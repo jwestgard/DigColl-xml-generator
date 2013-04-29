@@ -77,31 +77,31 @@ def createUMDM(data, template):         # performs series of find and replace op
     return outputfile
         
 def main():
-    import csv, datetime                            # import needed modules
-    greeting()                                             # a dummy greeting to get the program started
-    datafile = input("\nEnter the name of the data file: ")             # Prompts the user to enter the   
+    import csv, datetime                    # import needed modules
+    greeting()                              # a dummy greeting to get the program started
+    datafile = input("\nEnter the name of the data file: ")         # Prompts the user to enter the   
     with open(datafile, mode='r', encoding='utf-8') as inputfile:   # name of a CSV data file (must be in 
-        myData = csv.DictReader(inputfile)                                    # same directory); loads data from file
+        myData = csv.DictReader(inputfile)                          # same directory); loads data from file
         umam = loadTemplate('UMAM')         # loads UMAM template by calling function
-        print("\n UMAM:\n" + umam)            # prints UMAM
-        print('*' * 30)                                    # prints a divider
+        print("\n UMAM:\n" + umam)          # prints UMAM
+        print('*' * 30)                     # prints a divider
         umdm = loadTemplate('UMDM')         # loads UMDM template by calling function
-        print("\n UMDM:\n")                          # prints UMDM
+        print("\n UMDM:\n")                 # prints UMDM
         print(umdm)
-        print('*' * 30)                                   # prints a divider
-        i = 0                                                # initialize a counter for the rows of orignal data and output files
-        for x in myData:                              # for each line in original data
-            i += 1                                          # increment the counter
+        print('*' * 30)                     # prints a divider
+        i = 0                               # initialize a counter for the rows of orignal data and output files
+        for x in myData:                    # for each line in original data
+            i += 1                          # increment the counter
             print('\n' + ('*' * 30))
             print("\nDATASET " + str(i) + " :\n")   # prints the dataset (key/value pairs)
             print(x)
-            if x['XML_Type'] == 'UMAM':                                        # checks whether it's a UMAM row
-                outputFile = createUMAM(x, umam)                         # if yes, calls function to populate UMAM template
+            if x['XML_Type'] == 'UMAM':                                 # checks whether it's a UMAM row
+                outputFile = createUMAM(x, umam)                        # if yes, calls function to populate UMAM template
                 writeFile(x['File Name'].strip(), 'umam', outputFile)   # writes output to file
-            elif x['XML_Type'] == 'UMDM':                                      # checks whether it's a UMDM row
+            elif x['XML_Type'] == 'UMDM':                               # checks whether it's a UMDM row
                 outputFile = createUMDM(x, umdm)                        # if yes, calls function to populate UMDM template
-                writeFile(x['Item Control Number'].strip(), 'umdm', outputFile)   # writes output to file
-    print('\n' + ('*' * 30))                                                                                        # prints a divider
+                writeFile(x['Item Control Number'].strip(), 'umdm', outputFile)     # writes output to file
+    print('\n' + ('*' * 30))                                                        # prints a divider
     print('\n%s files written. Thanks for using the XML generator!\n\n' % (i))      # summarizes total output
 
 main()
