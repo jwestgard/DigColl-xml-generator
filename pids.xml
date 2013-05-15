@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pidList  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.fedora.info/definitions/1/0/management/ http://fedoradev.lib.umd.edu:80/getNextPIDInfo.xsd">
+  <pid>umd:778979</pid>
+  <pid>umd:778980</pid>
+  <pid>umd:778981</pid>
+  <pid>umd:778982</pid>
+  <pid>umd:778983</pid>
+  <pid>umd:778984</pid>
+  <pid>umd:778985</pid>
+  <pid>umd:778986</pid>
+  <pid>umd:778987</pid>
+  <pid>umd:778988</pid>
+</pidList>
