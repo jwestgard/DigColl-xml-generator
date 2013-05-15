@@ -6,6 +6,16 @@ def greeting():
     currentTime = datetime.datetime.utcnow()
     print('It is now ' + str(currentTime))       # prints the current time
 
+def extractPIDs(filename):      # extracts just the PIDs a Fedora XML page
+    import re                   # containing a list of requested pids
+    pidlist = []                # returns a list of PIDs
+    with open(filename) as f:
+        for line in f.readlines():
+            pid = re.search('<pid>(.*?)</pid>', line)
+            if pid:
+                pidlist.append(pid.group(1))
+    return pidlist
+
 # Prompt the user to enter the name of the UMAM or UMDM template to be imported for populating
 # with the data from the CSV file.
 def loadTemplate(fileType):
@@ -26,7 +36,6 @@ def writeFile(fileNumber, fileType, content):
 def convertTime(inputTime):
     if inputTime == "":                 # if the input string is empty, return the same string
         return inputTime
-    hrsMinSec = []
     hrsMinSec = inputTime.split(':')
     minutes = int(hrsMinSec[0]) * 60
     minutes += int(hrsMinSec[1])
@@ -34,8 +43,8 @@ def convertTime(inputTime):
     print('\nTime Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2)))
     return round(minutes, 2)
 
-def createUMAM(data, template):       # performs series of find and replace operations to
-    import datetime                            # generate UMDM file from the template.
+def createUMAM(data, template):     # performs series of find and replace operations to
+    import datetime                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     outputfile = template.replace('!!!Digitized by!!!', data['Digitized by DCMR'])
     outputfile = outputfile.replace('!!!TITLE!!!', data['Title'])
@@ -49,8 +58,8 @@ def createUMAM(data, template):       # performs series of find and replace oper
     outputfile = outputfile.replace('!!!YYYY-MM-DD!!!', timeStamp)
     return outputfile
 
-def createUMDM(data, template):         # performs series of find and replace operations to
-    import datetime                              # generate UMDM file from the template.
+def createUMDM(data, template):     # performs series of find and replace operations to
+    import datetime                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     outputfile = template.replace('!!!Title!!!', data['Title'])
     outputfile = outputfile.replace('!!!Alternate Title!!!', data['Alternate Title'])
@@ -75,10 +84,29 @@ def createUMDM(data, template):         # performs series of find and replace op
     outputfile = outputfile.replace('!!!Accession Number!!!', data['Accession Number'])
     outputfile = outputfile.replace('!!!YYYY-MM-DD!!!', timeStamp)
     return outputfile
+
+def fetchWebpage(url):
+    import urllib2
+    import base64
+    username = input('Username: ')
+    password = input('Password: ')
+    headers = {'Authorization': 'Basic ' + base64.encodestring('[username]:[password]')}
+    req = urllib2.Request(url, headers)
+    resp = urllib2.urlopen(req).read()
+    return resp
+
+def acquirePIDs(number):
+    import re
+    url = "http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids=" + str(number) + "&namespace=umd&xml=true"
+    pidPage = fetchWebpage(url)
+    r = re.compile('<pid>(.*?)</pid>')
+    print(r)
         
 def main():
     import csv, datetime                    # import needed modules
     greeting()                              # a dummy greeting to get the program started
+    pidfile = input('Enter the name of the PID file: ') # asks user for name of PID file
+    pidlist = extractPIDs(pidfile)                      # opens PID file and extracts the PIDs as a list
     datafile = input("\nEnter the name of the data file: ")         # Prompts the user to enter the   
     with open(datafile, mode='r', encoding='utf-8') as inputfile:   # name of a CSV data file (must be in 
         myData = csv.DictReader(inputfile)                          # same directory); loads data from file
@@ -109,5 +137,6 @@ def test():
     datafile = input("\nEnter the name of the data file: ")
     dataLength = len(datafile)
     print(dataLength)
- 
+    acquirePIDs(dataLength)
+
 test()
