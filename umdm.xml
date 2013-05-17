@@ -95,44 +95,7 @@
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
-  <foxml:datastream CONTROL_GROUP="X" ID="rels-mets" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="2013-03-08T16:11:04.796Z" ID="rels-mets.4" LABEL="METS Relationships"
-      MIMETYPE="text/xml" SIZE="947">
-      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
-      <foxml:xmlContent>
-        <mets schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd"
-          xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <fileSec>
-            <fileGrp ID="fedora">
-              <file ID="1">
-                <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="umd:165259" xlink:type="simple"/>
-              </file>
-              <file ID="2">
-                <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" fileName="!!!File Name!!!" xlink:href="!!!Manually Enter UMAM pid here!!!" xlink:type="simple"/>
-              </file>
-            </fileGrp>
-          </fileSec>
-          <structMap TYPE="LOGICAL">
-            <div ID="rels">
-              <div ID="isMemberOfCollection">
-                <fptr FILEID="1"/>
-                <div ID="hasPart">
-                  <fptr FILEID="2"/>
-                </div>
-              </div>
-            </div>
-          </structMap>
-          <structMap TYPE="LOGICAL">
-            <div ID="videos">
-              <div ORDER="1">
-                <fptr FILEID="2"/>
-              </div>
-            </div>
-          </structMap>
-        </mets>
-      </foxml:xmlContent>
-    </foxml:datastreamVersion>
-  </foxml:datastream>
+!!!INSERT_METS_HERE!!!
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:umdm" ID="DISS7" STATE="A" VERSIONABLE="true">
     <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umdm" CREATED="!!!YYYY-MM-DD!!!" ID="DISS7.0">
       <foxml:serviceInputMap>

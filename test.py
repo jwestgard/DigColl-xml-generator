@@ -8,23 +8,25 @@ def greeting():             # A dummy function to initiate interaction with the 
           "an XML template with that data in order to generate FOXML files for the University" +
           "of Maryland's digital collections repository.")
 
-def getPIDs(numPIDs):       # this function retrieves a specified number of PIDs from Fedora server
-    import requests, re
-    url = 'http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids={0}&namespace=umd&xml=true'.format(numPIDs)
-    username = input('\nEnter the server username: ')
-    password = input('\nEnter the server password: ')
-    retrievePids = requests.get(url, auth=(username, password))
+def getPIDs(numPIDs):       # This function retrieves a specified number of PIDs 
+    import requests         # from Fedora server.
+    import re
+    url = 'http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids='
+    url += '{0}&namespace=umd&xml=true'.format(numPIDs)
+    username = input('\nEnter the server username: ')       # prompts user for auth info
+    password = input('Enter the server password: ')
+    f = requests.get(url, auth=(username, password)).text   # submits request to fedora server
     print("\nRetrieving PIDs from the server...")
-    data = retrievePids.text
-    pidList = []                                                # create list to hold PIDs
-    print('\nServer answered with the following XML file:\n')   # print server's response
-    print(data)
-    for line in data.splitlines():                              # for each line in the response
-        pid = re.search('<pid>(.*?)</pid>', line)               # search for PID and if found
+    pidList = []                                               # create list to hold PIDs
+    print('\nServer answered with the following XML file:\n')  # print server's response
+    print(f)
+    for line in f.splitlines():                             # for each line in the response
+        pid = re.search('<pid>(.*?)</pid>', line)           # search for PID and if found
         if pid:
-            pidList.append(pid.group(1))                                # append PID to list
-    print("Successfully reserved the following PIDs: " + str(pidList))  # print result 
-    return pidList                                                      # return the PID list
+            pidList.append(pid.group(1))                    # append each PID to list
+    print('Successfully reserved the following ', end='')
+    print('{0} PIDs: '.format(len(pidList)) + str(pidList)) # print result 
+    return pidList                                          # return the PID list
 
 # Prompt the user to enter the name of the UMAM or UMDM template to be imported for populating
 # with the data from the CSV file.
@@ -53,7 +55,7 @@ def convertTime(inputTime):
     print('\nTime Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2))) # print result
     return round(minutes, 2)            # return the resulting decimal rounded to two places
 
-def createUMAM(data, template):     # performs series of find and replace operations to
+def createUMAM(data, template):     # Performs series of find and replace operations to
     import datetime                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     outputfile = template.replace('!!!Digitized by!!!', data['Digitized by DCMR'])
@@ -68,7 +70,7 @@ def createUMAM(data, template):     # performs series of find and replace operat
     outputfile = outputfile.replace('!!!YYYY-MM-DD!!!', timeStamp)
     return outputfile
 
-def createUMDM(data, template):     # performs series of find and replace operations to
+def createUMDM(data, template):     # Performs series of find and replace operations to
     import datetime                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     outputfile = template.replace('!!!Title!!!', data['Title'])
@@ -94,49 +96,40 @@ def createUMDM(data, template):     # performs series of find and replace operat
     outputfile = outputfile.replace('!!!Accession Number!!!', data['Accession Number'])
     outputfile = outputfile.replace('!!!YYYY-MM-DD!!!', timeStamp)
     return outputfile
-
-def acquirePIDs(number):
-    import re
-    url = "http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids=" + str(number) + "&namespace=umd&xml=true"
-    pidPage = fetchWebpage(url)
-    r = re.compile('<pid>(.*?)</pid>')
-    print(r)
-        
+ 
 def main():
-    import csv, datetime                    # import needed modules
-    greeting()                              # a dummy greeting to get the program started
-    pidfile = input('Enter the name of the PID file: ') # asks user for name of PID file
-    pidlist = extractPIDs(pidfile)                      # opens PID file and extracts the PIDs as a list
-    datafile = input("\nEnter the name of the data file: ")         # Prompts the user to enter the   
-    with open(datafile, mode='r', encoding='utf-8') as inputfile:   # name of a CSV data file (must be in 
-        myData = csv.DictReader(inputfile)                          # same directory); loads data from file
-        umam = loadTemplate('UMAM')         # loads UMAM template by calling function
-        print("\n UMAM:\n" + umam)          # prints UMAM
-        print('*' * 30)                     # prints a divider
-        umdm = loadTemplate('UMDM')         # loads UMDM template by calling function
-        print("\n UMDM:\n")                 # prints UMDM
-        print(umdm)
-        print('*' * 30)                     # prints a divider
-        i = 0                               # initialize a counter for the rows of orignal data and output files
-        for x in myData:                    # for each line in original data
-            i += 1                          # increment the counter
-            print('\n' + ('*' * 30))
-            print("\nDATASET " + str(i) + " :\n")   # prints the dataset (key/value pairs)
-            print(x)
-            if x['XML_Type'] == 'UMAM':                                 # checks whether it's a UMAM row
-                outputFile = createUMAM(x, umam)                        # if yes, calls function to populate UMAM template
-                writeFile(x['File Name'].strip(), 'umam', outputFile)   # writes output to file
-            elif x['XML_Type'] == 'UMDM':                               # checks whether it's a UMDM row
-                outputFile = createUMDM(x, umdm)                        # if yes, calls function to populate UMDM template
-                writeFile(x['Item Control Number'].strip(), 'umdm', outputFile)     # writes output to file
-    print('\n' + ('*' * 30))                                                        # prints a divider
-    print('\n%s files written. Thanks for using the XML generator!\n\n' % (i))      # summarizes total output
-
-def test():
     import csv
-    datafile = input("\nEnter the name of the data file: ")
-    dataLength = len(datafile)
-    print(dataLength)
-    PIDlist = getPIDs(dataLength)
+    dataFile = input("\nEnter the name of the data file: ")
+    dataLength = len(dataFile)      # Gets number of lines of data.
+    print("The datafile you specified has {0} rows".format(dataLength))
+    PIDlist = getPIDs(dataLength)   # Gets as many PIDs as lines of data.
+    umam = loadTemplate('UMAM')     # Loads UMAM template.
+    print("\n UMAM:\n" + umam)      # Prints UMAM.
+    print('*' * 30)                 # Prints a divider.
+    umdm = loadTemplate('UMDM')     # Loads UMDM template.
+    print("\n UMDM:\n" + umdm)      # Prints UMDM.
+    print('*' * 30)                 # Prints a divider.
+    with open(dataFile, mode='r', encoding='utf-8') as inputFile:
+        myData = csv.DictReader(inputFile)
+        i = 0
+        for x in myData:
+            x['PID'] = PIDlist[i]       # Attaches the PID to the dataset.
+            i += i
+            print('\n' + ('*' * 30))
+            print("\nDATASET " + str(i) + " :\n")   # Prints the dataset (key/value pairs).
+            print(x)
+            
+            
+            
+            if x['XML_Type'] == 'UMAM':             # checks whether it's a UMAM row
+            outputFile = createUMAM(x, umam)    # if yes, calls function to populate UMAM template
+            writeFile(x['File Name'].strip(), 'umam', outputFile)   # writes output to file
+        elif x['XML_Type'] == 'UMDM':           # checks whether it's a UMDM row
+            outputFile = createUMDM(x, umdm)    # if yes, calls function to populate UMDM template
+            writeFile(x['Item Control Number'].strip(), 'umdm', outputFile)     # writes output to file
 
-test()
+    print('\n' + ('*' * 30))        # Print a divider and summarize output.
+    print('\n{0} files written. Thanks for '.format(numFiles), end='')
+    print('using the XML generator!\n\n')
+    
+main()
