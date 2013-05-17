@@ -1,4 +1,4 @@
-# Pseudocode for XML Generator
+#Pseudocode for XML Generator
 
 1. prompt user to enter names of templates and CSV data files
 2. get length of data file (= number of files to be created)
