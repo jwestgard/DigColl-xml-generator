@@ -1,20 +1,30 @@
-# A dummy function to initiate interaction with the program.
-def greeting():
+def greeting():             # A dummy function to initiate interaction with the program.
     import datetime
     name = input("Enter your name: ")
     print("\nHello " + name + ", welcome to the XML generator!")
     currentTime = datetime.datetime.utcnow()
     print('It is now ' + str(currentTime))       # prints the current time
+    print("\nThis program is designed to take data from a CSV file and populate" +
+          "an XML template with that data in order to generate FOXML files for the University" +
+          "of Maryland's digital collections repository.")
 
-def extractPIDs(filename):      # extracts just the PIDs a Fedora XML page
-    import re                   # containing a list of requested pids
-    pidlist = []                # returns a list of PIDs
-    with open(filename) as f:
-        for line in f.readlines():
-            pid = re.search('<pid>(.*?)</pid>', line)
-            if pid:
-                pidlist.append(pid.group(1))
-    return pidlist
+def getPIDs(numPIDs):       # this function retrieves a specified number of PIDs from Fedora server
+    import requests, re
+    url = 'http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids={0}&namespace=umd&xml=true'.format(numPIDs)
+    username = input('\nEnter the server username: ')
+    password = input('\nEnter the server password: ')
+    retrievePids = requests.get(url, auth=(username, password))
+    print("\nRetrieving PIDs from the server...")
+    data = retrievePids.text
+    pidList = []                                                # create list to hold PIDs
+    print('\nServer answered with the following XML file:\n')   # print server's response
+    print(data)
+    for line in data.splitlines():                              # for each line in the response
+        pid = re.search('<pid>(.*?)</pid>', line)               # search for PID and if found
+        if pid:
+            pidList.append(pid.group(1))                                # append PID to list
+    print("Successfully reserved the following PIDs: " + str(pidList))  # print result 
+    return pidList                                                      # return the PID list
 
 # Prompt the user to enter the name of the UMAM or UMDM template to be imported for populating
 # with the data from the CSV file.
@@ -36,12 +46,12 @@ def writeFile(fileNumber, fileType, content):
 def convertTime(inputTime):
     if inputTime == "":                 # if the input string is empty, return the same string
         return inputTime
-    hrsMinSec = inputTime.split(':')
-    minutes = int(hrsMinSec[0]) * 60
-    minutes += int(hrsMinSec[1])
-    minutes += int(hrsMinSec[2]) / 60
-    print('\nTime Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2)))
-    return round(minutes, 2)
+    hrsMinSec = inputTime.split(':')    # otherwise, split the string at the colon
+    minutes = int(hrsMinSec[0]) * 60    # multiply the first value by 60
+    minutes += int(hrsMinSec[1])        # add the second value
+    minutes += int(hrsMinSec[2]) / 60   # add the third value divided by 60
+    print('\nTime Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2))) # print result
+    return round(minutes, 2)            # return the resulting decimal rounded to two places
 
 def createUMAM(data, template):     # performs series of find and replace operations to
     import datetime                 # generate UMDM file from the template.
@@ -85,16 +95,6 @@ def createUMDM(data, template):     # performs series of find and replace operat
     outputfile = outputfile.replace('!!!YYYY-MM-DD!!!', timeStamp)
     return outputfile
 
-def fetchWebpage(url):
-    import urllib2
-    import base64
-    username = input('Username: ')
-    password = input('Password: ')
-    headers = {'Authorization': 'Basic ' + base64.encodestring('[username]:[password]')}
-    req = urllib2.Request(url, headers)
-    resp = urllib2.urlopen(req).read()
-    return resp
-
 def acquirePIDs(number):
     import re
     url = "http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids=" + str(number) + "&namespace=umd&xml=true"
@@ -137,6 +137,6 @@ def test():
     datafile = input("\nEnter the name of the data file: ")
     dataLength = len(datafile)
     print(dataLength)
-    acquirePIDs(dataLength)
+    PIDlist = getPIDs(dataLength)
 
 test()
