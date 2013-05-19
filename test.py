@@ -96,6 +96,10 @@ def createUMDM(data, template):     # Performs series of find and replace operat
     outputfile = outputfile.replace('!!!Accession Number!!!', data['Accession Number'])
     outputfile = outputfile.replace('!!!YYYY-MM-DD!!!', timeStamp)
     return outputfile
+
+def createMETS():
+    metsFile = open('mets.xml', 'r').read()
+    return(metsFile)
  
 def main():
     import csv
@@ -112,24 +116,32 @@ def main():
     with open(dataFile, mode='r', encoding='utf-8') as inputFile:
         myData = csv.DictReader(inputFile)
         i = 0
+        mets = ""
+        objectParts = 0                 # a counter for number of UMAM parts
         for x in myData:
             x['PID'] = PIDlist[i]       # Attaches the PID to the dataset.
             i += i
             print('\n' + ('*' * 30))
-            print("\nDATASET " + str(i) + " :\n")   # Prints the dataset (key/value pairs).
-            print(x)
-            
-            
-            
-            if x['XML_Type'] == 'UMAM':             # checks whether it's a UMAM row
-            outputFile = createUMAM(x, umam)    # if yes, calls function to populate UMAM template
-            writeFile(x['File Name'].strip(), 'umam', outputFile)   # writes output to file
-        elif x['XML_Type'] == 'UMDM':           # checks whether it's a UMDM row
-            outputFile = createUMDM(x, umdm)    # if yes, calls function to populate UMDM template
-            writeFile(x['Item Control Number'].strip(), 'umdm', outputFile)     # writes output to file
-
+            print("\nDATASET " + str(i) + " : " + str(x))   # Prints the dataset (key/value pairs).
+            if x['XML_Type'] == 'UMDM':
+                if mets != "":
+                    print('Creating UMDM for object with {0} parts!\n'.format(objectParts))
+                    objectParts = 0
+                    myFile = createUMDM(tempData, umdm)
+                    myFile = myFile.replace('!!!INSERT_METS_HERE!!!', mets)
+                    writeFile(tempData['Item Control Number'].strip(), 'umdm', myFile)
+                tempData = x
+                mets = createMETS()
+            elif x['XML_Type'] == 'UMAM':             # checks whether it's a UMAM row
+                objectParts += objectParts
+                outputFile = createUMAM(x, umam)      # if yes, calls function to populate UMAM template
+                writeFile(x['File Name'].strip(), 'umam', outputFile)   # writes output to file
     print('\n' + ('*' * 30))        # Print a divider and summarize output.
     print('\n{0} files written. Thanks for '.format(numFiles), end='')
     print('using the XML generator!\n\n')
+    
+def test():
+    testme = createMETS()
+    print(testme)
     
 main()
