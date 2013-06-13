@@ -67,27 +67,28 @@ def convertTime(inputTime):
 def createUMAM(data, template):     # Performs series of find and replace operations to
     import datetime                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    outputfile = template.replace('!!!Digitized by!!!', data['Digitized by DCMR'])
-    outputfile = outputfile.replace('!!!TITLE!!!', data['Title'])
-    outputfile = outputfile.replace('!!!Digitization Notes!!!', data['Digitization Notes'])
-    outputfile = outputfile.replace('!!!FILE NAME!!!', data['File Name'])
+    outputfile = template.replace('!!!Title!!!', data['Title'])
+    outputfile = outputfile.replace('!!!DigitizationNotes!!!', data['Digitization Notes'])
+    outputfile = outputfile.replace('!!!FileName!!!', data['File Name'])
     outputfile = outputfile.replace('!!!Mono/Stereo!!!', data['Mono/Stereo'])
-    outputfile = outputfile.replace('!!!Sharestream!!!', data['SharestreamURLS'])
+    outputfile = outputfile.replace('!!!Sharestream!!!', data['ShareStreamURLs'])
     convertedRunTime = str(convertTime(data['TotalRunTimeDerivatives']))
     outputfile = outputfile.replace('!!!TotalRunTimeDerivatives!!!', convertedRunTime)
-    outputfile = outputfile.replace('!!!Track Format!!!', data['Track Format'])
-    outputfile = outputfile.replace('!!!YYYY-MM-DD!!!', timeStamp)
+    outputfile = outputfile.replace('!!!TrackFormat!!!', data['Track Format'])
+    outputfile = outputfile.replace('!!!TimeStamp!!!', timeStamp)
+    outputfile = outputfile.replace('!!!DateDigitized!!!', data['DateDigitized'])
+    outputfile = outputfile.replace('!!!DigitizedByPers!!!', data['DigitizedByPers'])
     return outputfile
 
 def createUMDM(data, template):     # Performs series of find and replace operations to
     import datetime                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     outputfile = template.replace('!!!Title!!!', data['Title'])
-    outputfile = outputfile.replace('!!!Alternate Title!!!', data['Alternate Title'])
+    outputfile = outputfile.replace('!!!AlternateTitle!!!', data['Alternate Title'])
     outputfile = outputfile.replace('!!!Contributor!!!', data['Contributor'])
-    outputfile = outputfile.replace('!!!Item Control Number!!!', data['Item Control Number'])
+    outputfile = outputfile.replace('!!!ItemControlNumber!!!', data['Item Control Number'])
     outputfile = outputfile.replace('!!!Description/Summary!!!', data['Description/Summary'])
-    outputfile = outputfile.replace('!!!Copyright Holder!!!', data['Copyright Holder'])
+    outputfile = outputfile.replace('!!!CopyrightHolder!!!', data['Copyright Holder'])
     outputfile = outputfile.replace('!!!Continent!!!', data['Continent'])
     outputfile = outputfile.replace('!!!Country!!!', data['Country'])
     outputfile = outputfile.replace('!!!Region/State!!!', data['Region/State'])
@@ -96,14 +97,14 @@ def createUMDM(data, template):     # Performs series of find and replace operat
     outputfile = outputfile.replace('!!!Repository!!!', data['Repository'])
     if data['SizeReel'].endswith('"'):
         data['SizeReel'] = data['SizeReel'][0:-1]
-    outputfile = outputfile.replace('!!!Size Reel!!!', data['SizeReel'])
+    outputfile = outputfile.replace('!!!SizeReel!!!', data['SizeReel'])
     convertedRunTime = str(convertTime(data['TotalRunTimeDerivatives']))
     outputfile = outputfile.replace('!!!TotalRunTimeDerivativesMinutes!!!', convertedRunTime)
-    outputfile = outputfile.replace('!!!Type of Material!!!', data['TypeofMaterial'])
+    outputfile = outputfile.replace('!!!TypeOfMaterial!!!', data['TypeofMaterial'])
     outputfile = outputfile.replace('!!!Collection!!!', data['Collection'])
-    outputfile = outputfile.replace('!!!Box Number!!!', data['Box Number'])
-    outputfile = outputfile.replace('!!!Accession Number!!!', data['Accession Number'])
-    outputfile = outputfile.replace('!!!YYYY-MM-DD!!!', timeStamp)
+    outputfile = outputfile.replace('!!!BoxNumber!!!', data['Box Number'])
+    outputfile = outputfile.replace('!!!AccessionNumber!!!', data['Accession Number'])
+    outputfile = outputfile.replace('!!!TimeStamp!!!', timeStamp)
     return outputfile
 
 def createMets():
@@ -112,16 +113,16 @@ def createMets():
  
 def updateMets(partNumber, mets, fileName, pid):
     id = str(partNumber + 1)
-    metsSnipA = open('metsA.txt', 'r').read() + '!!!Anchor-A!!!'
-    metsSnipB = open('metsB.txt', 'r').read() + '!!!Anchor-B!!!'
-    metsSnipC = open('metsC.txt', 'r').read() + '!!!Anchor-C!!!'
+    metsSnipA = open('metsA.xml', 'r').read() + '!!!Anchor-A!!!'
+    metsSnipB = open('metsB.xml', 'r').read() + '!!!Anchor-B!!!'
+    metsSnipC = open('metsC.xml', 'r').read() + '!!!Anchor-C!!!'
     mets = mets.replace('!!!Anchor-A!!!', metsSnipA)
     mets = mets.replace('!!!Anchor-B!!!', metsSnipB)
     mets = mets.replace('!!!Anchor-C!!!', metsSnipC)
-    mets = mets.replace('!!!File Name!!!', fileName)
+    mets = mets.replace('!!!FileName!!!', fileName)
     mets = mets.replace('!!!ID!!!', id)
     mets = mets.replace('!!!PID!!!', pid)
-    mets = mets.replace('!!!ORDER!!!', str(partNumber))
+    mets = mets.replace('!!!Order!!!', str(partNumber))
     return mets
 
 def stripAnchors(target):
@@ -171,13 +172,13 @@ def main():
     for x in myData:
         x['PID'] = pidList[i]   # Attaches a PID to the dataset.
         i += 1
-        if x['XML_Type'] == 'UMDM':
+        if x['XML Type'] == 'UMDM':
             if mets != "":
                 print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
                 objectParts = 0                                         # reset parts counter
                 myFile = createUMDM(tempData, umdm)                     # Create the UMDM
                 myFile = myFile.replace('!!!INSERT_METS_HERE!!!', mets) # Insert the METS
-                myFile = myFile.replace('!!!YYYY-MM-DD!!!', timeStamp)  # update timestamp in the METS
+                myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)  # update timestamp in the METS
                 myFile = stripAnchors(myFile)                           # Strip out anchor points
                 fileStem = tempData['PID'].replace(':', '').strip()
                 print('UMDM = {0}'.format(fileStem))
@@ -187,7 +188,7 @@ def main():
             print('\nFILE GROUP {0}: '.format(objectGroups))
             tempData = x                # Store the dataset for later, after UMAMs are generated
             mets = createMets()         # Prepare the METS for addition of UMAM info
-        elif x['XML_Type'] == 'UMAM':   # Checks whether it's a UMAM row
+        elif x['XML Type'] == 'UMAM':   # Checks whether it's a UMAM row
             objectParts += 1
             outputFile = createUMAM(x, umam)      # If yes, calls function to populate UMAM template
             print('Writing UMAM...', end=' ')
@@ -199,7 +200,7 @@ def main():
     print('Creating UMDM for object with {0} parts...'.format(objectParts), end=' ')   
     myFile = createUMDM(tempData, umdm)                             # Create the UMDM for the final object
     myFile = myFile.replace('!!!INSERT_METS_HERE!!!', mets)         # Insert the METS in the UMDM
-    myFile = myFile.replace('!!!YYYY-MM-DD!!!', timeStamp)          # update timestamp in the METS
+    myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)          # update timestamp in the METS
     myFile = stripAnchors(myFile)                                   # Strip out anchor points
     fileStem = tempData['PID'].replace(':', '').strip()             # create pid stem for use in filename
     print('UMDM = {0}'.format(fileStem))

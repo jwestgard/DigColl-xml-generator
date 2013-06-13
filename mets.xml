@@ -1,6 +1,6 @@
   <foxml:datastream CONTROL_GROUP="X" ID="rels-mets" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="!!!YYYY-MM-DD!!!" ID="rels-mets.4" LABEL="METS Relationships"
-      MIMETYPE="text/xml" SIZE="947">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="rels-mets.4" LABEL="METS Relationships"
+      MIMETYPE="text/xml">
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <mets schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd"

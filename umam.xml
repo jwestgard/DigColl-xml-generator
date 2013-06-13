@@ -9,25 +9,25 @@
     <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="UMD_VIDEO"/>
   </foxml:objectProperties>
   <foxml:datastream CONTROL_GROUP="E" ID="thumbnail" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="!!!YYYY-MM-DD!!!T20:32:34.491Z" ID="thumbnail.0" LABEL="thumbnail" MIMETYPE="image/jpeg" SIZE="0">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="thumbnail.0" LABEL="thumbnail" MIMETYPE="image/jpeg">
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:contentLocation REF="http://local.fedora.server/images/video_thumbnail.jpeg" TYPE="URL"/>
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream CONTROL_GROUP="X" ID="DC" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="!!!YYYY-MM-DD!!!" ID="DC.0" LABEL="Dublin Core Metadata"
-      MIMETYPE="text/xml" SIZE="318">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="DC.0" LABEL="Dublin Core Metadata"
+      MIMETYPE="text/xml">
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
-          <dc:title>!!!TITLE!!!</dc:title>
+          <dc:title>!!!Title!!!</dc:title>
         </oai_dc:dc>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream CONTROL_GROUP="X" ID="amInfo" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="!!!YYYY-MM-DD!!!" ID="amInfo.0" LABEL="Digital Object Information"
-      MIMETYPE="text/xml" SIZE="154">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="amInfo.0" LABEL="Digital Object Information"
+      MIMETYPE="text/xml">
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <amInfo xmlns="http://www.itd.umd.edu/fedora/amInfo">
@@ -38,14 +38,14 @@
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream CONTROL_GROUP="X" ID="umam" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="!!!YYYY-MM-DD!!!" ID="umam.0"
-      LABEL="University of Maryland Administrative Metadata" MIMETYPE="text/xml" SIZE="1684">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="umam.0"
+      LABEL="University of Maryland Administrative Metadata" MIMETYPE="text/xml">
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <adminMeta>
-          <identifier>!!!FILE NAME!!!</identifier>
+          <identifier>!!!FileName!!!</identifier>
           <digiProv>
-            <date>!!!Date Digital File Created!!!</date>
+            <date>!!!DateDigitized!!!</date>
             <agent type="creator">
               <corpName>Digital Conversion and Media Reformatting</corpName>
             </agent>
@@ -54,11 +54,11 @@
             </description>
           </digiProv>
           <digiProv>
-            <date>!!!Date Digital File Created!!!</date>
+            <date>!!!DateDigitized!!!</date>
             <agent type="creator">
-              <persName>!!!Digitized by!!!</persName>
+              <persName>!!!DigitizedByPers!!!</persName>
             </agent>
-            <description>!!!Digitization Notes!!!</description>
+            <description>!!!DigitizationNotes!!!</description>
           </digiProv>
           <adminRights>
             <access>UMDpublic</access>
@@ -70,19 +70,19 @@
             </format>
             <audio>
               <duration>!!!TotalRunTimeDerivatives!!!</duration>
-              <channels>!!!Track Format!!!</channels>
+              <channels>!!!TrackFormat!!!</channels>
               <audioTrack>
                 <soundField>!!!Mono/Stereo!!!</soundField>
               </audioTrack>
             </audio>
-            <fileName>!!!FILE NAME!!!</fileName>
+            <fileName>!!!FileName!!!</fileName>
           </technical>
         </adminMeta>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:video" ID="DISS4" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:video" CREATED="!!!YYYY-MM-DD!!!" ID="DISS4.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:video" CREATED="!!!TimeStamp!!!" ID="DISS4.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="umam" KEY="umam"/>
         <foxml:datastreamBinding DATASTREAM_ID="thumbnail" KEY="image"/>
@@ -90,21 +90,21 @@
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:umam" ID="DISS3" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umam" CREATED="!!!YYYY-MM-DD!!!" ID="DISS3.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umam" CREATED="!!!TimeStamp!!!" ID="DISS3.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="umam" KEY="DATASTREAM"/>
       </foxml:serviceInputMap>
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels" ID="DISS2" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="!!!YYYY-MM-DD!!!" ID="DISS2.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="!!!TimeStamp!!!" ID="DISS2.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
       </foxml:serviceInputMap>
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:amInfo" ID="DISS1" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:amInfo" CREATED="!!!YYYY-MM-DD!!!" ID="DISS1.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:amInfo" CREATED="!!!TimeStamp!!!" ID="DISS1.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="amInfo" KEY="DATASTREAM"/>
       </foxml:serviceInputMap>
