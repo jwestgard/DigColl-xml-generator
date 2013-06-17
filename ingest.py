@@ -156,9 +156,7 @@ def main():
     print('The datafile you specified has {0} rows.'.format(dataFileSize))
     print('Assuming there is a header row, you need {0} PIDs.'.format(dataLength))
     print('Load {0} PIDs from a file or request them from the server?'.format(dataLength))
-<<<<<<< HEAD
-    pidFile = getPids()
->>>>>>> 5a4efe88013292e8a1a58be3e919cd6105985848
+	pidFile = getPids()
     pidList = parsePids(pidFile)    # Parses PIDs from the PID file (either local or from the server)
     if len(pidList) < dataLength:
         print('Not enough PIDs for your dataset!')
