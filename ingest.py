@@ -12,7 +12,7 @@ def getPids():
     pidList = []
     pidSource = input('Enter F (file) or S (server): ')
     while (pidSource not in ('F','S')):
-        print("ERROR: you must enter either 'F' to load PIDs from a file, or 'S' to request them from the server! P ")
+        print("ERROR: you must enter either 'F' to load PIDs from a file, or 'S' to request them from the server!")
         pidSource = input('Please try again: ')
     if pidSource == 'F':
         pidFileName = input('Enter the name of the PID file: ')
@@ -150,13 +150,14 @@ def main():
     import datetime
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     greeting()
+    outputFiles = []
     dataFile = loadFile('data')
     dataFileSize = len(dataFile)
     dataLength = dataFileSize - 1
     print('The datafile you specified has {0} rows.'.format(dataFileSize))
     print('Assuming there is a header row, you need {0} PIDs.'.format(dataLength))
     print('Load {0} PIDs from a file or request them from the server?'.format(dataLength))
-	pidFile = getPids()
+    pidFile = getPids()
     pidList = parsePids(pidFile)    # Parses PIDs from the PID file (either local or from the server)
     if len(pidList) < dataLength:
         print('Not enough PIDs for your dataset!')
@@ -170,6 +171,7 @@ def main():
     print("\n UMDM:\n" + umdm)      # Prints UMDM.
     print('*' * 30)                 # Prints a divider.
     myData = csv.DictReader(dataFile)
+    print('Data successfully read.')
     i = 0
     mets = ""
     objectGroups = 0            # counter for UMDM plus UMAM(s) as a group
@@ -219,7 +221,7 @@ def main():
     filesWritten += 1
     print('\n' + ('*' * 30))                # Print a divider and summarize output.
     print('\n{0} files written: {1} FOXML files in {2}'.format(filesWritten, filesWritten - 1, objectGroups), end=' ')
-    print('groups plus the summary list of pids.')
+    print('groups, plus the summary list of pids.')
     print('Thanks for using the XML generator!\n\n')
     
 main()
