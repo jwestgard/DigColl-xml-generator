@@ -8,7 +8,20 @@ def greeting():             # A dummy function to initiate interaction with the 
     print("and use that data to generate FOXML files for the")
     print("University of Maryland's digital collections repository.")
 
-def getPids(numPids):       # This function retrieves a specified number of PIDs 
+def getPids():
+    pidList = []
+    pidSource = input('Enter F (file) or S (server): ')
+    while (pidSource not in ('F','S')):
+        print("ERROR: you must enter either 'F' to load PIDs from a file, or 'S' to request them from the server! P ")
+        pidSource = input('Please try again: ')
+    if pidSource == 'F':
+        pidFileName = input('Enter the name of the PID file: ')
+        pidFile = open(pidFileName, 'r').read()
+    elif pidSource == 'S':
+        pidFile = requestPids(dataLength)   # Requests as many PIDs as lines of data.
+    return pidFile
+    
+def requestPids(numPids):       # This function retrieves a specified number of PIDs 
     import requests         # from Fedora server.
     url = 'http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids='
     url += '{0}&namespace=umd&xml=true'.format(numPids)
@@ -143,17 +156,6 @@ def main():
     print('The datafile you specified has {0} rows.'.format(dataFileSize))
     print('Assuming there is a header row, you need {0} PIDs.'.format(dataLength))
     print('Load {0} PIDs from a file or request them from the server?'.format(dataLength))
-    pidSource = input('Enter F (file) or S (server): ')
-    pidList = []
-    outputFiles = []
-    if pidSource == 'F':
-        pidFileName = input('Enter the name of the PID file: ')
-        pidFile = open(pidFileName, 'r').read()
-    elif pidSource == 'S':
-        pidFile = getPids(dataLength)   # Requests as many PIDs as lines of data.
-    else:
-        print('Invalid response. I quit!')
-        quit()
     pidList = parsePids(pidFile)    # Parses PIDs from the PID file (either local or from the server)
     if len(pidList) < dataLength:
         print('Not enough PIDs for your dataset!')
