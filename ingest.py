@@ -8,7 +8,20 @@ def greeting():             # A dummy function to initiate interaction with the 
     print("and use that data to generate FOXML files for the")
     print("University of Maryland's digital collections repository.")
 
-def getPids(numPids):       # This function retrieves a specified number of PIDs 
+def getPids():
+    pidList = []
+    pidSource = input('Enter F (file) or S (server): ')
+    while (pidSource not in ('F','S')):
+        print("ERROR: you must enter either 'F' to load PIDs from a file, or 'S' to request them from the server! P ")
+        pidSource = input('Please try again: ')
+    if pidSource == 'F':
+        pidFileName = input('Enter the name of the PID file: ')
+        pidFile = open(pidFileName, 'r').read()
+    elif pidSource == 'S':
+        pidFile = requestPids(dataLength)   # Requests as many PIDs as lines of data.
+    return pidFile
+
+def requestPids(numPids):       # This function retrieves a specified number of PIDs 
     import requests         # from Fedora server.
     url = 'http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids='
     url += '{0}&namespace=umd&xml=true'.format(numPids)
@@ -30,7 +43,6 @@ def parsePids(pidFile):
         if pid:
             pidList.append(pid.group(1))                    # append each PID to list
     resultLength = str(len(pidList))
-    print('Successfully loaded the following {0} PIDs: '.format(resultLength))
     print('\nSuccessfully loaded the following {0} PIDs: '.format(resultLength))
     print(pidList)
     return pidList
@@ -45,11 +57,8 @@ def loadFile(fileType):
         f = open(sourceFile, 'r').read()
     return(f)
 
-# Creates a file containing the contents of the "content" string, named [fileName]_[fileType].xml,
 # Creates a file containing the contents of the "content" string, named umd_[PID].xml,
 # files are saved in a sub-directory called "output".
-def writeFile(fileStem, fileType, content):
-    filePath = "output/" + fileStem + '_' + fileType + ".xml"
 def writeFile(fileStem, content, extension):
     filePath = "output/" + fileStem + extension
     f = open(filePath, mode='w')
@@ -71,7 +80,6 @@ def convertTime(inputTime):
 def createUMAM(data, template):     # Performs series of find and replace operations to
     import datetime                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    outputfile = template.replace('!!!Title!!!', data['Title'])
     outputfile = template.replace('!!!PID!!!', data['PID'])
     outputfile = outputfile.replace('!!!Title!!!', data['Title'])
     outputfile = outputfile.replace('!!!DigitizationNotes!!!', data['Digitization Notes'])
@@ -89,7 +97,6 @@ def createUMAM(data, template):     # Performs series of find and replace operat
 def createUMDM(data, template):     # Performs series of find and replace operations to
     import datetime                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    outputfile = template.replace('!!!Title!!!', data['Title'])
     outputfile = template.replace('!!!PID!!!', data['PID'])
     outputfile = outputfile.replace('!!!Title!!!', data['Title'])
     outputfile = outputfile.replace('!!!AlternateTitle!!!', data['Alternate Title'])
@@ -150,18 +157,7 @@ def main():
     print('Assuming there is a header row, you need {0} PIDs.'.format(dataLength))
     print('Load {0} PIDs from a file or request them from the server?'.format(dataLength))
 <<<<<<< HEAD
-=======
-    pidSource = input('Enter F (file) or S (server): ')
-    pidList = []
-    outputFiles = []
-    if pidSource == 'F':
-        pidFileName = input('Enter the name of the PID file: ')
-        pidFile = open(pidFileName, 'r').read()
-    elif pidSource == 'S':
-        pidFile = getPids(dataLength)   # Requests as many PIDs as lines of data.
-    else:
-        print('Invalid response. I quit!')
-        quit()
+    pidFile = getPids()
 >>>>>>> 5a4efe88013292e8a1a58be3e919cd6105985848
     pidList = parsePids(pidFile)    # Parses PIDs from the PID file (either local or from the server)
     if len(pidList) < dataLength:
@@ -182,7 +178,6 @@ def main():
     objectParts = 0             # counter for the number of UMAM parts for each UMDM
     filesWritten = 0            # counter for file outputs
     for x in myData:
-        x['PID'] = pidList[i]   # Attaches a PID to the dataset.
         x['PID'] = pidList[i]            # Attaches a PID to the dataset.
         outputFiles.append(x['PID'])     # Append PID to list of output files
         i += 1
@@ -192,13 +187,10 @@ def main():
                 objectParts = 0                                         # reset parts counter
                 myFile = createUMDM(tempData, umdm)                     # Create the UMDM
                 myFile = myFile.replace('!!!INSERT_METS_HERE!!!', mets) # Insert the METS
-                myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)  # update timestamp in the METS
                 myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)   # update timestamp in the METS
                 myFile = stripAnchors(myFile)                           # Strip out anchor points
-                fileStem = tempData['PID'].replace(':', '').strip()
                 fileStem = tempData['PID'].replace(':', '_').strip()
                 print('UMDM = {0}'.format(fileStem))
-                writeFile(fileStem, 'umdm', myFile)      # Write the file
                 writeFile(fileStem, myFile, '.xml')      # Write the file
                 filesWritten += 1
             objectGroups += 1
@@ -207,26 +199,20 @@ def main():
             mets = createMets()         # Prepare the METS for addition of UMAM info
         elif x['XML Type'] == 'UMAM':   # Checks whether it's a UMAM row
             objectParts += 1
-            outputFile = createUMAM(x, umam)      # If yes, calls function to populate UMAM template
             myFile = createUMAM(x, umam)      # If yes, calls function to populate UMAM template
             print('Writing UMAM...', end=' ')
-            fileStem = x['PID'].replace(':', '').strip()
             fileStem = x['PID'].replace(':', '_').strip()
             print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
-            writeFile(fileStem, 'umam', outputFile)   # writes output to file
             writeFile(fileStem, myFile, '.xml')   # writes output to file
             filesWritten += 1
             mets = updateMets(objectParts, mets, x['File Name'], x['PID'])
     print('Creating UMDM for object with {0} parts...'.format(objectParts), end=' ')   
     myFile = createUMDM(tempData, umdm)                             # Create the UMDM for the final object
     myFile = myFile.replace('!!!INSERT_METS_HERE!!!', mets)         # Insert the METS in the UMDM
-    myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)          # update timestamp in the METS
     myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)           # update timestamp in the METS
     myFile = stripAnchors(myFile)                                   # Strip out anchor points
-    fileStem = tempData['PID'].replace(':', '').strip()             # create pid stem for use in filename
     fileStem = tempData['PID'].replace(':', '_').strip()            # create pid stem for use in filename
     print('UMDM = {0}'.format(fileStem))
-    writeFile(fileStem, 'umdm', myFile)     # Write the file
     writeFile(fileStem, myFile, '.xml')             # Write the file
     filesWritten += 1
     print('\nWriting summary file as pids.txt...')
@@ -234,8 +220,6 @@ def main():
     writeFile('pids', f, '.txt')
     filesWritten += 1
     print('\n' + ('*' * 30))                # Print a divider and summarize output.
-    print('\n{0} files written, in {1} groups. Thanks for'.format(filesWritten, objectGroups), end=' ')
-    print('using the XML generator!\n\n')
     print('\n{0} files written: {1} FOXML files in {2}'.format(filesWritten, filesWritten - 1, objectGroups), end=' ')
     print('groups plus the summary list of pids.')
     print('Thanks for using the XML generator!\n\n')
