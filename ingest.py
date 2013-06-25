@@ -8,7 +8,7 @@ def greeting():             # A dummy function to initiate interaction with the 
     print("and use that data to generate FOXML files for the")
     print("University of Maryland's digital collections repository.")
 
-def getPids():
+def getPids(dataLength):
     pidList = []
     pidSource = input('Enter F (file) or S (server): ')
     while (pidSource not in ('F','S')):
@@ -22,8 +22,8 @@ def getPids():
     return pidFile
 
 def requestPids(numPids):       # This function retrieves a specified number of PIDs 
-    import requests         # from Fedora server.
-    url = 'http://fedoradev.lib.umd.edu/fedora/management/getNextPID?numPids='
+    import requests             # from Fedora server.
+    url = 'http://fedorastage.lib.umd.edu/fedora/management/getNextPID?numPids='
     url += '{0}&namespace=umd&xml=true'.format(numPids)
     username = input('\nEnter the server username: ')          # prompts user for auth info
     password = input('Enter the server password: ')
@@ -32,7 +32,7 @@ def requestPids(numPids):       # This function retrieves a specified number of 
     print('\nServer answered with the following XML file:\n')  # print server's response
     print(f)
     fName = input('Enter a name to save the server\'s PID file: ')
-    writeFile(fName, '', f)
+    writeFile(fName, f, '.xml')
     return f
 
 def parsePids(pidFile):
@@ -157,7 +157,7 @@ def main():
     print('The datafile you specified has {0} rows.'.format(dataFileSize))
     print('Assuming there is a header row, you need {0} PIDs.'.format(dataLength))
     print('Load {0} PIDs from a file or request them from the server?'.format(dataLength))
-    pidFile = getPids()
+    pidFile = getPids(dataLength)
     pidList = parsePids(pidFile)    # Parses PIDs from the PID file (either local or from the server)
     if len(pidList) < dataLength:
         print('Not enough PIDs for your dataset!')
