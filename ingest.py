@@ -31,7 +31,7 @@ def requestPids(numPids):       # This function retrieves a specified number of 
     print("\nRetrieving PIDs from the server...")
     print('\nServer answered with the following XML file:\n')  # print server's response
     print(f)
-    fName = input('Enter a name to save the server\'s PID file: ')
+    fName = input('Enter a name under which to save the server\'s PID file: ')
     writeFile(fName, f, '.xml')
     return f
 
@@ -55,7 +55,7 @@ def loadFile(fileType):
         f = open(sourceFile, 'r').readlines()
     else:
         f = open(sourceFile, 'r').read()
-    return(f)
+    return(f, sourceFile)
 
 # Creates a file containing the contents of the "content" string, named umd_[PID].xml,
 # files are saved in a sub-directory called "output".
@@ -86,16 +86,16 @@ def createUMAM(data, template):     # Performs series of find and replace operat
     outputfile = outputfile.replace('!!!FileName!!!', data['File Name'])
     outputfile = outputfile.replace('!!!Mono/Stereo!!!', data['Mono/Stereo'])
     outputfile = outputfile.replace('!!!Sharestream!!!', data['ShareStreamURLs'])
-    convertedRunTime = str(convertTime(data['TotalRunTimeDerivatives']))
-    outputfile = outputfile.replace('!!!TotalRunTimeDerivatives!!!', convertedRunTime)
+    convertedRunTime = convertTime(data['TotalRunTimeDerivatives'])
+    outputfile = outputfile.replace('!!!TotalRunTimeDerivatives!!!', str(convertedRunTime))
     outputfile = outputfile.replace('!!!TrackFormat!!!', data['Track Format'])
     outputfile = outputfile.replace('!!!TimeStamp!!!', timeStamp)
     outputfile = outputfile.replace('!!!DateDigitized!!!', data['DateDigitized'])
     outputfile = outputfile.replace('!!!DigitizedByPers!!!', data['DigitizedByPers'])
-    return outputfile
+    return outputfile, convertedRunTime
 
-def createUMDM(data, template):     # Performs series of find and replace operations to
-    import datetime                 # generate UMDM file from the template.
+def createUMDM(data, template, summedRunTime):      # Performs series of find and replace operations to
+    import datetime                                 # generate UMDM file from the template.
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     outputfile = template.replace('!!!PID!!!', data['PID'])
     outputfile = outputfile.replace('!!!Title!!!', data['Title'])
@@ -113,8 +113,8 @@ def createUMDM(data, template):     # Performs series of find and replace operat
     if data['SizeReel'].endswith('"'):
         data['SizeReel'] = data['SizeReel'][0:-1]
     outputfile = outputfile.replace('!!!SizeReel!!!', data['SizeReel'])
-    convertedRunTime = str(convertTime(data['TotalRunTimeDerivatives']))
-    outputfile = outputfile.replace('!!!TotalRunTimeDerivativesMinutes!!!', convertedRunTime)
+    runTimeMasters = str(round(summedRunTime, 2))
+    outputfile = outputfile.replace('!!!TotalRunTimeMasters!!!', runTimeMasters)
     outputfile = outputfile.replace('!!!TypeOfMaterial!!!', data['TypeofMaterial'])
     outputfile = outputfile.replace('!!!Collection!!!', data['Collection'])
     outputfile = outputfile.replace('!!!BoxNumber!!!', data['Box Number'])
@@ -148,12 +148,24 @@ def stripAnchors(target):
 def main():
     import csv
     import datetime
+    
+    mets = ""					# empty string for compiling METS record
+    umdmList = []				# empty list for compiling list of UMDM pids
+    outputFiles = []			# empty list for compiling list of all pids written
+    logData = []				# empty list for compiling data for log file
+    objectGroups = 0            # counter for UMDM plus UMAM(s) as a group
+    objectParts = 0             # counter for the number of UMAM parts for each UMDM
+    filesWritten = 0            # counter for file outputs
+    summedRunTime = 0
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    
     greeting()
-    outputFiles = []
-    dataFile = loadFile('data')
+    
+    dataFile, fileName = loadFile('data')
+    logData.append('Loaded data file: {0}'.format(fileName))
     dataFileSize = len(dataFile)
     dataLength = dataFileSize - 1
+    logData.append('Dataset had {0} items.'.format(dataLength))
     print('The datafile you specified has {0} rows.'.format(dataFileSize))
     print('Assuming there is a header row, you need {0} PIDs.'.format(dataLength))
     print('Load {0} PIDs from a file or request them from the server?'.format(dataLength))
@@ -164,64 +176,90 @@ def main():
         print('Please reserve additional PIDs from the server and try again.')
         print('Exiting program.')
         quit()
-    umam = loadFile('UMAM')         # Loads UMAM template.
-    print("\n UMAM:\n" + umam)      # Prints UMAM.
-    print('*' * 30)                 # Prints a divider.
-    umdm = loadFile('UMDM')         # Loads UMDM template.
-    print("\n UMDM:\n" + umdm)      # Prints UMDM.
-    print('*' * 30)                 # Prints a divider.
+        
+    umam, umamName = loadFile('UMAM')         					# Loads UMAM template.
+    logData.append('UMAM template: {0}.'.format(umamName))
+    print("\n UMAM:\n" + umam)      							# Prints UMAM.
+    print('*' * 30)                 							# Prints a divider.
+    
+    umdm, umdmName = loadFile('UMDM')        					# Loads UMDM template.
+    logData.append('UMDM template: {0}.'.format(umdmName))
+    print("\n UMDM:\n" + umdm)     								# Prints UMDM.
+    print('*' * 30)                 							# Prints a divider.
+    
     myData = csv.DictReader(dataFile)
     print('Data successfully read.')
+    
     i = 0
-    mets = ""
-    objectGroups = 0            # counter for UMDM plus UMAM(s) as a group
-    objectParts = 0             # counter for the number of UMAM parts for each UMDM
-    filesWritten = 0            # counter for file outputs
     for x in myData:
-        x['PID'] = pidList[i]            # Attaches a PID to the dataset.
-        outputFiles.append(x['PID'])     # Append PID to list of output files
+        x['PID'] = pidList[i]            			# Attaches a PID to the dataset.
+        outputFiles.append(x['PID'])     			# Append PID to list of output files
         i += 1
+        
         if x['XML Type'] == 'UMDM':
             if mets != "":
                 print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
                 objectParts = 0                                         # reset parts counter
-                myFile = createUMDM(tempData, umdm)                     # Create the UMDM
+                myFile = createUMDM(tempData, umdm, summedRunTime)      # Create the UMDM
                 myFile = myFile.replace('!!!INSERT_METS_HERE!!!', mets) # Insert the METS
                 myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)   # update timestamp in the METS
                 myFile = stripAnchors(myFile)                           # Strip out anchor points
+                print('\nTotal runtime of all parts = {0}.'.format(str(summedRunTime)))
+                summedRunTime = 0
                 fileStem = tempData['PID'].replace(':', '_').strip()
                 print('UMDM = {0}'.format(fileStem))
-                writeFile(fileStem, myFile, '.xml')      # Write the file
+                writeFile(fileStem, myFile, '.xml')                     # Write the file
+                logData.append('UMDM written for PID {0}.'.format(fileStem))
+                umdmList.append(x['PID'])                               # Append PID to list of UMDM files
                 filesWritten += 1
             objectGroups += 1
             print('\nFILE GROUP {0}: '.format(objectGroups))
-            tempData = x                # Store the dataset for later, after UMAMs are generated
-            mets = createMets()         # Prepare the METS for addition of UMAM info
-        elif x['XML Type'] == 'UMAM':   # Checks whether it's a UMAM row
+            tempData = x                            # Store this dataset for later, after UMAMs are generated
+            mets = createMets()                     # Prepare the METS for addition of UMAM info
+            
+        elif x['XML Type'] == 'UMAM':   	    # Checks whether it's a UMAM row
             objectParts += 1
-            myFile = createUMAM(x, umam)      # If yes, calls function to populate UMAM template
+            myFile, convertedRunTime = createUMAM(x, umam)              # If yes, calls function to populate UMAM template
+            summedRunTime += convertedRunTime
             print('Writing UMAM...', end=' ')
             fileStem = x['PID'].replace(':', '_').strip()
             print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
-            writeFile(fileStem, myFile, '.xml')   # writes output to file
+            writeFile(fileStem, myFile, '.xml')     # writes output to file
+            logData.append('UMAM written for PID {0}.'.format(fileStem))
             filesWritten += 1
             mets = updateMets(objectParts, mets, x['File Name'], x['PID'])
+            
     print('Creating UMDM for object with {0} parts...'.format(objectParts), end=' ')   
-    myFile = createUMDM(tempData, umdm)                             # Create the UMDM for the final object
+    myFile = createUMDM(tempData, umdm, summedRunTime)              # Create the UMDM for the final object
     myFile = myFile.replace('!!!INSERT_METS_HERE!!!', mets)         # Insert the METS in the UMDM
     myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)           # update timestamp in the METS
     myFile = stripAnchors(myFile)                                   # Strip out anchor points
+    print('\nTotal runtime of all parts = {0}.'.format(str(round(summedRunTime, 2))))
     fileStem = tempData['PID'].replace(':', '_').strip()            # create pid stem for use in filename
     print('UMDM = {0}'.format(fileStem))
-    writeFile(fileStem, myFile, '.xml')             # Write the file
+    writeFile(fileStem, myFile, '.xml')                             # Write the file
+    logData.append('UMDM written for PID {0}.'.format(fileStem))
+    umdmList.append(x['PID'])                                       # Append PID to list of UMDM files
     filesWritten += 1
+    
     print('\nWriting summary file as pids.txt...')
     f = '\n'.join(outputFiles)
     writeFile('pids', f, '.txt')
     filesWritten += 1
+    
+    print('Writing log file as log.txt...')
+    l = '\n'.join(logData)
+    writeFile('log', l, '.txt')
+    filesWritten += 1
+    
+    print('Writing list of UMDM files as UMDMpids.txt...')
+    d = '\n'.join(umdmList)
+    writeFile('UMDMpids', d, '.txt')
+    filesWritten += 1
+    
     print('\n' + ('*' * 30))                # Print a divider and summarize output.
-    print('\n{0} files written: {1} FOXML files in {2}'.format(filesWritten, filesWritten - 1, objectGroups), end=' ')
-    print('groups, plus the summary list of pids.')
+    print('\n{0} files written: {1} FOXML files in {2}'.format(filesWritten, filesWritten - 3, objectGroups), end=' ')
+    print('groups, plus the summary list of pids, list of UMDM pids, and the log file.')
     print('Thanks for using the XML generator!\n\n')
     
 main()

@@ -31,7 +31,7 @@
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <amInfo xmlns="http://www.itd.umd.edu/fedora/amInfo">
-          <type>UMD_AUDIO</type>
+          <type>UMD_VIDEO</type>
           <status>Complete</status>
         </amInfo>
       </foxml:xmlContent>

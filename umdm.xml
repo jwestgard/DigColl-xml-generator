@@ -67,7 +67,7 @@
           </repository>
           <physDesc>
             <size units="in">!!!SizeReel!!!</size>
-            <extent units="minutes">!!!TotalRunTimeDerivativesMinutes!!!</extent>
+            <extent units="minutes">!!!TotalRunTimeMasters!!!</extent>
             <format>!!!TypeOfMaterial!!!</format>
           </physDesc>
           <subject type="browse">Broadcasting, Communications</subject>
