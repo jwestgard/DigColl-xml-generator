@@ -58,7 +58,7 @@
           </covPlace>
           <covTime>
             <century certainty="exact" era="ad">1901-2000</century>
-            <date certainty="exact" era="ad">!!!DateAnalogCreated!!!</date>
+            <date certainty="!!!CertaintyAttribute!!!" era="ad">!!!DateAnalogCreated!!!</date>
           </covTime>
           <culture>American</culture>
           <language>en</language>
