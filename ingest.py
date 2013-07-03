@@ -109,6 +109,10 @@ def createUMDM(data, template, summedRunTime):      # Performs series of find an
     outputfile = outputfile.replace('!!!Region/State!!!', data['Region/State'])
     outputfile = outputfile.replace('!!!Settlement/City!!!', data['Settlement/City'])
     outputfile = outputfile.replace('!!!DateAnalogCreated!!!', data['DateAnalogCreated'])
+    if data['DateCreatedCertainty'] == "circa":
+    	outputfile = outputfile.replace('!!!CertaintyAttribute!!!', 'circa')
+    else:
+    	outputfile = outputfile.replace('!!!CertaintyAttribute!!!', 'exact')	
     outputfile = outputfile.replace('!!!Repository!!!', data['Repository'])
     if data['SizeReel'].endswith('"'):
         data['SizeReel'] = data['SizeReel'][0:-1]
