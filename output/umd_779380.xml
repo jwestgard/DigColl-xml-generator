@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<foxml:digitalObject PID="!!!PID!!!"
+<foxml:digitalObject PID="umd:779380"
   fedoraxsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-0.xsd"
   xmlns:audit="info:fedora/fedora-system:def/audit#" xmlns:fedoraxsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:foxml="info:fedora/fedora-system:def/foxml#">
   <foxml:objectProperties>
@@ -9,7 +9,7 @@
     <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="UMD_VIDEO"/>
   </foxml:objectProperties>
   <foxml:datastream CONTROL_GROUP="X" ID="AUDIT" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!"
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:35.885677Z"
       FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit" ID="AUDIT.0" LABEL="Fedora Object Audit Trail" MIMETYPE="text/xml">
       <foxml:xmlContent>
         <audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
@@ -18,7 +18,7 @@
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream CONTROL_GROUP="X" ID="doInfo" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="doInfo.1" LABEL="Digital Object Information"
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:35.885677Z" ID="doInfo.1" LABEL="Digital Object Information"
       MIMETYPE="text/xml" SIZE="129">
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
@@ -30,55 +30,53 @@
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream CONTROL_GROUP="X" ID="umdm" STATE="A" VERSIONABLE="false">
-    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="umdm.4"
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:35.885677Z" ID="umdm.4"
       LABEL="University of Maryland Descriptive Metadata" MIMETYPE="text/xml">
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <descMeta xml:lang="en">
-          <title type="main">!!!Title!!!</title>
-          <title type="alternate">!!!AlternateTitle!!!</title>
+          <title type="main">WJHU News, undated</title>
+          <title type="alternate">Another Space Tape; 3 hours of Classical Compendium</title>
           <agent type="contributor">
-            <persName>!!!Contributor!!!</persName>
+            <persName>Macon, Robert</persName>
           </agent>
           <agent type="provider">
             <corpName>WMUC (Radio station : College Park, Md.)</corpName>
           </agent>
-          <identifier>!!!ItemControlNumber!!!</identifier>
-          <description type="summary">!!!Description/Summary!!!</description>
+          <identifier>WMUC-Reel-130</identifier>
+          <description type="summary">Label on reel says "Another Space Tape (Emergency is crossed out and replaced with Space); a comprehensive compilation of classical music." Actually contains four takes of WJHU 5:30pm News with Robert Macon reporting, undated.</description>
           <rights type="access">Access restricted to patrons at the University of Maryland.</rights>
-          <rights type="copyrightowner">!!!CopyrightHolder!!!</rights>
+          <rights type="copyrightowner">University of Maryland (College Park, Md.)</rights>
           <mediaType type="sound">
             <form type="analog">spoken word</form>
           </mediaType>
           <covPlace>
-            <geogName type="continent">!!!Continent!!!</geogName>
-            <geogName type="country">!!!Country!!!</geogName>
-            <geogName type="region">!!!Region/State!!!</geogName>
-            <geogName type="settlement">!!!Settlement/City!!!</geogName>
+            <geogName type="continent">North America</geogName>
+            <geogName type="country">United States of America</geogName>
+            <geogName type="region">Maryland</geogName>
+            <geogName type="settlement">College Park</geogName>
           </covPlace>
           <covTime>
             <century certainty="exact" era="ad">1901-2000</century>
-            <date certainty="exact" era="ad">!!!DateAnalogCreated!!!</date>
+            <date certainty="exact" era="ad">undated</date>
           </covTime>
           <culture>American</culture>
           <language>en</language>
           <repository>
-            <corpName>!!!Repository!!!</corpName>
+            <corpName>University Archives</corpName>
           </repository>
           <physDesc>
-            <size units="in">!!!SizeReel!!!</size>
-            <extent units="minutes">!!!TotalRunTimeMasters!!!</extent>
-            <format>!!!TypeOfMaterial!!!</format>
+            <size units="in">10.5</size>
+            <extent units="minutes">14.22</extent>
+            <format>1/4" open reel tape</format>
           </physDesc>
-          <subject type="browse">University of Maryland</subject>
-		  <subject label="AlbUM" type="browse">Events</subject>
           <subject type="browse">Broadcasting, Communications</subject>
           <relationships>
             <relation label="archivalcollection" type="isPartOf">
               <bibRef>
-                <title type="main">!!!Collection!!!</title>
-                <bibScope type="box">!!!BoxNumber!!!</bibScope>
-                <bibScope type="accession">!!!AccessionNumber!!!</bibScope>
+                <title type="main">WMUC Archives</title>
+                <bibScope type="box">2</bibScope>
+                <bibScope type="accession">2011-084</bibScope>
               </bibRef>
             </relation>
           </relationships>
@@ -87,7 +85,7 @@
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream CONTROL_GROUP="X" ID="DC" STATE="A" VERSIONABLE="true">
-    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="DC1.0" LABEL="Dublin Core Metadata"
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:35.885677Z" ID="DC1.0" LABEL="Dublin Core Metadata"
       MIMETYPE="text/xml">
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
@@ -97,51 +95,94 @@
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
-!!!INSERT_METS_HERE!!!
+  <foxml:datastream CONTROL_GROUP="X" ID="rels-mets" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:11.145566Z" ID="rels-mets.4" LABEL="METS Relationships"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <mets schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd"
+          xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <fileSec>
+            <fileGrp ID="fedora">
+              <file ID="1">
+                <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="umd:165259" xlink:type="simple"/>
+              </file>
+              <file ID="2">
+                <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="umd:3391" xlink:type="simple"/>
+              </file>
+	      <file ID="3">
+		  <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" fileName="bcast-018875-0001" xlink:href="umd:779381" xlink:type="simple"/>
+              </file>
+            </fileGrp>
+          </fileSec>
+          <structMap TYPE="LOGICAL">
+            <div ID="rels">
+              <div ID="isMemberOfCollection">
+                <fptr FILEID="1"/>
+              </div>
+              <div ID="isMemberOfCollection">
+                <fptr FILEID="2"/>
+              </div>
+                <div ID="hasPart">
+                  <fptr FILEID="3"/>
+                </div>
+            </div>
+          </structMap>
+          <structMap TYPE="LOGICAL">
+            <div ID="videos">
+              <div ORDER="1">
+                <fptr FILEID="3"/>
+              </div>
+            </div>
+          </structMap>
+        </mets>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:umdm" ID="DISS7" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umdm" CREATED="!!!TimeStamp!!!" ID="DISS7.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umdm" CREATED="2013-07-03T16:19:35.885677Z" ID="DISS7.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="umdm" KEY="DATASTREAM"/>
       </foxml:serviceInputMap>
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:thumbnail" ID="DISS5" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:thumbnail" CREATED="!!!TimeStamp!!!" ID="DISS5.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:thumbnail" CREATED="2013-07-03T16:19:35.885677Z" ID="DISS5.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
       </foxml:serviceInputMap>
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:image" ID="DISS6" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:image.umdm" CREATED="!!!TimeStamp!!!" ID="DISS6.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:image.umdm" CREATED="2013-07-03T16:19:35.885677Z" ID="DISS6.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
       </foxml:serviceInputMap>
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:handle" ID="DISS4" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:handle" CREATED="!!!TimeStamp!!!" ID="DISS4.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:handle" CREATED="2013-07-03T16:19:35.885677Z" ID="DISS4.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
       </foxml:serviceInputMap>
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:doInfo" ID="DISS3" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:doInfo" CREATED="!!!TimeStamp!!!" ID="DISS3.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:doInfo" CREATED="2013-07-03T16:19:35.885677Z" ID="DISS3.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="doInfo" KEY="DATASTREAM"/>
       </foxml:serviceInputMap>
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels" ID="DISS2" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="!!!TimeStamp!!!" ID="DISS2.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="2013-07-03T16:19:35.885677Z" ID="DISS2.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
       </foxml:serviceInputMap>
     </foxml:disseminatorVersion>
   </foxml:disseminator>
   <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels-mets" ID="DISS1" STATE="A" VERSIONABLE="true">
-    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels-mets" CREATED="!!!TimeStamp!!!" ID="DISS1.0">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels-mets" CREATED="2013-07-03T16:19:35.885677Z" ID="DISS1.0">
       <foxml:serviceInputMap>
         <foxml:datastreamBinding DATASTREAM_ID="rels-mets" KEY="DATASTREAM"/>
       </foxml:serviceInputMap>

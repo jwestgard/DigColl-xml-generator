@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject PID="umd:779368"
+  fedoraxsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-0.xsd"
+  xmlns:audit="info:fedora/fedora-system:def/audit#" xmlns:fedoraxsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:foxml="info:fedora/fedora-system:def/foxml#">
+  <foxml:objectProperties>
+    <foxml:property NAME="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" VALUE="FedoraObject"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="UMAM Object"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="UMD_VIDEO"/>
+  </foxml:objectProperties>
+  <foxml:datastream CONTROL_GROUP="E" ID="thumbnail" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:35.877527Z" ID="thumbnail.0" LABEL="thumbnail" MIMETYPE="image/jpeg">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:contentLocation REF="http://local.fedora.server/images/video_thumbnail.jpeg" TYPE="URL"/>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="DC" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:35.877527Z" ID="DC.0" LABEL="Dublin Core Metadata"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+          <dc:title></dc:title>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="amInfo" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:35.877527Z" ID="amInfo.0" LABEL="Digital Object Information"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <amInfo xmlns="http://www.itd.umd.edu/fedora/amInfo">
+          <type>UMD_VIDEO</type>
+          <status>Complete</status>
+        </amInfo>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="umam" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="2013-07-03T16:19:35.877527Z" ID="umam.0"
+      LABEL="University of Maryland Administrative Metadata" MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <adminMeta>
+          <identifier>bcast-018869-0001</identifier>
+          <digiProv>
+            <date></date>
+            <agent type="creator">
+              <corpName>Digital Conversion and Media Reformatting</corpName>
+            </agent>
+            <description>Sharestream
+              <extRef>http://streamer.lib.umd.edu/ssdcms/i.do?u=9a546126201846e</extRef>
+            </description>
+          </digiProv>
+          <digiProv>
+            <date></date>
+            <agent type="creator">
+              <persName>Borchers, Henry</persName>
+            </agent>
+            <description>Removed 1k tone from the start of the recording; Digitized through Mac Pro soundcard (HB)</description>
+          </digiProv>
+          <adminRights>
+            <access>UMDpublic</access>
+          </adminRights>
+          <technical>
+            <format>
+              <mimeType>audio/mpeg</mimeType>
+              <compression>lossy</compression>
+            </format>
+            <audio>
+              <duration>29.63</duration>
+              <channels>Full</channels>
+              <audioTrack>
+                <soundField>mono</soundField>
+              </audioTrack>
+            </audio>
+            <fileName>bcast-018869-0001</fileName>
+          </technical>
+        </adminMeta>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:video" ID="DISS4" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:video" CREATED="2013-07-03T16:19:35.877527Z" ID="DISS4.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="umam" KEY="umam"/>
+        <foxml:datastreamBinding DATASTREAM_ID="thumbnail" KEY="image"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:umam" ID="DISS3" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umam" CREATED="2013-07-03T16:19:35.877527Z" ID="DISS3.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="umam" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels" ID="DISS2" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="2013-07-03T16:19:35.877527Z" ID="DISS2.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:amInfo" ID="DISS1" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:amInfo" CREATED="2013-07-03T16:19:35.877527Z" ID="DISS1.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="amInfo" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+</foxml:digitalObject>

@@ -8,6 +8,9 @@
           <fileSec>
             <fileGrp ID="fedora">
               <file ID="1">
+                <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="umd:165259" xlink:type="simple"/>
+              </file>
+              <file ID="2">
                 <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="umd:3391" xlink:type="simple"/>
               </file>
 !!!Anchor-A!!!
@@ -17,6 +20,9 @@
             <div ID="rels">
               <div ID="isMemberOfCollection">
                 <fptr FILEID="1"/>
+              </div>
+              <div ID="isMemberOfCollection">
+                <fptr FILEID="2"/>
               </div>
 !!!Anchor-B!!!
             </div>

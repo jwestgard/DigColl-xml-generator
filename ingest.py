@@ -127,7 +127,7 @@ def createMets():
     return(metsFile)
  
 def updateMets(partNumber, mets, fileName, pid):
-    id = str(partNumber + 1)
+    id = str(partNumber + 2)   # first part is file 3 because the first two files are the collection PIDs for AlbUM and WMUC
     metsSnipA = open('metsA.xml', 'r').read() + '!!!Anchor-A!!!'
     metsSnipB = open('metsB.xml', 'r').read() + '!!!Anchor-B!!!'
     metsSnipC = open('metsC.xml', 'r').read() + '!!!Anchor-C!!!'
