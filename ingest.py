@@ -23,7 +23,7 @@ def getPids(dataLength):
 
 def requestPids(numPids):       # This function retrieves a specified number of PIDs 
     import requests             # from Fedora server.
-    url = 'http://fedorastage.lib.umd.edu/fedora/management/getNextPID?numPids='
+    url = 'http://fedora.lib.umd.edu/fedora/management/getNextPID?numPids='
     url += '{0}&namespace=umd&xml=true'.format(numPids)
     username = input('\nEnter the server username: ')          # prompts user for auth info
     password = input('Enter the server password: ')
@@ -153,10 +153,10 @@ def main():
     import csv
     import datetime
     
-    mets = ""					# empty string for compiling METS record
-    umdmList = []				# empty list for compiling list of UMDM pids
-    outputFiles = []			# empty list for compiling list of all pids written
-    logData = []				# empty list for compiling data for log file
+    mets = ""			# empty string for compiling METS record
+    umdmList = []		# empty list for compiling list of UMDM pids
+    outputFiles = []	        # empty list for compiling list of all pids written
+    logData = []		# empty list for compiling data for log file
     objectGroups = 0            # counter for UMDM plus UMAM(s) as a group
     objectParts = 0             # counter for the number of UMAM parts for each UMDM
     filesWritten = 0            # counter for file outputs
@@ -197,7 +197,7 @@ def main():
     i = 0
     for x in myData:
         x['PID'] = pidList[i]            			# Attaches a PID to the dataset.
-        outputFiles.append(x['PID'])     			# Append PID to list of output files
+#      outputFiles.append(x['PID'])     			# Append PID to list of output files
         i += 1
         
         if x['XML Type'] == 'UMDM':
@@ -214,7 +214,8 @@ def main():
                 print('UMDM = {0}'.format(fileStem))
                 writeFile(fileStem, myFile, '.xml')                     # Write the file
                 logData.append('UMDM written for PID {0}.'.format(fileStem))
-                umdmList.append(x['PID'])                               # Append PID to list of UMDM files
+                outputFiles.append(tempData['PID'])     		# Append UMDM PID to list of all output
+                umdmList.append(tempData['PID'])                        # Append UMDM PID to list of UMDM files
                 filesWritten += 1
             objectGroups += 1
             print('\nFILE GROUP {0}: '.format(objectGroups))
@@ -223,12 +224,13 @@ def main():
             
         elif x['XML Type'] == 'UMAM':   	    # Checks whether it's a UMAM row
             objectParts += 1
-            myFile, convertedRunTime = createUMAM(x, umam)              # If yes, calls function to populate UMAM template
+            myFile, convertedRunTime = createUMAM(x, umam)          # If yes, calls function to populate UMAM template
             summedRunTime += convertedRunTime
             print('Writing UMAM...', end=' ')
             fileStem = x['PID'].replace(':', '_').strip()
             print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
-            writeFile(fileStem, myFile, '.xml')     # writes output to file
+            writeFile(fileStem, myFile, '.xml')                     # writes output to file
+            outputFiles.append(x['PID'])     	                    # Append UMAM PID to list of all output
             logData.append('UMAM written for PID {0}.'.format(fileStem))
             filesWritten += 1
             mets = updateMets(objectParts, mets, x['File Name'], x['PID'])
@@ -243,7 +245,9 @@ def main():
     print('UMDM = {0}'.format(fileStem))
     writeFile(fileStem, myFile, '.xml')                             # Write the file
     logData.append('UMDM written for PID {0}.'.format(fileStem))
-    umdmList.append(x['PID'])                                       # Append PID to list of UMDM files
+    outputFiles.append(tempData['PID'])     		            # Append UMDM PID to list of all output
+    umdmList.append(tempData['PID'])                                # Append UMDM PID to list of UMDM files
+    
     filesWritten += 1
     
     print('\nWriting summary file as pids.txt...')
