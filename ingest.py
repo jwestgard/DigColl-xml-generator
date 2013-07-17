@@ -47,6 +47,42 @@ def parsePids(pidFile):
     print(pidList)
     return pidList
 
+def generateDateTag(inputDate, inputAttribute):
+    dateTagList = []
+    myDate = parseDate(inputDate, inputAttribute)
+    if myDate['Type'] == 'range':
+        limits = myDate['Value'].split('-')
+        myTag = '<date certainty="{0}" era="ad" from="{1}" to="{2}>{3}</date>'.format(myDate['Certainty'], limits[0], limits[1], myDate['Value'])
+        dateTagList.append(myTag)
+    elif myDate['Number'] == 'multiple':
+        for i in myDate['Value']:
+            myTag = '<date certainty="{0}" era="ad">{1}</date>'.format(myDate['Certainty'], i.strip())
+            dateTagList.append(myTag)
+    else:
+        myTag = '<date certainty="{0}" era="ad">{1}</date>'.format(myDate['Certainty'], myDate['Value'])
+        dateTagList.append(myTag)
+    return '\n'.join(dateTagList)
+
+def parseDate(inputDate, inputAttribute):
+    myDate = {}
+    if 'multiple' in inputAttribute:            # multiple or single date?
+        myDate['Number'] = 'multiple'
+    else:
+        myDate['Number'] = 'single'
+    if 'circa' in inputAttribute:               # exact or circa?
+        myDate['Certainty'] = 'circa'
+    else:
+        myDate['Certainty'] = 'exact'
+    if 'range' in inputAttribute:               # range or point?  
+        myDate['Type'] = 'range'
+    else:
+        myDate['Type'] = 'date'
+    if myDate['Number'] == 'multiple':          # set value --> split if multiple, otherwise single value
+        myDate['Value'] = inputDate.split(';')
+    else:
+        myDate['Value'] = inputDate
+    return myDate
+
 # Prompt the user to enter the name of the UMAM or UMDM template or PID file and
 # read that file, returning the contents.
 def loadFile(fileType):
@@ -109,10 +145,8 @@ def createUMDM(data, template, summedRunTime):      # Performs series of find an
     outputfile = outputfile.replace('!!!Region/State!!!', data['Region/State'])
     outputfile = outputfile.replace('!!!Settlement/City!!!', data['Settlement/City'])
     outputfile = outputfile.replace('!!!DateAnalogCreated!!!', data['DateAnalogCreated'])
-    if data['CreatedDateCertainty'] == "circa":
-    	outputfile = outputfile.replace('!!!CertaintyAttribute!!!', 'circa')
-    else:
-    	outputfile = outputfile.replace('!!!CertaintyAttribute!!!', 'exact')	
+    dateTagString = generateDateTag(data['DateAnalogCreated'], data['CreatedDateCertainty'])
+    outputfile = outputfile.replace('!!!InsertDateHere!!!', dateTagString)
     outputfile = outputfile.replace('!!!Repository!!!', data['Repository'])
     if data['SizeReel'].endswith('"'):
         data['SizeReel'] = data['SizeReel'][0:-1]
@@ -156,7 +190,7 @@ def main():
     mets = ""			# empty string for compiling METS record
     umdmList = []		# empty list for compiling list of UMDM pids
     outputFiles = []	        # empty list for compiling list of all pids written
-    logData = []		# empty list for compiling data for log file
+    summaryList = []		# empty list for compiling list of PIDs and Object IDs
     objectGroups = 0            # counter for UMDM plus UMAM(s) as a group
     objectParts = 0             # counter for the number of UMAM parts for each UMDM
     filesWritten = 0            # counter for file outputs
@@ -166,10 +200,8 @@ def main():
     greeting()
     
     dataFile, fileName = loadFile('data')
-    logData.append('Loaded data file: {0}'.format(fileName))
     dataFileSize = len(dataFile)
     dataLength = dataFileSize - 1
-    logData.append('Dataset had {0} items.'.format(dataLength))
     print('The datafile you specified has {0} rows.'.format(dataFileSize))
     print('Assuming there is a header row, you need {0} PIDs.'.format(dataLength))
     print('Load {0} PIDs from a file or request them from the server?'.format(dataLength))
@@ -181,15 +213,13 @@ def main():
         print('Exiting program.')
         quit()
         
-    umam, umamName = loadFile('UMAM')         					# Loads UMAM template.
-    logData.append('UMAM template: {0}.'.format(umamName))
-    print("\n UMAM:\n" + umam)      							# Prints UMAM.
-    print('*' * 30)                 							# Prints a divider.
+    umam, umamName = loadFile('UMAM')         			# Loads UMAM template.
+    print("\n UMAM:\n" + umam)      				# Prints UMAM.
+    print('*' * 30)                 				# Prints a divider.
     
-    umdm, umdmName = loadFile('UMDM')        					# Loads UMDM template.
-    logData.append('UMDM template: {0}.'.format(umdmName))
-    print("\n UMDM:\n" + umdm)     								# Prints UMDM.
-    print('*' * 30)                 							# Prints a divider.
+    umdm, umdmName = loadFile('UMDM')        			# Loads UMDM template.
+    print("\n UMDM:\n" + umdm)     				# Prints UMDM.
+    print('*' * 30)                 				# Prints a divider.
     
     myData = csv.DictReader(dataFile)
     print('Data successfully read.')
@@ -197,10 +227,12 @@ def main():
     i = 0
     for x in myData:
         x['PID'] = pidList[i]            			# Attaches a PID to the dataset.
-#      outputFiles.append(x['PID'])     			# Append PID to list of output files
+        outputFiles.append(x['PID'])     			# Append PID to list of output files
         i += 1
         
         if x['XML Type'] == 'UMDM':
+            link = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['Item Control Number'], x['XML Type'], x['PID'])
+            summaryList.append(link)                                # Append Control Number, Type, and PID to summary list
             if mets != "":
                 print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
                 objectParts = 0                                         # reset parts counter
@@ -213,9 +245,8 @@ def main():
                 fileStem = tempData['PID'].replace(':', '_').strip()
                 print('UMDM = {0}'.format(fileStem))
                 writeFile(fileStem, myFile, '.xml')                     # Write the file
-                logData.append('UMDM written for PID {0}.'.format(fileStem))
-                outputFiles.append(tempData['PID'])     		# Append UMDM PID to list of all output
-                umdmList.append(tempData['PID'])                        # Append UMDM PID to list of UMDM files
+                outputFiles.append(tempData['PID'])     		# Append UMDM PID to pidlist
+                umdmList.append(tempData['PID'])                        # Append UMDM PID to UMDM pidlist
                 filesWritten += 1
             objectGroups += 1
             print('\nFILE GROUP {0}: '.format(objectGroups))
@@ -223,6 +254,8 @@ def main():
             mets = createMets()                     # Prepare the METS for addition of UMAM info
             
         elif x['XML Type'] == 'UMAM':   	    # Checks whether it's a UMAM row
+            link = '"{0}","{1}","{2}"'.format(x['Item Control Number'], x['XML Type'], x['PID'])
+            summaryList.append(link)                                # Append Control Number, Type, and PID to summary list
             objectParts += 1
             myFile, convertedRunTime = createUMAM(x, umam)          # If yes, calls function to populate UMAM template
             summedRunTime += convertedRunTime
@@ -231,7 +264,6 @@ def main():
             print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
             writeFile(fileStem, myFile, '.xml')                     # writes output to file
             outputFiles.append(x['PID'])     	                    # Append UMAM PID to list of all output
-            logData.append('UMAM written for PID {0}.'.format(fileStem))
             filesWritten += 1
             mets = updateMets(objectParts, mets, x['File Name'], x['PID'])
             
@@ -244,20 +276,19 @@ def main():
     fileStem = tempData['PID'].replace(':', '_').strip()            # create pid stem for use in filename
     print('UMDM = {0}'.format(fileStem))
     writeFile(fileStem, myFile, '.xml')                             # Write the file
-    logData.append('UMDM written for PID {0}.'.format(fileStem))
     outputFiles.append(tempData['PID'])     		            # Append UMDM PID to list of all output
     umdmList.append(tempData['PID'])                                # Append UMDM PID to list of UMDM files
     
     filesWritten += 1
     
-    print('\nWriting summary file as pids.txt...')
+    print('\nWriting pidlist file as pids.txt...')
     f = '\n'.join(outputFiles)
     writeFile('pids', f, '.txt')
     filesWritten += 1
     
-    print('Writing log file as log.txt...')
-    l = '\n'.join(logData)
-    writeFile('log', l, '.txt')
+    print('Writing summary file as links.txt...')
+    l = '\n'.join(summaryList)
+    writeFile('links', l, '.txt')
     filesWritten += 1
     
     print('Writing list of UMDM files as UMDMpids.txt...')
@@ -267,7 +298,12 @@ def main():
     
     print('\n' + ('*' * 30))                # Print a divider and summarize output.
     print('\n{0} files written: {1} FOXML files in {2}'.format(filesWritten, filesWritten - 3, objectGroups), end=' ')
-    print('groups, plus the summary list of pids, list of UMDM pids, and the log file.')
+    print('groups, plus the summary list of pids, list of UMDM pids, and the links file.')
     print('Thanks for using the XML generator!\n\n')
     
 main()
+
+# inputDate = input('enter date: ')
+# inputType = input('enter type: ')
+# myTag = generateDateTag(inputDate, inputType)
+# print(myTag)
