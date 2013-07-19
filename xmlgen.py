@@ -97,9 +97,9 @@ def loadFile(fileType):
 # with all files saved in dir 'output', and XML files in the sub-dir 'foxml'.
 def writeFile(fileStem, content, extension):
     if extension == '.xml':
-        filepath = 'output/foxml/' + fileStem + extension
+        filePath = 'output/foxml/' + fileStem + extension
     else:
-        filePath = "output/" + fileStem + extension
+        filePath = 'output/' + fileStem + extension
     f = open(filePath, mode='w')
     f.write(content)
     f.close()
