@@ -245,7 +245,6 @@ def main():
                 fileStem = tempData['PID'].replace(':', '_').strip()
                 print('UMDM = {0}'.format(fileStem))
                 writeFile(fileStem, myFile, '.xml')                     # Write the file
-                outputFiles.append(tempData['PID'])     		# Append UMDM PID to pidlist
                 umdmList.append(tempData['PID'])                        # Append UMDM PID to UMDM pidlist
                 filesWritten += 1
             objectGroups += 1
@@ -263,7 +262,6 @@ def main():
             fileStem = x['PID'].replace(':', '_').strip()
             print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
             writeFile(fileStem, myFile, '.xml')                     # writes output to file
-            outputFiles.append(x['PID'])     	                    # Append UMAM PID to list of all output
             filesWritten += 1
             mets = updateMets(objectParts, mets, x['File Name'], x['PID'])
             
@@ -276,7 +274,6 @@ def main():
     fileStem = tempData['PID'].replace(':', '_').strip()            # create pid stem for use in filename
     print('UMDM = {0}'.format(fileStem))
     writeFile(fileStem, myFile, '.xml')                             # Write the file
-    outputFiles.append(tempData['PID'])     		            # Append UMDM PID to list of all output
     umdmList.append(tempData['PID'])                                # Append UMDM PID to list of UMDM files
     
     filesWritten += 1
