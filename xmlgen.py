@@ -94,9 +94,12 @@ def loadFile(fileType):
     return(f, sourceFile)
 
 # Creates a file containing the contents of the "content" string, named umd_[PID].xml,
-# files are saved in a sub-directory called "output".
+# with all files saved in dir 'output', and XML files in the sub-dir 'foxml'.
 def writeFile(fileStem, content, extension):
-    filePath = "output/" + fileStem + extension
+    if extension == '.xml':
+        filepath = 'output/foxml/' + fileStem + extension
+    else:
+        filePath = "output/" + fileStem + extension
     f = open(filePath, mode='w')
     f.write(content)
     f.close()
