@@ -6,7 +6,7 @@
 4. parse returned result, extracting list of PIDs
 5. iterate through data list, appending one pid to each line
 6. iterate through data list creating files as follows:
-7. create truncated UMDM
+    * create truncated UMDM
 8. create METS
 9. create UMAM (repeat 7-9 as long as next line is UMAM line)
 10. append info to METS
