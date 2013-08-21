@@ -52,12 +52,12 @@ def generateDateTag(inputDate, inputAttribute):
     myDate = parseDate(inputDate, inputAttribute)
     if myDate['Type'] == 'range':
         elements = myDate['Value'].split('-')   # split the date into its parts
-        if len(elements) == 2:                  # if there are two parts, use those as begin/end dates
+        if len(elements) == 2:                  # if there are two parts, use those as begin/end years
             beginDate = elements[0]
             endDate = elements[1]
-        elif len(elements) == 6:                # if there are 6 parts, use index 2 and 5 as begin/end dates
-            beginDate = elements[2]
-            endDate = elements[5]
+        elif len(elements) == 6:                # if there are 6 parts, use index 0 and 4 as begin/end years
+            beginDate = elements[0]             # i.e. we assume YYYY-MM-DD-YYYY-MM-DD format for exact date ranges
+            endDate = elements[4]
         myTag = '<date certainty="{0}" era="ad" from="{1}" to="{2}">{3}</date>'.format(myDate['Certainty'], beginDate, endDate, myDate['Value'])
         dateTagList.append(myTag)
     elif myDate['Number'] == 'multiple':
