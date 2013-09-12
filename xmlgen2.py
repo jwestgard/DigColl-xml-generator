@@ -1,10 +1,10 @@
-
 ############################################################################
 #                                                                          #
 #                              XMLGEN.PY:                                  #
-#  A program to generate FOXML files for Digital Collections Audio at UMD  #
-#                      Version 2 -- September 2013                         #    
-#                                                                          #       
+#                 A script to generate FOXML files for                     #
+#               Digital Collections Audio & Video at UMD                   #    
+#                      Version 2 -- September 2013                         #  
+#                                                                          #
 ############################################################################
 #                                                                          #       
 # Recommended command to run this program:                                 #
@@ -20,12 +20,15 @@
 #                                                                          #       
 ############################################################################
 
+
 # Import needed modules
 import csv
 import datetime
 import re
 import requests
 
+
+# Define global variables used as counters and to track summary info
 global umdmList
 umdmList = []	    # global list for compiling list of UMDM pids
 global outputFiles
@@ -34,6 +37,7 @@ global summaryList
 summaryList = []    # global list for compiling list of PIDs and Object IDs
 global filesWritten
 filesWritten = 0    # global counter for file outputs
+
 
 # Initiates interaction with the program and records the time and user.
 def greeting():
