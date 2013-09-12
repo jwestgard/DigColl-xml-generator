@@ -7,4 +7,5 @@ For testing purposes, you can use the included umam.xml (University of Maryland 
 
 The program assumes that the XML templates and data files will be in the same working directory as the python script. It also assumes that there will be a sub-directory called 'output' for the resulting XML files.
 
-The whole script has been revised as xmlgen2.py.  The revised version attempts to accommodate audio or video objects coming from any collection, and therefore the program no longer assumes that modifiable metadata elements are hardcoded in the XML templates. In addition, a succinct mapping of all metadata elements has been implemented as two python dictionaries, for easier updating in the future.
+============
+__UPDATE 2013-09-12:__ The whole script has been revised as xmlgen2.py.  The revised version attempts to accommodate audio or video objects coming from any collection, and therefore the program no longer assumes that modifiable metadata elements are hardcoded in the XML templates. In addition, a succinct mapping of all metadata elements has been implemented as two python dictionaries, for easier updating in the future.
