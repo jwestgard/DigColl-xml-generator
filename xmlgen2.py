@@ -20,20 +20,13 @@
 #                                                                          #       
 ############################################################################
 
+
 # Import needed modules
 import csv
 import datetime
 import re
 import requests
 
-global umdmList
-umdmList = []	    # global list for compiling list of UMDM pids
-global outputFiles
-outputFiles = []    # global list for compiling list of all pids written
-global summaryList
-summaryList = []    # global list for compiling list of PIDs and Object IDs
-global filesWritten
-filesWritten = 0    # global counter for file outputs
 
 # Initiates interaction with the program and records the time and user.
 def greeting():
@@ -46,7 +39,7 @@ def greeting():
     print("University of Maryland's digital collections repository.")
 
 
-# This section analyzes the type of datafile and calculates the number of PIDs needed.
+# Analyzes the type of datafile and calculates the number of PIDs needed.
 def analyzeDataFile(dataFile):
     dataFileSize = len(dataFile)
     print('\nDoes your datafile contain single or multiple rows for each object?')
@@ -77,7 +70,7 @@ def getPids(dataLength):
         pidFileName = input('Enter the name of the PID file: ')
         pidFile = open(pidFileName, 'r').read()
     elif pidSource == 'S':
-        pidFile = requestPids(dataLength)   # Requests as many PIDs as lines of data.
+        pidFile = requestPids(dataLength)
     return pidFile
 
 
@@ -201,7 +194,7 @@ def convertTime(inputTime):
 
 
 # Performs series of find and replace operations to generate UMAM file from the template.
-def createUMAM(data, template):
+def createUMAM(data, template, pid):
     
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     convertedRunTime = convertTime(data['TotalRunTimeDerivatives'])
@@ -210,7 +203,7 @@ def createUMAM(data, template):
     outputfile = template
     
     # create mapping of the metadata onto the UMAM XML template file
-    umamMap = {'!!!PID!!!' : data['PID'],
+    umamMap = {'!!!PID!!!' : pid,
                '!!!Title!!!' : data['Title'],
                '!!!DigitizationNotes!!!' : data['Digitization Notes'],
                '!!!FileName!!!' : data['File Name'],
@@ -219,7 +212,7 @@ def createUMAM(data, template):
                '!!!TrackFormat!!!' : data['Track Format'],
                '!!!DateDigitized!!!' : data['DateDigitized'],
                '!!!DigitizedByPers!!!' : data['DigitizedByPers'],
-               '!!!TotalRunTimeDerivatives!!!' : str(convertedRunTime) }
+               '!!!TotalRunTimeDerivatives!!!' : str(convertedRunTime)}
     
     # Carry out a find and replace for each line of the data mapping
     for anchor in umamMap:
@@ -229,59 +222,53 @@ def createUMAM(data, template):
 
 
 # Performs series of find and replace operations to generate UMDM file from the template.
-def populateUMDM(data, template, summedRunTime):
+def createUMDM(data, template, summedRunTime, mets, pid):
+    
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    outputfile = template.replace('!!!PID!!!', data['PID'])
-    outputfile = outputfile.replace('!!!Title!!!', data['Title'])
-    outputfile = outputfile.replace('!!!AlternateTitle!!!', data['Alternate Title'])
-    outputfile = outputfile.replace('!!!Contributor!!!', data['Contributor'])
-    outputfile = outputfile.replace('!!!ItemControlNumber!!!', data['Item Control Number'])
-    outputfile = outputfile.replace('!!!Description/Summary!!!', data['Description/Summary'])
-    outputfile = outputfile.replace('!!!CopyrightHolder!!!', data['Copyright Holder'])
-    outputfile = outputfile.replace('!!!Continent!!!', data['Continent'])
-    outputfile = outputfile.replace('!!!Country!!!', data['Country'])
-    outputfile = outputfile.replace('!!!Region/State!!!', data['Region/State'])
-    outputfile = outputfile.replace('!!!Settlement/City!!!', data['Settlement/City'])
-    outputfile = outputfile.replace('!!!DateAnalogCreated!!!', data['DateAnalogCreated'])
-    dateTagString = generateDateTag(data['DateAnalogCreated'], data['CreatedDateCertainty'])
-    outputfile = outputfile.replace('!!!InsertDateHere!!!', dateTagString)
-    outputfile = outputfile.replace('!!!Repository!!!', data['Repository'])
+    
+    # Initialize the output starting with the specified template file
+    outputfile = template
+    
+    # Strip out trailing quotation marks from SizeReel field
     if data['SizeReel'].endswith('"'):
         data['SizeReel'] = data['SizeReel'][0:-1]
-    outputfile = outputfile.replace('!!!SizeReel!!!', data['SizeReel'])
-    runTimeMasters = str(round(summedRunTime, 2))
-    outputfile = outputfile.replace('!!!TotalRunTimeMasters!!!', runTimeMasters)
-    outputfile = outputfile.replace('!!!TypeOfMaterial!!!', data['TypeofMaterial'])
-    outputfile = outputfile.replace('!!!Collection!!!', data['Collection'])
-    outputfile = outputfile.replace('!!!BoxNumber!!!', data['Box Number'])
-    outputfile = outputfile.replace('!!!AccessionNumber!!!', data['Accession Number'])
-    outputfile = outputfile.replace('!!!TimeStamp!!!', timeStamp)
+    
+    # Generate dating tags  
+    dateTagString = generateDateTag(data['DateAnalogCreated'], data['CreatedDateCertainty'])
+    
+    # Create mapping of the metadata onto the UMDM XML template file
+    umdmMap = {'!!!PID!!!' : pid,
+               '!!!Title!!!' : data['Title'],
+               '!!!AlternateTitle!!!' : data['Alternate Title'],
+               '!!!Contributor!!!' : data['Contributor'],
+               '!!!ItemControlNumber!!!' : data['Item Control Number'],
+               '!!!Description/Summary!!!' : data['Description/Summary'],
+               '!!!CopyrightHolder!!!' : data['Copyright Holder'],
+               '!!!Continent!!!' : data['Continent'],
+               '!!!Country!!!' : data['Country'],
+               '!!!Region/State!!!' : data['Region/State'],
+               '!!!Settlement/City!!!' : data['Settlement/City'],
+               '!!!InsertDateHere!!!' : dateTagString,
+               '!!!Repository!!!' : data['Repository'],
+               '!!!SizeReel!!!' : data['SizeReel'],
+               '!!!TotalRunTimeMasters!!!' : str(round(summedRunTime, 2)),
+               '!!!TypeOfMaterial!!!' : data['TypeofMaterial'],
+               '!!!Collection!!!' : data['Collection'],
+               '!!!BoxNumber!!!' : data['Box Number'],
+               '!!!AccessionNumber!!!' : data['Accession Number'],
+               '!!!TimeStamp!!!' : timeStamp}
+    
+    # Carry out a find and replace for each line of the data mapping
+    # Converting ampersands to XML entities in the process
+    for anchor in umdmMap:
+        datapoint = umdmMap[anchor].replace('&', '&amp;')
+        outputfile.replace(anchor, datapoint)
+    
+    # Insert the RELS-METS section compiled from the UMAM files
+    outputfile.replace('!!!INSERT_METS_HERE!!!', mets)      # Insert the METS
+    outputfile = stripAnchors(outputfile)                   # Strip out anchor points
+    
     return outputfile
-
-
-def createUMDM(data, umdm, summedRunTime, mets, objectParts):
-    global outputFiles
-    global umdmList
-    global filesWritten
-
-    # Create the UMDM
-    timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    myFile = populateUMDM(data, umdm, summedRunTime)        # Populate the UMDM
-    myFile = myFile.replace('!!!INSERT_METS_HERE!!!', mets) # Insert the METS
-    myFile = stripAnchors(myFile)                           # Strip out anchor points
-    myFile = myFile.replace('!!!TimeStamp!!!', timeStamp)   # Apply the timestamp
-    fileStem = data['PID'].replace(':', '_').strip()        # convert ':' to '_' in PID for use in filename
-    writeFile(fileStem, myFile, '.xml')                     # Write the file
-    
-    # Print summary info to the screen
-    print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
-    print('\nTotal runtime of all parts = {0}.'.format(str(summedRunTime)))
-    print('UMDM = {0}'.format(fileStem))
-    
-    # Append PID to list of all files created and list of UMDM files created
-    umdmList.append(data['PID'])
-    outputFiles.append(data['PID'])
-    filesWritten += 1
 
 
 # Initiates a METS section for use in a UMDM file
@@ -315,13 +302,15 @@ def stripAnchors(target):
 def main():
     
     # Initialize needed variables and lists
-    
-    mets = ""		        # empty string for compiling METS record
-    objectGroups = 0            # counter for UMDM plus UMAM(s) as a group
-    objectParts = 0             # counter for the number of UMAM parts for each UMDM
-    summedRunTime = 0           # variable to hold sum of constituent UMAM runtimes for UMDM
-    pidCounter = 0              # counter for coordinating PID list with data lines from CSV
-    global filesWritten
+    mets = ""		# empty string for compiling METS record
+    objectGroups = 0    # counter for UMDM plus UMAM(s) as a group
+    objectParts = 0     # counter for the number of UMAM parts for each UMDM
+    summedRunTime = 0   # variable to hold sum of constituent UMAM runtimes for UMDM
+    pidCounter = 0      # counter for coordinating PID list with data lines from CSV
+    filesWritten = 0    # counter for file outputs
+    umdmList = []	# list for compiling list of UMDM pids
+    outputFiles = []    # list for compiling list of all pids written
+    summaryList = []    # list for compiling list of PIDs and Object IDs
     
     # Create a timeStamp for these operations
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -366,6 +355,7 @@ def main():
     if dataFileArrangement == 'M':
         
         for x in myData:
+            
             # Attach a PID to the line of data.
             x['PID'] = pidList[pidCounter]
             pidCounter += 1
@@ -382,7 +372,19 @@ def main():
                 
                 # If the mets variable is NOT empty, finish the UMDM for the previous group
                 if mets != "":
-                    createUMDM(tempData, umdm, summedRunTime, mets, objectParts)
+                    myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'])
+                    fileStem = tempData['PID'].replace(':', '_').strip()    # convert ':' to '_' in PID for use in filename
+                    writeFile(fileStem, myFile, '.xml')                     # Write the file
+                    
+                    # Print summary info to the screen
+                    print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
+                    print('\nTotal runtime of all parts = {0}.'.format(str(summedRunTime)))
+                    print('UMDM = {0}'.format(fileStem))
+                    
+                    # Append PID to list of all files created and list of UMDM files created
+                    umdmList.append(tempData['PID'])
+                    outputFiles.append(tempData['PID'])
+                    filesWritten += 1
                     
                     # Reset counters
                     objectParts = 0     # reset parts counter
@@ -402,12 +404,13 @@ def main():
                 print('Writing UMAM...', end=' ')
                 
                 # Create UMAM, convert PID for use as filename, write the file
-                myFile, convertedRunTime = createUMAM(x, umam)
+                myFile, convertedRunTime = createUMAM(x, umam, x['PID'])
                 fileStem = x['PID'].replace(':', '_').strip()
                 print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
                 writeFile(fileStem, myFile, '.xml')
                 
                 # Increment counters
+                outputFiles.append(x['PID'])
                 summedRunTime += convertedRunTime
                 objectParts += 1
                 filesWritten += 1
@@ -416,7 +419,17 @@ def main():
                 mets = updateMets(objectParts, mets, x['File Name'], x['PID'])
                 
         # After iteration complete, finish the last UMDM    
-        createUMDM(tempData, umdm, summedRunTime, mets, objectParts)
+        createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'])
+        
+        # Print summary info to the screen
+        print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
+        print('\nTotal runtime of all parts = {0}.'.format(str(summedRunTime)))
+        print('UMDM = {0}'.format(fileStem))
+                    
+        # Append PID to list of all files created and list of UMDM files created
+        umdmList.append(tempData['PID'])
+        outputFiles.append(tempData['PID'])
+        filesWritten += 1
         
     # Generate XML for data arranged with single lines (UMAM plus UMDM) per object
     elif dataFileArrangement == 'S':
@@ -442,8 +455,7 @@ def main():
             mets = createMets()
             
             # Create UMAM, convert PID for use as filename, write the file
-            x['PID'] = x['umamPID']
-            myFile, convertedRunTime = createUMAM(x, umam)
+            myFile, convertedRunTime = createUMAM(x, umam, x['umamPID'])
             fileStem = x['umamPID'].replace(':', '_').strip()
             writeFile(fileStem, myFile, '.xml')
             
@@ -460,9 +472,18 @@ def main():
             print('Writing UMAM...', end=' ')
             
             # Create UMDM
-            x['PID'] = x['umdmPID']
-            createUMDM(x, umdm, summedRunTime)
-                    
+            createUMDM(x, umdm, summedRunTime, mets, x['umdmPID'])
+            
+            # Print summary info to the screen
+            print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
+            print('\nTotal runtime of all parts = {0}.'.format(str(summedRunTime)))
+            print('UMDM = {0}'.format(fileStem))
+            
+            # Append PID to list of all files created and list of UMDM files created
+            umdmList.append(x['umdmPID'])
+            outputFiles.append(x['umdmPID'])
+            filesWritten += 1
+          
             # Reset counters
             objectParts = 0     # reset parts counter
             summedRunTime = 0   # reset runtime sum counter
