@@ -27,20 +27,6 @@ import datetime
 import re
 import requests
 
-<<<<<<< HEAD
-=======
-
-# Define global variables used as counters and to track summary info
-global umdmList
-umdmList = []	    # global list for compiling list of UMDM pids
-global outputFiles
-outputFiles = []    # global list for compiling list of all pids written
-global summaryList
-summaryList = []    # global list for compiling list of PIDs and Object IDs
-global filesWritten
-filesWritten = 0    # global counter for file outputs
->>>>>>> 1c7fba904e588e7d0b65f377f93884dd9d242c0a
-
 
 # Initiates interaction with the program and records the time and user.
 def greeting():
@@ -218,7 +204,7 @@ def createUMAM(data, template, pid):
     
     # create mapping of the metadata onto the UMAM XML template file
     umamMap = {'!!!PID!!!' : pid,
-               '!!!Title!!!' : data['Title'],
+               '!!!Title!!!' : 'test',
                '!!!DigitizationNotes!!!' : data['Digitization Notes'],
                '!!!FileName!!!' : data['File Name'],
                '!!!Mono/Stereo!!!' : data['Mono/Stereo'],
@@ -229,8 +215,8 @@ def createUMAM(data, template, pid):
                '!!!TotalRunTimeDerivatives!!!' : str(convertedRunTime)}
     
     # Carry out a find and replace for each line of the data mapping
-    for anchor in umamMap:
-        outputfile.replace(anchor, umamMap[anchor])
+    for k, v in umamMap.items():
+        outputfile.replace(k, v)
     
     return outputfile, convertedRunTime
 
