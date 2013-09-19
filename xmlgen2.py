@@ -204,19 +204,26 @@ def createUMAM(data, template, pid):
     
     # create mapping of the metadata onto the UMAM XML template file
     umamMap = {'!!!PID!!!' : pid,
-               '!!!Title!!!' : 'test',
-               '!!!DigitizationNotes!!!' : data['Digitization Notes'],
-               '!!!FileName!!!' : data['File Name'],
-               '!!!Mono/Stereo!!!' : data['Mono/Stereo'],
-               '!!!Sharestream!!!' : data['ShareStreamURLs'],
-               '!!!TrackFormat!!!' : data['Track Format'],
+               '!!!ContentModel!!!' : 'UMD_VIDEO',
+               '!!!Status!!!' : 'Complete',
+               '!!!FileName!!!' : data['FileName'],
                '!!!DateDigitized!!!' : data['DateDigitized'],
+               '!!!DigitizedByCorp!!!' : 'Digital Conversion and Media Reformatting',
+               '!!!ExtRefDescription!!!' : 'Sharestream',
+               '!!!SharestreamURL!!!' : data['ShareStreamURLs'],
                '!!!DigitizedByPers!!!' : data['DigitizedByPers'],
-               '!!!TotalRunTimeDerivatives!!!' : str(convertedRunTime)}
+               '!!!DigitizationNotes!!!' : data['Digitization Notes'],
+               '!!!AccessRights!!!' : 'UMDpublic',
+               '!!!MimeType!!!' : 'audio/mpeg',
+               '!!!Compression!!!' : 'lossy',
+               '!!!TotalRunTimeDerivatives!!!' : str(convertedRunTime),
+               '!!!Mono/Stereo!!!' : data['Mono/Stereo'],
+               '!!!TrackFormat!!!' : data['Track Format']}
     
     # Carry out a find and replace for each line of the data mapping
+    # and convert ampersands in data into XML entities in the process
     for k, v in umamMap.items():
-        outputfile.replace(k, v)
+        outputfile = outputfile.replace(k, v.replace('&', '&amp;'))
     
     return outputfile, convertedRunTime
 
@@ -259,19 +266,18 @@ def createUMDM(data, template, summedRunTime, mets, pid):
                '!!!TimeStamp!!!' : timeStamp}
     
     # Carry out a find and replace for each line of the data mapping
-    # Converting ampersands to XML entities in the process
-    for anchor in umdmMap:
-        datapoint = umdmMap[anchor].replace('&', '&amp;')
-        outputfile.replace(anchor, datapoint)
+    # and convert ampersands to XML entities in the process
+    for k, v in umdmMap.items():
+        outputfile = outputfile.replace(k, v.replace('&', '&amp;'))
     
     # Insert the RELS-METS section compiled from the UMAM files
-    outputfile.replace('!!!INSERT_METS_HERE!!!', mets)      # Insert the METS
-    outputfile = stripAnchors(outputfile)                   # Strip out anchor points
+    outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
+    outputfile = stripAnchors(outputfile)                               # Strip out anchor points
     
     return outputfile
 
 
-# Initiates a METS section for use in a UMDM file
+# Initiates a new METS snippet for use in a UMDM file
 def createMets():
     metsFile = open('mets.xml', 'r').read()
     return(metsFile)
