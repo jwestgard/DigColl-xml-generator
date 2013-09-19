@@ -25,7 +25,7 @@ UMDM Mapping
 '!!!Title!!!' : data['Title'],
 '!!!AlternateTitle!!!' : data['Alternate Title'],
 '!!!Contributor!!!' : data['Contributor'],
-'!!!Provider!!!' : 'WMUC (Radio station : College Park, Md.)',
+'!!!Provider!!!' : data['Provider/Publisher'],
 '!!!ItemControlNumber!!!' : data['Item Control Number'],
 '!!!Description/Summary!!!' : data['Description/Summary'],
 '!!!AccessDescription!!!' : 'Access restricted to patrons at the University of Maryland.',
