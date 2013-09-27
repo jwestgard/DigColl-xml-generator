@@ -74,7 +74,7 @@ def getPids(dataLength):
     return pidFile
 
 
-# This function handles the request for PIDs from the server, 
+# Handles the request for PIDs from the server, 
 # requesting a specified number of PIDs and saving the resulting XML file.
 def requestPids(numPids):                   
     serverChoice = input('Enter S to get PIDs on fedoraStage, P to get PIDs on Production: ')
@@ -112,16 +112,17 @@ def parsePids(pidFile):
 
 # Generates the specific XML tags based on dating information stored in the myDate dictionary
 # previously returned by the parseDate function.
-def generateDateTag(inputDate, inputAttribute):
-    dateTagList = []
+def generateDateTag(inputDate, inputAttribute, centuryData):
+    dateTagList = generateCenturyTags(centuryData)  # start result list with century tag(s)
+    centuryList = []
     myDate = parseDate(inputDate, inputAttribute)
     if myDate['Type'] == 'range':
         elements = myDate['Value'].split('-')   # split the date into its parts
         if len(elements) == 2:                  # if there are two parts, use those as begin/end years
             beginDate = elements[0]
             endDate = elements[1]
-        elif len(elements) == 6:                # if there are 6 parts, use index 0 and 4 as begin/end years
-            beginDate = elements[0]             # i.e. we assume YYYY-MM-DD-YYYY-MM-DD format for exact date ranges
+        elif len(elements) == 6:    # if there are 6 parts, use index 0 and 4 as begin/end years
+            beginDate = elements[0] # i.e. we assume YYYY-MM-DD-YYYY-MM-DD format for exact date ranges
             endDate = elements[4]
         myTag = '<date certainty="{0}" era="ad" from="{1}" to="{2}">{3}</date>'.format(myDate['Certainty'], beginDate, endDate, myDate['Value'])
         dateTagList.append(myTag)
@@ -155,6 +156,24 @@ def parseDate(inputDate, inputAttribute):
     else:
         myDate['Value'] = inputDate
     return myDate
+
+
+# generate the sorted century tag(s) from the input data in the century column
+def generateCenturyTags(inputCentury):
+    result = []
+    myList = sorted(inputCentury.split(';'))
+    for i in myList:
+        result.append('<century certainty="exact" era="ad">{0}</century>'.format(i.strip()))
+    return result
+
+
+# generate browse terms from the subject field of the data
+def generateBrowseTerms(inputSubjects):
+    result = []
+    myList = inputSubjects.split(';')
+    for i in myList:
+        result.append('<subject type="browse">{0}</subject>'.format(i.strip()))
+    return '\n'.join(result)
 
 
 # Prompts the user to enter the name of the UMAM or UMDM template or PID file and
@@ -197,7 +216,7 @@ def convertTime(inputTime):
 def createUMAM(data, template, pid):
     
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    convertedRunTime = convertTime(data['TotalRunTimeDerivatives'])
+    convertedRunTime = convertTime(data['DurationDerivatives'])
     
     # initialize the output starting with the specified template file
     outputfile = template
@@ -206,19 +225,19 @@ def createUMAM(data, template, pid):
     umamMap = {'!!!PID!!!' : pid,
                '!!!ContentModel!!!' : 'UMD_VIDEO',
                '!!!Status!!!' : 'Complete',
-               '!!!FileName!!!' : data['File Name'],
+               '!!!FileName!!!' : data['FileName'],
                '!!!DateDigitized!!!' : data['DateDigitized'],
-               '!!!DigitizedByCorp!!!' : 'Digital Conversion and Media Reformatting',
+               '!!!DigitizedByDept!!!' : 'Digital Conversion and Media Reformatting',
                '!!!ExtRefDescription!!!' : 'Sharestream',
-               '!!!SharestreamURL!!!' : data['ShareStreamURLs'],
+               '!!!SharestreamURL!!!' : data['SharestreamURLs'],
                '!!!DigitizedByPers!!!' : data['DigitizedByPers'],
-               '!!!DigitizationNotes!!!' : data['Digitization Notes'],
-               '!!!AccessRights!!!' : 'UMDpublic',
+               '!!!DigitizationNotes!!!' : data['DigitizationNotes'],
+               '!!!AccessRights!!!' : 'Public',
                '!!!MimeType!!!' : 'audio/mpeg',
                '!!!Compression!!!' : 'lossy',
-               '!!!TotalRunTimeDerivatives!!!' : str(convertedRunTime),
+               '!!!DurationDerivatives!!!' : str(convertedRunTime),
                '!!!Mono/Stereo!!!' : data['Mono/Stereo'],
-               '!!!TrackFormat!!!' : data['Track Format'],
+               '!!!TrackFormat!!!' : data['TrackFormat'],
                '!!!TimeStamp!!!' : timeStamp}
     
     # Carry out a find and replace for each line of the data mapping
@@ -226,7 +245,7 @@ def createUMAM(data, template, pid):
     for k, v in umamMap.items():
         outputfile = outputfile.replace(k, v.replace('&', '&amp;'))
     
-    return outputfile, convertedRunTime
+    return outputfile
 
 
 # Performs series of find and replace operations to generate UMDM file from the template.
@@ -237,50 +256,54 @@ def createUMDM(data, template, summedRunTime, mets, pid):
     # Initialize the output starting with the specified template file
     outputfile = template
     
-    # Strip out trailing quotation marks from SizeReel field
-    if data['SizeReel'].endswith('"'):
-        data['SizeReel'] = data['SizeReel'][0:-1]
+    # Strip out trailing quotation marks from Dimensions field
+    if data['Dimensions'].endswith('"'):
+        data['Dimensions'] = data['Dimensions'][0:-1]
     
     # Generate dating tags  
-    dateTagString = generateDateTag(data['DateAnalogCreated'], data['CreatedDateCertainty'])
+    dateTagString = generateDateTag(data['DateCreated'], data['DateAttribute'], data['Century'])
+    
+    # Generate browse terms from subject field
+    subjectTagString = generateBrowseTerms(data['Subjects'])
+    
+    # Insert the RELS-METS section compiled from the UMAM files
+    outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
+    outputfile = stripAnchors(outputfile)                               # Strip out anchor points
     
     # Create mapping of the metadata onto the UMDM XML template file
     umdmMap = {'!!!PID!!!' : pid,
+               '!!!ContentModel!!!' : 'UMD_VIDEO',
+               '!!!Status!!!' : 'Complete',
                '!!!Title!!!' : data['Title'],
-               '!!!AlternateTitle!!!' : data['Alternate Title'],
+               '!!!AlternateTitle!!!' : data['AlternateTitle'],
                '!!!Contributor!!!' : data['Contributor'],
                '!!!Provider!!!' : data['Provider/Publisher'],
-               '!!!ItemControlNumber!!!' : data['Item Control Number'],
+               '!!!ItemControlNumber!!!' : data['ItemControlNumber'],
                '!!!Description/Summary!!!' : data['Description/Summary'],
-               '!!!AccessDescription!!!' : 'Access restricted to patrons at the University of Maryland.',
-               '!!!CopyrightHolder!!!' : data['Copyright Holder'],
-               '!!!MediaType/Form!!!' : 'spoken word',
+               '!!!AccessDescription!!!' : 'Collection may be protected under Title 17 of the U.S. Copyright Law. To obtain permission to publish or reproduce, please contact the University of Maryland Libraries at http://digital.lib.umd.edu/archivesum/contact.jsp.',
+               '!!!CopyrightHolder!!!' : data['CopyrightHolder'],
+               '!!!MediaType/Form!!!' : data['Genre'],
                '!!!Continent!!!' : data['Continent'],
                '!!!Country!!!' : data['Country'],
                '!!!Region/State!!!' : data['Region/State'],
                '!!!Settlement/City!!!' : data['Settlement/City'],
                '!!!InsertDateHere!!!' : dateTagString,
-               '!!!Century!!!' : '1901-2000',
                '!!!Culture!!!' : 'American',
                '!!!Language!!!' : 'en',
                '!!!Repository!!!' : data['Repository'],
-               '!!!SizeReel!!!' : data['SizeReel'],
-               '!!!TotalRunTimeMasters!!!' : str(round(summedRunTime, 2)),
-               '!!!TypeOfMaterial!!!' : data['TypeofMaterial'],
-               '!!!Subjects!!!' : 'Broadcasting/Communications',
+               '!!!Dimensions!!!' : data['Dimensions'],
+               '!!!DurationMasters!!!' : str(round(summedRunTime, 2)),
+               '!!!TypeOfMaterial!!!' : data['TypeOfMaterial'],
+               '!!!Subjects!!!' : subjectTagString,
                '!!!Collection!!!' : data['Collection'],
-               '!!!BoxNumber!!!' : data['Box Number'],
-               '!!!AccessionNumber!!!' : data['Accession Number'],
+               '!!!PhysicalLocation!!!' : data['PhysicalLocation'],
+               '!!!AccessionNumber!!!' : data['AccessionNumber'],
                '!!!TimeStamp!!!' : timeStamp}
     
     # Carry out a find and replace for each line of the data mapping
     # and convert ampersands to XML entities in the process
     for k, v in umdmMap.items():
         outputfile = outputfile.replace(k, v.replace('&', '&amp;'))
-    
-    # Insert the RELS-METS section compiled from the UMAM files
-    outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
-    outputfile = stripAnchors(outputfile)                               # Strip out anchor points
     
     return outputfile
 
@@ -293,7 +316,7 @@ def createMets():
 
 # Updates a METS record with UMAM info
 def updateMets(partNumber, mets, fileName, pid):
-    id = str(partNumber + 2)   # first part is file 3 because the first two files are the collection PIDs for AlbUM and WMUC
+    id = str(partNumber + 1)   # first item(s) are collection PIDs
     metsSnipA = open('metsA.xml', 'r').read() + '!!!Anchor-A!!!'
     metsSnipB = open('metsB.xml', 'r').read() + '!!!Anchor-B!!!'
     metsSnipC = open('metsC.xml', 'r').read() + '!!!Anchor-C!!!'
@@ -375,14 +398,14 @@ def main():
             pidCounter += 1
             
             # Attach summary info to summary list, depending on XML type
-            if x['XML Type'] == 'UMDM':
-                link = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['Item Control Number'], x['XML Type'], x['PID'])
-            elif x['XML Type'] == 'UMAM':
-                link = '"{0}","{1}","{2}"'.format(x['Item Control Number'], x['XML Type'], x['PID'])
+            if x['XMLType'] == 'UMDM':
+                link = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['ItemControlNumber'], x['XMLType'], x['PID'])
+            elif x['XMLType'] == 'UMAM':
+                link = '"{0}","{1}","{2}"'.format(x['ItemControlNumber'], x['XMLType'], x['PID'])
             summaryList.append(link)
             
             # Check the XML type for each line, and build the FOXML files accordingly
-            if x['XML Type'] == 'UMDM':
+            if x['XMLType'] == 'UMDM':
                 
                 # If the mets variable is NOT empty, finish the UMDM for the previous group
                 if mets != "":
@@ -402,7 +425,7 @@ def main():
                     
                     # Reset counters
                     objectParts = 0     # reset parts counter
-                    summedRunTime = 0   # reset runtime sum counter
+                    summedRunTime = 0  # reset runtime sum counter for masters
                 
                 # Begin a new UMDM group by incrementing the group counter, printing a notice to screen,
                 # storing the line of UMDM data for use after UMAMs are complete, and initiating a new METS
@@ -412,25 +435,26 @@ def main():
                 mets = createMets()
                 
             # If the line is a UMAM line
-            elif x['XML Type'] == 'UMAM':
+            elif x['XMLType'] == 'UMAM':
                 
                 # Print summary info to the screen
                 print('Writing UMAM...', end=' ')
                 
                 # Create UMAM, convert PID for use as filename, write the file
-                myFile, convertedRunTime = createUMAM(x, umam, x['PID'])
+                myFile = createUMAM(x, umam, x['PID'])
+                convertedMasterRunTime = convertTime(x['DurationMasters'])
                 fileStem = x['PID'].replace(':', '_').strip()
                 print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
                 writeFile(fileStem, myFile, '.xml')
                 
                 # Increment counters
                 outputFiles.append(x['PID'])
-                summedRunTime += convertedRunTime
+                summedRunTime += convertedMasterRunTime
                 objectParts += 1
                 filesWritten += 1
                 
                 # Update the running METS record for use in finishing the UMDM
-                mets = updateMets(objectParts, mets, x['File Name'], x['PID'])
+                mets = updateMets(objectParts, mets, x['FileName'], x['PID'])
                 
         # After iteration complete, finish the last UMDM    
         createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'])
@@ -456,8 +480,8 @@ def main():
             pidCounter += 1
             
             # Attach summary info to summary list, once for each file
-            link1 = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['Item Control Number'], 'UMDM', x['umdmPID'])
-            link2 = '"{0}","{1}","{2}"'.format(x['Item Control Number'], 'UMAM', x['umamPID'])
+            link1 = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['ItemControlNumber'], 'UMDM', x['umdmPID'])
+            link2 = '"{0}","{1}","{2}"'.format(x['ItemControlNumber'], 'UMAM', x['umamPID'])
             summaryList.append(link1)
             summaryList.append(link2)
             

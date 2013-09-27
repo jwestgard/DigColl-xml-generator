@@ -6,7 +6,7 @@
     <foxml:property NAME="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" VALUE="FedoraObject"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="UMAM Object"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="UMD_VIDEO"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="!!!ContentModel!!!"/>
   </foxml:objectProperties>
   <foxml:datastream CONTROL_GROUP="E" ID="thumbnail" STATE="A" VERSIONABLE="false">
     <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="thumbnail.0" LABEL="thumbnail" MIMETYPE="image/jpeg">
@@ -31,8 +31,8 @@
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <amInfo xmlns="http://www.itd.umd.edu/fedora/amInfo">
-          <type>UMD_VIDEO</type>
-          <status>Complete</status>
+          <type>!!!ContentModel!!!</type>
+          <status>!!!Status!!!</status>
         </amInfo>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -47,9 +47,9 @@
           <digiProv>
             <date>!!!DateDigitized!!!</date>
             <agent type="creator">
-              <corpName>Digital Conversion and Media Reformatting</corpName>
+              <corpName>!!!DigitizedByDept!!!</corpName>
             </agent>
-            <description>Sharestream
+            <description>!!!ExtRefDescription!!!
               <extRef>!!!SharestreamURL!!!</extRef>
             </description>
           </digiProv>
@@ -61,15 +61,15 @@
             <description>!!!DigitizationNotes!!!</description>
           </digiProv>
           <adminRights>
-            <access>UMDpublic</access>
+            <access>!!!AccessRights!!!</access>
           </adminRights>
           <technical>
             <format>
-              <mimeType>audio/mpeg</mimeType>
-              <compression>lossy</compression>
+              <mimeType>!!!MimeType!!!</mimeType>
+              <compression>!!!Compression!!!</compression>
             </format>
             <audio>
-              <duration>!!!TotalRunTimeDerivatives!!!</duration>
+              <duration>!!!DurationDerivatives!!!</duration>
               <channels>!!!TrackFormat!!!</channels>
               <audioTrack>
                 <soundField>!!!Mono/Stereo!!!</soundField>

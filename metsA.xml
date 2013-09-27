@@ -1,3 +1,3 @@
-	      <file ID="!!!ID!!!">
-		  <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="!!!PID!!!" xlink:type="simple"/>
-              </file>
+		<file ID="!!!ID!!!">
+		    <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="!!!PID!!!" xlink:type="simple"/>
+		</file>

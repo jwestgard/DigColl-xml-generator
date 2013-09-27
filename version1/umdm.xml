@@ -23,8 +23,8 @@
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <doInfo xmlns="http://www.itd.umd.edu/fedora/doInfo">
-          <type>!!!ContentModel!!!</type>
-          <status>!!!Status!!!</status>
+          <type>UMD_VIDEO</type>
+          <status>Private</status>
         </doInfo>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -41,14 +41,14 @@
             <persName>!!!Contributor!!!</persName>
           </agent>
           <agent type="provider">
-            <corpName>!!!Provider!!!</corpName>
+            <corpName>WMUC (Radio station : College Park, Md.)</corpName>
           </agent>
           <identifier>!!!ItemControlNumber!!!</identifier>
           <description type="summary">!!!Description/Summary!!!</description>
-          <rights type="access">!!!AccessDescription!!!</rights>
+          <rights type="access">Access restricted to patrons at the University of Maryland.</rights>
           <rights type="copyrightowner">!!!CopyrightHolder!!!</rights>
           <mediaType type="sound">
-            <form type="analog"></form>
+            <form type="analog">spoken word</form>
           </mediaType>
           <covPlace>
             <geogName type="continent">!!!Continent!!!</geogName>
@@ -57,7 +57,7 @@
             <geogName type="settlement">!!!Settlement/City!!!</geogName>
           </covPlace>
           <covTime>
-            <century certainty="exact" era="ad">!!!Century!!!</century>
+            <century certainty="exact" era="ad">1901-2000</century>
             !!!InsertDateHere!!!
           </covTime>
           <culture>American</culture>
@@ -70,7 +70,9 @@
             <extent units="minutes">!!!TotalRunTimeMasters!!!</extent>
             <format>!!!TypeOfMaterial!!!</format>
           </physDesc>
-          <subject type="browse">!!!Subjects!!!</subject>
+          <subject type="browse">University of Maryland</subject>
+		  <subject label="AlbUM" type="browse">Events</subject>
+          <subject type="browse">Broadcasting, Communications</subject>
           <relationships>
             <relation label="archivalcollection" type="isPartOf">
               <bibRef>

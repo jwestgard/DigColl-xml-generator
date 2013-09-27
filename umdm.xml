@@ -23,8 +23,8 @@
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <doInfo xmlns="http://www.itd.umd.edu/fedora/doInfo">
-          <type>UMD_VIDEO</type>
-          <status>Private</status>
+          <type>!!!ContentModel!!!</type>
+          <status>!!!Status!!!</status>
         </doInfo>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -41,14 +41,14 @@
             <persName>!!!Contributor!!!</persName>
           </agent>
           <agent type="provider">
-            <corpName>WMUC (Radio station : College Park, Md.)</corpName>
+            <corpName>!!!Provider!!!</corpName>
           </agent>
           <identifier>!!!ItemControlNumber!!!</identifier>
           <description type="summary">!!!Description/Summary!!!</description>
-          <rights type="access">Access restricted to patrons at the University of Maryland.</rights>
+          <rights type="access">!!!AccessDescription!!!</rights>
           <rights type="copyrightowner">!!!CopyrightHolder!!!</rights>
           <mediaType type="sound">
-            <form type="analog">spoken word</form>
+            <form type="analog">!!!MediaType/Form!!!</form>
           </mediaType>
           <covPlace>
             <geogName type="continent">!!!Continent!!!</geogName>
@@ -57,8 +57,7 @@
             <geogName type="settlement">!!!Settlement/City!!!</geogName>
           </covPlace>
           <covTime>
-            <century certainty="exact" era="ad">1901-2000</century>
-            !!!InsertDateHere!!!
+	    !!!InsertDateHere!!!
           </covTime>
           <culture>American</culture>
           <language>en</language>
@@ -66,18 +65,16 @@
             <corpName>!!!Repository!!!</corpName>
           </repository>
           <physDesc>
-            <size units="in">!!!SizeReel!!!</size>
-            <extent units="minutes">!!!TotalRunTimeMasters!!!</extent>
+            <size units="in">!!!Dimensions!!!</size>
+            <extent units="minutes">!!!DurationMasters!!!</extent>
             <format>!!!TypeOfMaterial!!!</format>
           </physDesc>
-          <subject type="browse">University of Maryland</subject>
-		  <subject label="AlbUM" type="browse">Events</subject>
-          <subject type="browse">Broadcasting, Communications</subject>
+	  !!!Subjects!!!
           <relationships>
             <relation label="archivalcollection" type="isPartOf">
               <bibRef>
                 <title type="main">!!!Collection!!!</title>
-                <bibScope type="box">!!!BoxNumber!!!</bibScope>
+                <bibScope type="box">!!!PhysicalLocation!!!</bibScope>
                 <bibScope type="accession">!!!AccessionNumber!!!</bibScope>
               </bibRef>
             </relation>
