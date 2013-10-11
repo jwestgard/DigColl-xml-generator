@@ -1,0 +1,663 @@
+
+Enter your name: 
+Hello Josh, welcome to the XML generator!
+It is now 2013-10-11T20:16:49.255301Z
+
+This program is designed to take data from a CSV file,
+and use that data to generate FOXML files for the
+University of Maryland's digital collections repository.
+
+Enter the name of the data file: 
+Does your datafile contain single or multiple rows for each object?
+Please enter S or M: 
+The datafile you specified has 80 rows.
+Since you have multi-rowed objects, you need one PID for each row.
+Assuming there is a header row in your datafile, you need 79 PIDs.
+Load 79 PIDs from a file or request them from the server?
+Enter F (file) or S (server): Enter S to get PIDs on fedoraStage, P to get PIDs on Production: 
+Enter the server username: Enter the server password: 
+Retrieving PIDs from the server...
+
+Server answered with the following XML file:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<pidList  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.fedora.info/definitions/1/0/management/ http://fedora.lib.umd.edu:80/getNextPIDInfo.xsd">
+  <pid>umd:321096</pid>
+  <pid>umd:321097</pid>
+  <pid>umd:321098</pid>
+  <pid>umd:321099</pid>
+  <pid>umd:321100</pid>
+  <pid>umd:321101</pid>
+  <pid>umd:321102</pid>
+  <pid>umd:321103</pid>
+  <pid>umd:321104</pid>
+  <pid>umd:321105</pid>
+  <pid>umd:321106</pid>
+  <pid>umd:321107</pid>
+  <pid>umd:321108</pid>
+  <pid>umd:321109</pid>
+  <pid>umd:321110</pid>
+  <pid>umd:321111</pid>
+  <pid>umd:321112</pid>
+  <pid>umd:321113</pid>
+  <pid>umd:321114</pid>
+  <pid>umd:321115</pid>
+  <pid>umd:321116</pid>
+  <pid>umd:321117</pid>
+  <pid>umd:321118</pid>
+  <pid>umd:321119</pid>
+  <pid>umd:321120</pid>
+  <pid>umd:321121</pid>
+  <pid>umd:321122</pid>
+  <pid>umd:321123</pid>
+  <pid>umd:321124</pid>
+  <pid>umd:321125</pid>
+  <pid>umd:321126</pid>
+  <pid>umd:321127</pid>
+  <pid>umd:321128</pid>
+  <pid>umd:321129</pid>
+  <pid>umd:321130</pid>
+  <pid>umd:321131</pid>
+  <pid>umd:321132</pid>
+  <pid>umd:321133</pid>
+  <pid>umd:321134</pid>
+  <pid>umd:321135</pid>
+  <pid>umd:321136</pid>
+  <pid>umd:321137</pid>
+  <pid>umd:321138</pid>
+  <pid>umd:321139</pid>
+  <pid>umd:321140</pid>
+  <pid>umd:321141</pid>
+  <pid>umd:321142</pid>
+  <pid>umd:321143</pid>
+  <pid>umd:321144</pid>
+  <pid>umd:321145</pid>
+  <pid>umd:321146</pid>
+  <pid>umd:321147</pid>
+  <pid>umd:321148</pid>
+  <pid>umd:321149</pid>
+  <pid>umd:321150</pid>
+  <pid>umd:321151</pid>
+  <pid>umd:321152</pid>
+  <pid>umd:321153</pid>
+  <pid>umd:321154</pid>
+  <pid>umd:321155</pid>
+  <pid>umd:321156</pid>
+  <pid>umd:321157</pid>
+  <pid>umd:321158</pid>
+  <pid>umd:321159</pid>
+  <pid>umd:321160</pid>
+  <pid>umd:321161</pid>
+  <pid>umd:321162</pid>
+  <pid>umd:321163</pid>
+  <pid>umd:321164</pid>
+  <pid>umd:321165</pid>
+  <pid>umd:321166</pid>
+  <pid>umd:321167</pid>
+  <pid>umd:321168</pid>
+  <pid>umd:321169</pid>
+  <pid>umd:321170</pid>
+  <pid>umd:321171</pid>
+  <pid>umd:321172</pid>
+  <pid>umd:321173</pid>
+  <pid>umd:321174</pid>
+</pidList>
+
+Enter a name under which to save the server's PID file: 
+Successfully loaded the following 79 PIDs: 
+['umd:321096', 'umd:321097', 'umd:321098', 'umd:321099', 'umd:321100', 'umd:321101', 'umd:321102', 'umd:321103', 'umd:321104', 'umd:321105', 'umd:321106', 'umd:321107', 'umd:321108', 'umd:321109', 'umd:321110', 'umd:321111', 'umd:321112', 'umd:321113', 'umd:321114', 'umd:321115', 'umd:321116', 'umd:321117', 'umd:321118', 'umd:321119', 'umd:321120', 'umd:321121', 'umd:321122', 'umd:321123', 'umd:321124', 'umd:321125', 'umd:321126', 'umd:321127', 'umd:321128', 'umd:321129', 'umd:321130', 'umd:321131', 'umd:321132', 'umd:321133', 'umd:321134', 'umd:321135', 'umd:321136', 'umd:321137', 'umd:321138', 'umd:321139', 'umd:321140', 'umd:321141', 'umd:321142', 'umd:321143', 'umd:321144', 'umd:321145', 'umd:321146', 'umd:321147', 'umd:321148', 'umd:321149', 'umd:321150', 'umd:321151', 'umd:321152', 'umd:321153', 'umd:321154', 'umd:321155', 'umd:321156', 'umd:321157', 'umd:321158', 'umd:321159', 'umd:321160', 'umd:321161', 'umd:321162', 'umd:321163', 'umd:321164', 'umd:321165', 'umd:321166', 'umd:321167', 'umd:321168', 'umd:321169', 'umd:321170', 'umd:321171', 'umd:321172', 'umd:321173', 'umd:321174']
+
+Enter the name of the UMAM file: 
+ UMAM:
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject PID="!!!PID!!!"
+  fedoraxsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-0.xsd"
+  xmlns:audit="info:fedora/fedora-system:def/audit#" xmlns:fedoraxsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:foxml="info:fedora/fedora-system:def/foxml#">
+  <foxml:objectProperties>
+    <foxml:property NAME="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" VALUE="FedoraObject"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="UMAM Object"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="!!!ContentModel!!!"/>
+  </foxml:objectProperties>
+  <foxml:datastream CONTROL_GROUP="E" ID="thumbnail" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="thumbnail.0" LABEL="thumbnail" MIMETYPE="image/jpeg">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:contentLocation REF="http://local.fedora.server/images/video_thumbnail.jpeg" TYPE="URL"/>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="DC" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="DC.0" LABEL="Dublin Core Metadata"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+          <dc:title>UMAM Object</dc:title>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="amInfo" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="amInfo.0" LABEL="Digital Object Information"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <amInfo xmlns="http://www.itd.umd.edu/fedora/amInfo">
+          <type>!!!ContentModel!!!</type>
+          <status>!!!Status!!!</status>
+        </amInfo>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="umam" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="umam.0"
+      LABEL="University of Maryland Administrative Metadata" MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <adminMeta>
+          <identifier>!!!FileName!!!</identifier>
+          <digiProv>
+            <date>!!!DateDigitized!!!</date>
+            <agent type="creator">
+              <corpName>!!!DigitizedByDept!!!</corpName>
+            </agent>
+            <description>!!!ExtRefDescription!!!
+              <extRef>!!!SharestreamURL!!!</extRef>
+            </description>
+          </digiProv>
+          <digiProv>
+            <date>!!!DateDigitized!!!</date>
+            <agent type="creator">
+              <persName>!!!DigitizedByPers!!!</persName>
+            </agent>
+            <description>!!!DigitizationNotes!!!</description>
+          </digiProv>
+          <adminRights>
+            <access>!!!AccessRights!!!</access>
+          </adminRights>
+          <technical>
+            <format>
+              <mimeType>!!!MimeType!!!</mimeType>
+              <compression>!!!Compression!!!</compression>
+            </format>
+            <audio>
+              <duration>!!!DurationDerivatives!!!</duration>
+              <channels>!!!TrackFormat!!!</channels>
+              <audioTrack>
+                <soundField>!!!Mono/Stereo!!!</soundField>
+              </audioTrack>
+            </audio>
+            <fileName>!!!FileName!!!</fileName>
+          </technical>
+        </adminMeta>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:video" ID="DISS4" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:video" CREATED="!!!TimeStamp!!!" ID="DISS4.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="umam" KEY="umam"/>
+        <foxml:datastreamBinding DATASTREAM_ID="thumbnail" KEY="image"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:umam" ID="DISS3" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umam" CREATED="!!!TimeStamp!!!" ID="DISS3.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="umam" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels" ID="DISS2" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="!!!TimeStamp!!!" ID="DISS2.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:amInfo" ID="DISS1" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:amInfo" CREATED="!!!TimeStamp!!!" ID="DISS1.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="amInfo" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+</foxml:digitalObject>
+
+******************************
+
+Enter the name of the UMDM file: 
+ UMDM:
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject PID="!!!PID!!!"
+  fedoraxsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-0.xsd"
+  xmlns:audit="info:fedora/fedora-system:def/audit#" xmlns:fedoraxsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:foxml="info:fedora/fedora-system:def/foxml#">
+  <foxml:objectProperties>
+    <foxml:property NAME="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" VALUE="FedoraObject"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="UMDM Object"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="UMD_VIDEO"/>
+  </foxml:objectProperties>
+  <foxml:datastream CONTROL_GROUP="X" ID="AUDIT" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!"
+      FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit" ID="AUDIT.0" LABEL="Fedora Object Audit Trail" MIMETYPE="text/xml">
+      <foxml:xmlContent>
+        <audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+        </audit:auditTrail>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="doInfo" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="doInfo.1" LABEL="Digital Object Information"
+      MIMETYPE="text/xml" SIZE="129">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <doInfo xmlns="http://www.itd.umd.edu/fedora/doInfo">
+          !!!ContentModel!!!
+          !!!Status!!!
+        </doInfo>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="umdm" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="umdm.4"
+      LABEL="University of Maryland Descriptive Metadata" MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <descMeta xml:lang="en">
+          !!!Title!!!
+          !!!AlternateTitle!!!
+          !!!Contributor!!!
+	  !!!Provider!!!
+          !!!ItemControlNumber!!!
+	  !!!Description/Summary!!!
+	  !!!AccessDescription!!!
+	  !!!CopyrightHolder!!!
+          !!!MediaType/Form!!!
+          <covPlace>
+            !!!Continent!!!
+            !!!Country!!!
+            !!!Region/State!!!
+            !!!Settlement/City!!!
+          </covPlace>
+          <covTime>
+	    !!!InsertDateHere!!!
+          </covTime>
+          <culture>American</culture>
+          <language>en</language>
+          !!!Repository!!!
+          <physDesc>
+            !!!Dimensions!!!
+            !!!DurationMasters!!!
+            !!!TypeOfMaterial!!!
+          </physDesc>
+	  !!!Subjects!!!
+          <relationships>
+            <relation label="archivalcollection" type="isPartOf">
+              <bibRef>
+                !!!Collection!!!
+                !!!PhysicalLocation!!!
+                !!!AccessionNumber!!!
+              </bibRef>
+            </relation>
+          </relationships>
+        </descMeta>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="DC" STATE="A" VERSIONABLE="true">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="DC1.0" LABEL="Dublin Core Metadata"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+          <dc:title>UMDM Object</dc:title>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+!!!INSERT_METS_HERE!!!
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:umdm" ID="DISS7" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umdm" CREATED="!!!TimeStamp!!!" ID="DISS7.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="umdm" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:thumbnail" ID="DISS5" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:thumbnail" CREATED="!!!TimeStamp!!!" ID="DISS5.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:image" ID="DISS6" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:image.umdm" CREATED="!!!TimeStamp!!!" ID="DISS6.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:handle" ID="DISS4" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:handle" CREATED="!!!TimeStamp!!!" ID="DISS4.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:doInfo" ID="DISS3" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:doInfo" CREATED="!!!TimeStamp!!!" ID="DISS3.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="doInfo" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels" ID="DISS2" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="!!!TimeStamp!!!" ID="DISS2.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels-mets" ID="DISS1" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels-mets" CREATED="!!!TimeStamp!!!" ID="DISS1.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="rels-mets" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+</foxml:digitalObject>
+
+******************************
+Data successfully read.
+
+FILE GROUP 1: 
+Writing UMAM... Time Conversion: ['00', '47', '45'] = 47.75
+Time Conversion: ['00', '48', '15'] = 48.25
+Part 0: UMAM = umd_321097
+Writing UMAM... Time Conversion: ['00', '47', '42'] = 47.7
+Time Conversion: ['00', '47', '51'] = 47.85
+Part 1: UMAM = umd_321098
+Writing UMAM... Time Conversion: ['00', '29', '27'] = 29.45
+Time Conversion: ['00', '48', '15'] = 48.25
+Part 2: UMAM = umd_321099
+Writing UMAM... Time Conversion: ['00', '46', '08'] = 46.13
+Time Conversion: ['00', '46', '20'] = 46.33
+Part 3: UMAM = umd_321100
+Writing UMAM... Time Conversion: ['00', '09', '45'] = 9.75
+Time Conversion: ['01', '06', '08'] = 66.13
+Part 4: UMAM = umd_321101
+Creating UMDM for object with 5 parts... 
+Total runtime of all parts = 256.81.
+UMDM = umd_321096
+
+FILE GROUP 2: 
+Writing UMAM... Time Conversion: ['00', '50', '52'] = 50.87
+Time Conversion: ['00', '51', '09'] = 51.15
+Part 0: UMAM = umd_321103
+Writing UMAM... Time Conversion: ['00', '19', '07'] = 19.12
+Time Conversion: ['00', '50', '53'] = 50.88
+Part 1: UMAM = umd_321104
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 102.03.
+UMDM = umd_321102
+
+FILE GROUP 3: 
+Writing UMAM... Time Conversion: ['00', '28', '54'] = 28.9
+Time Conversion: ['00', '30', '38'] = 30.63
+Part 0: UMAM = umd_321106
+Writing UMAM... Time Conversion: ['00', '11', '39'] = 11.65
+Time Conversion: ['00', '30', '40'] = 30.67
+Part 1: UMAM = umd_321107
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 61.3.
+UMDM = umd_321105
+
+FILE GROUP 4: 
+Writing UMAM... Time Conversion: ['00', '47', '18'] = 47.3
+Time Conversion: ['00', '47', '37'] = 47.62
+Part 0: UMAM = umd_321109
+Writing UMAM... Time Conversion: ['00', '47', '15'] = 47.25
+Time Conversion: ['00', '47', '32'] = 47.53
+Part 1: UMAM = umd_321110
+Writing UMAM... Time Conversion: ['00', '01', '42'] = 1.7
+Time Conversion: ['00', '47', '15'] = 47.25
+Part 2: UMAM = umd_321111
+Creating UMDM for object with 3 parts... 
+Total runtime of all parts = 142.4.
+UMDM = umd_321108
+
+FILE GROUP 5: 
+Writing UMAM... Time Conversion: ['00', '57', '37'] = 57.62
+Time Conversion: ['00', '59', '56'] = 59.93
+Part 0: UMAM = umd_321113
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 59.93.
+UMDM = umd_321112
+
+FILE GROUP 6: 
+Writing UMAM... Time Conversion: ['00', '45', '47'] = 45.78
+Time Conversion: ['00', '45', '56'] = 45.93
+Part 0: UMAM = umd_321115
+Writing UMAM... Time Conversion: ['00', '37', '20'] = 37.33
+Time Conversion: ['00', '45', '49'] = 45.82
+Part 1: UMAM = umd_321116
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 91.75.
+UMDM = umd_321114
+
+FILE GROUP 7: 
+Writing UMAM... Time Conversion: ['01', '00', '46'] = 60.77
+Time Conversion: ['01', '00', '54'] = 60.9
+Part 0: UMAM = umd_321118
+Writing UMAM... Time Conversion: ['00', '28', '14'] = 28.23
+Time Conversion: ['01', '00', '56'] = 60.93
+Part 1: UMAM = umd_321119
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 121.83.
+UMDM = umd_321117
+
+FILE GROUP 8: 
+Writing UMAM... Time Conversion: ['00', '45', '57'] = 45.95
+Time Conversion: ['00', '46', '08'] = 46.13
+Part 0: UMAM = umd_321121
+Writing UMAM... Time Conversion: ['00', '34', '37'] = 34.62
+Time Conversion: ['00', '46', '02'] = 46.03
+Part 1: UMAM = umd_321122
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 92.16.
+UMDM = umd_321120
+
+FILE GROUP 9: 
+Writing UMAM... Time Conversion: ['00', '45', '53'] = 45.88
+Time Conversion: ['00', '46', '05'] = 46.08
+Part 0: UMAM = umd_321124
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 46.08.
+UMDM = umd_321123
+
+FILE GROUP 10: 
+Writing UMAM... Time Conversion: ['00', '46', '22'] = 46.37
+Time Conversion: ['00', '46', '32'] = 46.53
+Part 0: UMAM = umd_321126
+Writing UMAM... Time Conversion: ['00', '46', '15'] = 46.25
+Time Conversion: ['00', '47', '21'] = 47.35
+Part 1: UMAM = umd_321127
+Writing UMAM... Time Conversion: ['00', '18', '57'] = 18.95
+Time Conversion: ['00', '46', '32'] = 46.53
+Part 2: UMAM = umd_321128
+Creating UMDM for object with 3 parts... 
+Total runtime of all parts = 140.41.
+UMDM = umd_321125
+
+FILE GROUP 11: 
+Writing UMAM... Time Conversion: ['00', '46', '15'] = 46.25
+Time Conversion: ['00', '46', '26'] = 46.43
+Part 0: UMAM = umd_321130
+Writing UMAM... Time Conversion: ['00', '46', '12'] = 46.2
+Time Conversion: ['00', '46', '17'] = 46.28
+Part 1: UMAM = umd_321131
+Writing UMAM... Time Conversion: ['00', '05', '20'] = 5.33
+Time Conversion: ['00', '46', '20'] = 46.33
+Part 2: UMAM = umd_321132
+Creating UMDM for object with 3 parts... 
+Total runtime of all parts = 139.04000000000002.
+UMDM = umd_321129
+
+FILE GROUP 12: 
+Writing UMAM... Time Conversion: ['00', '46', '14'] = 46.23
+Time Conversion: ['00', '46', '21'] = 46.35
+Part 0: UMAM = umd_321134
+Writing UMAM... Time Conversion: ['00', '46', '19'] = 46.32
+Time Conversion: ['00', '46', '32'] = 46.53
+Part 1: UMAM = umd_321135
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 92.88.
+UMDM = umd_321133
+
+FILE GROUP 13: 
+Writing UMAM... Time Conversion: ['00', '46', '10'] = 46.17
+Time Conversion: ['00', '46', '34'] = 46.57
+Part 0: UMAM = umd_321137
+Writing UMAM... Time Conversion: ['00', '27', '00'] = 27.0
+Time Conversion: ['00', '46', '12'] = 46.2
+Part 1: UMAM = umd_321138
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 92.77000000000001.
+UMDM = umd_321136
+
+FILE GROUP 14: 
+Writing UMAM... Time Conversion: ['00', '45', '49'] = 45.82
+Time Conversion: ['00', '45', '54'] = 45.9
+Part 0: UMAM = umd_321140
+Writing UMAM... Time Conversion: ['00', '45', '47'] = 45.78
+Time Conversion: ['00', '45', '48'] = 45.8
+Part 1: UMAM = umd_321141
+Writing UMAM... Time Conversion: ['00', '02', '16'] = 2.27
+Time Conversion: ['00', '56', '10'] = 56.17
+Part 2: UMAM = umd_321142
+Creating UMDM for object with 3 parts... 
+Total runtime of all parts = 147.87.
+UMDM = umd_321139
+
+FILE GROUP 15: 
+Writing UMAM... Time Conversion: ['00', '45', '58'] = 45.97
+Time Conversion: ['00', '46', '47'] = 46.78
+Part 0: UMAM = umd_321144
+Writing UMAM... Time Conversion: ['00', '46', '04'] = 46.07
+Time Conversion: ['00', '46', '53'] = 46.88
+Part 1: UMAM = umd_321145
+Writing UMAM... Time Conversion: ['00', '15', '19'] = 15.32
+Time Conversion: ['00', '46', '47'] = 46.78
+Part 2: UMAM = umd_321146
+Creating UMDM for object with 3 parts... 
+Total runtime of all parts = 140.44.
+UMDM = umd_321143
+
+FILE GROUP 16: 
+Writing UMAM... Time Conversion: ['00', '46', '59'] = 46.98
+Time Conversion: ['00', '47', '08'] = 47.13
+Part 0: UMAM = umd_321148
+Writing UMAM... Time Conversion: ['00', '34', '39'] = 34.65
+Time Conversion: ['00', '46', '59'] = 46.98
+Part 1: UMAM = umd_321149
+Writing UMAM... Time Conversion: ['00', '46', '15'] = 46.25
+Time Conversion: ['00', '46', '21'] = 46.35
+Part 2: UMAM = umd_321150
+Writing UMAM... Time Conversion: ['00', '32', '44'] = 32.73
+Time Conversion: ['00', '46', '13'] = 46.22
+Part 3: UMAM = umd_321151
+Creating UMDM for object with 4 parts... 
+Total runtime of all parts = 186.68.
+UMDM = umd_321147
+
+FILE GROUP 17: 
+Writing UMAM... Time Conversion: ['00', '46', '15'] = 46.25
+Time Conversion: ['00', '46', '31'] = 46.52
+Part 0: UMAM = umd_321153
+Writing UMAM... Time Conversion: ['00', '15', '00'] = 15.0
+Time Conversion: ['00', '45', '57'] = 45.95
+Part 1: UMAM = umd_321154
+Writing UMAM... Time Conversion: ['00', '45', '46'] = 45.77
+Time Conversion: ['00', '46', '00'] = 46.0
+Part 2: UMAM = umd_321155
+Writing UMAM... Time Conversion: ['00', '25', '21'] = 25.35
+Time Conversion: ['00', '45', '54'] = 45.9
+Part 3: UMAM = umd_321156
+Creating UMDM for object with 4 parts... 
+Total runtime of all parts = 184.37.
+UMDM = umd_321152
+
+FILE GROUP 18: 
+Writing UMAM... Time Conversion: ['00', '31', '40'] = 31.67
+Time Conversion: ['00', '50', '46'] = 50.77
+Part 0: UMAM = umd_321158
+Writing UMAM... Time Conversion: ['00', '31', '48'] = 31.8
+Time Conversion: ['00', '50', '52'] = 50.87
+Part 1: UMAM = umd_321159
+Writing UMAM... Time Conversion: ['00', '30', '24'] = 30.4
+Time Conversion: ['00', '30', '47'] = 30.78
+Part 2: UMAM = umd_321160
+Writing UMAM... Time Conversion: ['00', '29', '40'] = 29.67
+Time Conversion: ['00', '31', '12'] = 31.2
+Part 3: UMAM = umd_321161
+Creating UMDM for object with 4 parts... 
+Total runtime of all parts = 163.62.
+UMDM = umd_321157
+
+FILE GROUP 19: 
+Writing UMAM... Time Conversion: ['00', '45', '53'] = 45.88
+Time Conversion: ['00', '46', '08'] = 46.13
+Part 0: UMAM = umd_321163
+Writing UMAM... Time Conversion: ['00', '45', '48'] = 45.8
+Time Conversion: ['00', '45', '58'] = 45.97
+Part 1: UMAM = umd_321164
+Writing UMAM... Time Conversion: ['00', '25', '49'] = 25.82
+Time Conversion: ['00', '46', '17'] = 46.28
+Part 2: UMAM = umd_321165
+Creating UMDM for object with 3 parts... 
+Total runtime of all parts = 138.38.
+UMDM = umd_321162
+
+FILE GROUP 20: 
+Writing UMAM... Time Conversion: ['00', '46', '05'] = 46.08
+Time Conversion: ['00', '46', '20'] = 46.33
+Part 0: UMAM = umd_321167
+Writing UMAM... Time Conversion: ['00', '25', '03'] = 25.05
+Time Conversion: ['00', '46', '18'] = 46.3
+Part 1: UMAM = umd_321168
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 92.63.
+UMDM = umd_321166
+
+FILE GROUP 21: 
+Writing UMAM... Time Conversion: ['00', '32', '42'] = 32.7
+Time Conversion: ['00', '46', '18'] = 46.3
+Part 0: UMAM = umd_321170
+Writing UMAM... Time Conversion: ['00', '35', '39'] = 35.65
+Time Conversion: ['00', '46', '00'] = 46.0
+Part 1: UMAM = umd_321171
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 92.3.
+UMDM = umd_321169
+
+FILE GROUP 22: 
+Writing UMAM... Time Conversion: ['00', '45', '49'] = 45.82
+Time Conversion: ['00', '46', '11'] = 46.18
+Part 0: UMAM = umd_321173
+Writing UMAM... Time Conversion: ['00', '45', '57'] = 45.95
+Time Conversion: ['00', '46', '19'] = 46.32
+Part 1: UMAM = umd_321174
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 92.5.
+UMDM = umd_321172
+
+Writing pidlist file as pids.txt...
+Writing summary file as links.txt...
+Writing list of UMDM files as UMDMpids.txt...
+
+******************************
+
+82 files written: 79 FOXML files in 22 groups, plus the summary list of pids, list of UMDM pids, and the links file.
+Thanks for using the XML generator!
+
+
