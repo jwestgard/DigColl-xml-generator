@@ -8,7 +8,7 @@
           <fileSec>
             <fileGrp ID="fedora">
               <file ID="1">
-                <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="umd:3392" xlink:type="simple"/>
+                <FLocat LOCTYPE="OTHER" OTHERLOCTYPE="PID" xlink:href="!!!CollectionPID!!!" xlink:type="simple"/>
               </file>
 !!!Anchor-A!!!
             </fileGrp>

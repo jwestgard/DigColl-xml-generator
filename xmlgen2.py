@@ -64,7 +64,8 @@ def getPids(dataLength):
     pidList = []
     pidSource = input('Enter F (file) or S (server): ')
     while (pidSource not in ('F','S')):
-        print("ERROR: you must enter either 'F' to load PIDs from a file, or 'S' to request them from the server!")
+        print("ERROR: you must enter either 'F' to load PIDs from a file, " +
+              "or 'S' to request them from the server!")
         pidSource = input('Please try again: ')
     if pidSource == 'F':
         pidFileName = input('Enter the name of the PID file: ')
@@ -124,7 +125,9 @@ def generateDateTag(inputDate, inputAttribute, centuryData):
         elif len(elements) == 6:    # if there are 6 parts, use index 0 and 4 as begin/end years
             beginDate = elements[0] # i.e. we assume YYYY-MM-DD-YYYY-MM-DD format for exact date ranges
             endDate = elements[4]
-        myTag = '<date certainty="{0}" era="ad" from="{1}" to="{2}">{3}</date>'.format(myDate['Certainty'], beginDate, endDate, myDate['Value'])
+        myTag = '<date certainty="{0}" era="ad" from="{1}" to="{2}">{3}</date>'.format(myDate['Certainty'],
+                                                                                       beginDate, endDate,
+                                                                                       myDate['Value'])
         dateTagList.append(myTag)
     elif myDate['Number'] == 'multiple':
         for i in myDate['Value']:
@@ -222,23 +225,25 @@ def createUMAM(data, template, pid):
     outputfile = template
     
     # create mapping of the metadata onto the UMAM XML template file
-    umamMap = {'!!!PID!!!' : pid,
-               '!!!ContentModel!!!' : 'UMD_VIDEO',
-               '!!!Status!!!' : 'Complete',
-               '!!!FileName!!!' : data['FileName'],
-               '!!!DateDigitized!!!' : data['DateDigitized'],
-               '!!!DigitizedByDept!!!' : 'Digital Conversion and Media Reformatting',
-               '!!!ExtRefDescription!!!' : 'Sharestream',
-               '!!!SharestreamURL!!!' : data['SharestreamURLs'],
-               '!!!DigitizedByPers!!!' : data['DigitizedByPers'],
-               '!!!DigitizationNotes!!!' : data['DigitizationNotes'],
-               '!!!AccessRights!!!' : 'Public',
-               '!!!MimeType!!!' : 'audio/mpeg',
-               '!!!Compression!!!' : 'lossy',
-               '!!!DurationDerivatives!!!' : str(convertedRunTime),
-               '!!!Mono/Stereo!!!' : data['Mono/Stereo'],
-               '!!!TrackFormat!!!' : data['TrackFormat'],
-               '!!!TimeStamp!!!' : timeStamp}
+    umamMap = {
+                '!!!PID!!!' : pid,
+                '!!!ContentModel!!!' : 'UMD_VIDEO',
+                '!!!Status!!!' : 'Complete',
+                '!!!FileName!!!' : data['FileName'],
+                '!!!DateDigitized!!!' : data['DateDigitized'],
+                '!!!DigitizedByDept!!!' : 'Digital Conversion and Media Reformatting',
+                '!!!ExtRefDescription!!!' : 'Sharestream',
+                '!!!SharestreamURL!!!' : data['SharestreamURLs'],
+                '!!!DigitizedByPers!!!' : data['DigitizedByPers'],
+                '!!!DigitizationNotes!!!' : data['DigitizationNotes'],
+                '!!!AccessRights!!!' : 'UMDpublic',
+                '!!!MimeType!!!' : 'audio/mpeg',
+                '!!!Compression!!!' : 'lossy',
+                '!!!DurationDerivatives!!!' : str(convertedRunTime),
+                '!!!Mono/Stereo!!!' : data['Mono/Stereo'],
+                '!!!TrackFormat!!!' : data['TrackFormat'],
+                '!!!TimeStamp!!!' : timeStamp
+    }
     
     # Carry out a find and replace for each line of the data mapping
     # and convert ampersands in data into XML entities in the process
@@ -270,41 +275,102 @@ def createUMDM(data, template, summedRunTime, mets, pid):
     outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
     outputfile = stripAnchors(outputfile)                               # Strip out anchor points
     
+    # XML tags with which to wrap the CSV data
+    XMLtags = {
+            '!!!ContentModel!!!' : {'open' : '<type>',
+                                    'close' : '</type>'},
+            '!!!Status!!!' : {'open' : '<status>',
+                              'close' : '</status>'},
+            '!!!Title!!!' : {'open' : '<title type="main">',
+                       'close' : '</title>' },
+            '!!!AlternateTitle!!!' : {'open' : '<title type="alternate">',
+                                      'close' : '</title>'},
+            '!!!Contributor!!!' : {'open' : '<agent type="contributor"><persName>',
+                                   'close' : '</persName></agent>'},
+            '!!!Provider!!!' : {'open' : '<agent type="provider"><corpName>',
+                                'close' : '</corpName></agent>'},
+            '!!!ItemControlNumber!!!' : {'open' : '<identifier>',
+                                         'close' : '</identifier>'},
+	    '!!!Description/Summary!!!' : {'open' : '<description type="summary">',
+                                           'close' : '</description>'},
+	    '!!!AccessDescription!!!' : {'open' : '<rights type="access">',
+                                         'close' : '</rights>'},
+	    '!!!CopyrightHolder!!!' : {'open' : '<rights type="copyrightowner">',
+                                       'close' : '</rights>'},
+	    '!!!MediaType/Form!!!' : {'open' : '<mediaType type="sound"><form type="analog">',
+                                      'close' : '</form></mediaType>'},
+	    '!!!Continent!!!' : {'open' : '<geogName type="continent">',
+                                 'close' : '</geogName>'},
+	    '!!!Country!!!' : {'open' : '<geogName type="country">','close' : '</geogName>'},
+	    '!!!Region/State!!!' : {'open' : '<geogName type="region">',
+                                    'close' : '</geogName>'},
+	    '!!!Settlement/City!!!' : {'open' : '<geogName type="settlement">',
+                                       'close' : '</geogName>'},
+            '!!!Repository!!!' : {'open' : '<repository><corpName>',
+                                  'close' : '</corpName></repository>'},
+	    '!!!Dimensions!!!' : {'open' : '<size units="in">',
+                                  'close' : '</size>'},
+	    '!!!DurationMasters!!!' : {'open' : '<extent units="minutes">',
+                                       'close' : '</extent>'},
+	    '!!!TypeOfMaterial!!!' : {'open' : '<format>',
+                                      'close' : '</format>'},
+	    '!!!Collection!!!' : {'open' : '<title type="main">',
+                                  'close' : '</title>'},
+	    '!!!PhysicalLocation!!!' : {'open' : '<bibScope type="box">',
+                                        'close' : '</bibScope>'},
+	    '!!!AccessionNumber!!!' : {'open' : '<bibScope type="accession">',
+                                       'close' : '</bibScope>'},
+            }
+    
     # Create mapping of the metadata onto the UMDM XML template file
-    umdmMap = {'!!!PID!!!' : pid,
-               '!!!ContentModel!!!' : 'UMD_VIDEO',
-               '!!!Status!!!' : 'Complete',
-               '!!!Title!!!' : data['Title'],
-               '!!!AlternateTitle!!!' : data['AlternateTitle'],
-               '!!!Contributor!!!' : data['Contributor'],
-               '!!!Provider!!!' : data['Provider/Publisher'],
-               '!!!ItemControlNumber!!!' : data['ItemControlNumber'],
-               '!!!Description/Summary!!!' : data['Description/Summary'],
-               '!!!AccessDescription!!!' : 'Collection may be protected under Title 17 of the U.S. Copyright Law. To obtain permission to publish or reproduce, please contact the University of Maryland Libraries at http://digital.lib.umd.edu/archivesum/contact.jsp.',
-               '!!!CopyrightHolder!!!' : data['CopyrightHolder'],
-               '!!!MediaType/Form!!!' : data['Genre'],
-               '!!!Continent!!!' : data['Continent'],
-               '!!!Country!!!' : data['Country'],
-               '!!!Region/State!!!' : data['Region/State'],
-               '!!!Settlement/City!!!' : data['Settlement/City'],
-               '!!!InsertDateHere!!!' : dateTagString,
-               '!!!Culture!!!' : 'American',
-               '!!!Language!!!' : 'en',
-               '!!!Repository!!!' : data['Repository'],
-               '!!!Dimensions!!!' : data['Dimensions'],
-               '!!!DurationMasters!!!' : str(round(summedRunTime, 2)),
-               '!!!TypeOfMaterial!!!' : data['TypeOfMaterial'],
-               '!!!Subjects!!!' : subjectTagString,
-               '!!!Collection!!!' : data['Collection'],
-               '!!!PhysicalLocation!!!' : data['PhysicalLocation'],
-               '!!!AccessionNumber!!!' : data['AccessionNumber'],
-               '!!!TimeStamp!!!' : timeStamp}
+    umdmMap = {
+                '!!!PID!!!' : pid,
+                '!!!ContentModel!!!' : 'UMD_VIDEO',
+                '!!!Status!!!' : 'Complete',
+                '!!!Title!!!' : data['Title'],
+                '!!!AlternateTitle!!!' : data['AlternateTitle'],
+                '!!!Contributor!!!' : data['Contributor'],
+                '!!!Provider!!!' :  data['Provider/Publisher'],
+                '!!!ItemControlNumber!!!' : data['ItemControlNumber'],
+                '!!!Description/Summary!!!' : data['Description/Summary'],
+                '!!!AccessDescription!!!' : 'Collection may be protected under Title 17 ' +
+                                            'of the U.S. Copyright Law. To obtain permission ' +
+                                            'to publish or reproduce, please contact the ' +
+                                            'University of Maryland Libraries at ' +
+                                            'http://digital.lib.umd.edu/archivesum/contact.jsp.',
+                '!!!CopyrightHolder!!!' : data['CopyrightHolder'],
+                '!!!MediaType/Form!!!' : data['Genre'],
+                '!!!Continent!!!' : data['Continent'],
+                '!!!Country!!!' : data['Country'],
+                '!!!Region/State!!!' : data['Region/State'],
+                '!!!Settlement/City!!!' : data['Settlement/City'],
+                '!!!InsertDateHere!!!' : dateTagString,
+                '!!!Culture!!!' : 'American',
+                '!!!Language!!!' : 'en',
+                '!!!Repository!!!' : data['Repository'],
+                '!!!Dimensions!!!' : data['Dimensions'],
+                '!!!DurationMasters!!!' : str(round(summedRunTime, 2)),
+                '!!!TypeOfMaterial!!!' : data['TypeOfMaterial'],
+                '!!!Subjects!!!' : subjectTagString,
+                '!!!Collection!!!' : data['Collection'],
+                '!!!PhysicalLocation!!!' : data['PhysicalLocation'],
+                '!!!AccessionNumber!!!' : data['AccessionNumber'],
+                '!!!CollectionPID!!!' : 'umd:3392',
+                '!!!TimeStamp!!!' : timeStamp
+    }
     
     # Carry out a find and replace for each line of the data mapping
     # and convert ampersands to XML entities in the process
     for k, v in umdmMap.items():
-        outputfile = outputfile.replace(k, v.replace('&', '&amp;'))
-    
+        if k in XMLtags.keys(): # If there is an XML tag available
+            if v != '':         # and if the data point is not empty
+                # wrap the data point with the XML tag and insert it in the template
+                myTag = XMLtags[k]['open'] + v.replace('&', '&amp;') + XMLtags[k]['close']
+                outputfile = outputfile.replace(k, myTag)
+            else: # if the data is empty, get rid of the anchor point
+                outputfile = outputfile.replace(k, '')
+        else: # but if there is no xml tag available, simply replace anchor with value
+            outputfile = outputfile.replace(k, v.replace('&', '&amp;'))
     return outputfile
 
 
@@ -399,7 +465,8 @@ def main():
             
             # Attach summary info to summary list, depending on XML type
             if x['XMLType'] == 'UMDM':
-                link = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['ItemControlNumber'], x['XMLType'], x['PID'])
+                link = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['ItemControlNumber'],
+                                                                                             x['XMLType'], x['PID'])
             elif x['XMLType'] == 'UMAM':
                 link = '"{0}","{1}","{2}"'.format(x['ItemControlNumber'], x['XMLType'], x['PID'])
             summaryList.append(link)
@@ -457,7 +524,9 @@ def main():
                 mets = updateMets(objectParts, mets, x['FileName'], x['PID'])
                 
         # After iteration complete, finish the last UMDM    
-        createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'])
+        myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'])
+        fileStem = tempData['PID'].replace(':', '_').strip()    # convert ':' to '_' in PID for use in filename
+        writeFile(fileStem, myFile, '.xml')                     # Write the file
         
         # Print summary info to the screen
         print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
@@ -480,8 +549,10 @@ def main():
             pidCounter += 1
             
             # Attach summary info to summary list, once for each file
-            link1 = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['ItemControlNumber'], 'UMDM', x['umdmPID'])
-            link2 = '"{0}","{1}","{2}"'.format(x['ItemControlNumber'], 'UMAM', x['umamPID'])
+            link1 = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['ItemControlNumber'],
+                                                                                          'UMDM', x['umdmPID'])
+            link2 = '"{0}","{1}","{2}"'.format(x['ItemControlNumber'],
+                                               'UMAM', x['umamPID'])
             summaryList.append(link1)
             summaryList.append(link2)
             
@@ -549,7 +620,8 @@ def main():
     
     # Print a divider and summarize output to the screen.
     print('\n' + ('*' * 30))               
-    print('\n{0} files written: {1} FOXML files in {2}'.format(filesWritten, filesWritten - 3, objectGroups), end=' ')
+    print('\n{0} files written: {1} FOXML files in {2}'.format(filesWritten, filesWritten - 3,
+                                                               objectGroups), end=' ')
     print('groups, plus the summary list of pids, list of UMDM pids, and the links file.')
     print('Thanks for using the XML generator!\n\n')
         

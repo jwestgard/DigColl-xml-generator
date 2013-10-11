@@ -23,8 +23,8 @@
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <doInfo xmlns="http://www.itd.umd.edu/fedora/doInfo">
-          !!!ContentModel!!!
-          !!!Status!!!
+          <type>!!!ContentModel!!!</type>
+          <status>!!!Status!!!</status>
         </doInfo>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -35,39 +35,47 @@
       <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
       <foxml:xmlContent>
         <descMeta xml:lang="en">
-          !!!Title!!!
-          !!!AlternateTitle!!!
-          !!!Contributor!!!
-	  !!!Provider!!!
-          !!!ItemControlNumber!!!
-	  !!!Description/Summary!!!
-	  !!!AccessDescription!!!
-	  !!!CopyrightHolder!!!
-          !!!MediaType/Form!!!
+          <title type="main">!!!Title!!!</title>
+          <title type="alternate">!!!AlternateTitle!!!</title>
+          <agent type="contributor">
+            <persName>!!!Contributor!!!</persName>
+          </agent>
+	  <agent type="provider">
+	    <corpName>!!!Provider!!!</corpName>
+	  </agent>
+          <identifier>!!!ItemControlNumber!!!</identifier>
+          <description type="summary">!!!Description/Summary!!!</description>
+          <rights type="access">!!!AccessDescription!!!</rights>
+          <rights type="copyrightowner">!!!CopyrightHolder!!!</rights>
+          <mediaType type="sound">
+            <form type="analog">!!!MediaType/Form!!!</form>
+          </mediaType>
           <covPlace>
-            !!!Continent!!!
-            !!!Country!!!
-            !!!Region/State!!!
-            !!!Settlement/City!!!
+            <geogName type="continent">!!!Continent!!!</geogName>
+            <geogName type="country">!!!Country!!!</geogName>
+            <geogName type="region">!!!Region/State!!!</geogName>
+            <geogName type="settlement">!!!Settlement/City!!!</geogName>
           </covPlace>
           <covTime>
 	    !!!InsertDateHere!!!
           </covTime>
           <culture>American</culture>
           <language>en</language>
-          !!!Repository!!!
+          <repository>
+            <corpName>!!!Repository!!!</corpName>
+          </repository>
           <physDesc>
-            !!!Dimensions!!!
-            !!!DurationMasters!!!
-            !!!TypeOfMaterial!!!
+            <size units="in">!!!Dimensions!!!</size>
+            <extent units="minutes">!!!DurationMasters!!!</extent>
+            <format>!!!TypeOfMaterial!!!</format>
           </physDesc>
 	  !!!Subjects!!!
           <relationships>
             <relation label="archivalcollection" type="isPartOf">
               <bibRef>
-                !!!Collection!!!
-                !!!PhysicalLocation!!!
-                !!!AccessionNumber!!!
+                <title type="main">!!!Collection!!!</title>
+                <bibScope type="box">!!!PhysicalLocation!!!</bibScope>
+                <bibScope type="accession">!!!AccessionNumber!!!</bibScope>
               </bibRef>
             </relation>
           </relationships>
