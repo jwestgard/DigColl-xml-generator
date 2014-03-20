@@ -291,34 +291,34 @@ def createUMDM(data, template, summedRunTime, mets, pid):
                                 'close' : '</corpName></agent>'},
             '!!!ItemControlNumber!!!' : {'open' : '<identifier>',
                                          'close' : '</identifier>'},
-	    '!!!Description/Summary!!!' : {'open' : '<description type="summary">',
+            '!!!Description/Summary!!!' : {'open' : '<description type="summary">',
                                            'close' : '</description>'},
-	    '!!!AccessDescription!!!' : {'open' : '<rights type="access">',
+            '!!!AccessDescription!!!' : {'open' : '<rights type="access">',
                                          'close' : '</rights>'},
-	    '!!!CopyrightHolder!!!' : {'open' : '<rights type="copyrightowner">',
+            '!!!CopyrightHolder!!!' : {'open' : '<rights type="copyrightowner">',
                                        'close' : '</rights>'},
-	    '!!!MediaType/Form!!!' : {'open' : '<mediaType type="sound"><form type="analog">',
+            '!!!MediaType/Form!!!' : {'open' : '<mediaType type="sound"><form type="analog">',
                                       'close' : '</form></mediaType>'},
-	    '!!!Continent!!!' : {'open' : '<geogName type="continent">',
+            '!!!Continent!!!' : {'open' : '<geogName type="continent">',
                                  'close' : '</geogName>'},
-	    '!!!Country!!!' : {'open' : '<geogName type="country">','close' : '</geogName>'},
-	    '!!!Region/State!!!' : {'open' : '<geogName type="region">',
+            '!!!Country!!!' : {'open' : '<geogName type="country">','close' : '</geogName>'},
+            '!!!Region/State!!!' : {'open' : '<geogName type="region">',
                                     'close' : '</geogName>'},
-	    '!!!Settlement/City!!!' : {'open' : '<geogName type="settlement">',
+            '!!!Settlement/City!!!' : {'open' : '<geogName type="settlement">',
                                        'close' : '</geogName>'},
             '!!!Repository!!!' : {'open' : '<repository><corpName>',
                                   'close' : '</corpName></repository>'},
-	    '!!!Dimensions!!!' : {'open' : '<size units="in">',
+            '!!!Dimensions!!!' : {'open' : '<size units="in">',
                                   'close' : '</size>'},
-	    '!!!DurationMasters!!!' : {'open' : '<extent units="minutes">',
+            '!!!DurationMasters!!!' : {'open' : '<extent units="minutes">',
                                        'close' : '</extent>'},
-	    '!!!TypeOfMaterial!!!' : {'open' : '<format>',
+            '!!!TypeOfMaterial!!!' : {'open' : '<format>',
                                       'close' : '</format>'},
-	    '!!!Collection!!!' : {'open' : '<title type="main">',
+            '!!!Collection!!!' : {'open' : '<title type="main">',
                                   'close' : '</title>'},
-	    '!!!PhysicalLocation!!!' : {'open' : '<bibScope type="box">',
+            '!!!PhysicalLocation!!!' : {'open' : '<bibScope type="box">',
                                         'close' : '</bibScope>'},
-	    '!!!AccessionNumber!!!' : {'open' : '<bibScope type="accession">',
+            '!!!AccessionNumber!!!' : {'open' : '<bibScope type="accession">',
                                        'close' : '</bibScope>'},
             }
     
@@ -492,7 +492,7 @@ def main():
                     
                     # Reset counters
                     objectParts = 0     # reset parts counter
-                    summedRunTime = 0  # reset runtime sum counter for masters
+                    summedRunTime = 0   # reset runtime sum counter for masters
                 
                 # Begin a new UMDM group by incrementing the group counter, printing a notice to screen,
                 # storing the line of UMDM data for use after UMAMs are complete, and initiating a new METS
@@ -509,14 +509,14 @@ def main():
                 
                 # Create UMAM, convert PID for use as filename, write the file
                 myFile = createUMAM(x, umam, x['PID'])
-                convertedMasterRunTime = convertTime(x['DurationMasters'])
+                convertedDerivativeRunTime = convertTime(x['DurationDerivatives'])
                 fileStem = x['PID'].replace(':', '_').strip()
                 print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
                 writeFile(fileStem, myFile, '.xml')
                 
                 # Increment counters
                 outputFiles.append(x['PID'])
-                summedRunTime += convertedMasterRunTime
+                summedRunTime += convertedDerivativeRunTime
                 objectParts += 1
                 filesWritten += 1
                 
@@ -564,12 +564,12 @@ def main():
             mets = createMets()
             
             # Create UMAM, convert PID for use as filename, write the file
-            myFile, convertedRunTime = createUMAM(x, umam, x['umamPID'])
+            myFile, convertedDerivativeRunTime = createUMAM(x, umam, x['umamPID'])
             fileStem = x['umamPID'].replace(':', '_').strip()
             writeFile(fileStem, myFile, '.xml')
             
             # Increment counters
-            summedRunTime += convertedRunTime
+            summedRunTime += convertedDerivativeRunTime
             objectParts += 1
             filesWritten += 1
             
