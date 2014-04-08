@@ -22,10 +22,7 @@
 
 
 # Import needed modules
-import csv
-import datetime
-import re
-import requests
+import csv, datetime, re, requests
 
 
 # Initiates interaction with the program and records the time and user.
@@ -92,8 +89,8 @@ def requestPids(numPids):
     print("\nRetrieving PIDs from the server...")
     print('\nServer answered with the following XML file:\n')  # print server's response
     print(f)
-    fName = input('Enter a name under which to save the server\'s PID file: ')
-    writeFile(fName, f, '.txt')
+    print('Saving the PID file as output/pids.xml: ')
+    writeFile("pids", f, '.xml')
     return f
 
 
@@ -110,6 +107,38 @@ def parsePids(pidFile):
     print(pidList)
     return pidList
 
+
+# Sets the rights scheme to govern access to this batch, based on user input.
+def getRightsScheme():
+    results = {}
+    print("\n[P]ublic = Accessible from anywhere, discoverable via search.")
+    print("[R]estricted = Accessible on campus only, not discoverable.")
+    print("[C]ampus Only = Accessible on campus only, discoverable via search.")
+    print("[M]ediated = Accessible from anywhere, not discoverable.")
+    schemeSelection = input("\nEnter the rights scheme to govern access to this batch [P, R, C, or M]: ")
+    while schemeSelection not in ["P", "R", "C", "M"]:
+        schemeSelection = input("You must enter P, R, C, or M!")
+    if schemeSelection == "P":
+        results['amInfoStatus'] = "Complete"
+        results['doInfoStatus'] = "Complete"
+        results['adminRightsAccess'] = "UMDPublic"
+    elif schemeSelection == "R":
+        results['amInfoStatus'] = "Complete"
+        results['doInfoStatus'] = "Private"
+        results['adminRightsAccess'] = "UMDfilms00001"
+    elif schemeSelection == "C":
+        results['amInfoStatus'] = "Complete"
+        results['doInfoStatus'] = "Complete"
+        results['adminRightsAccess'] = "UMDfilms00001"
+    elif schemeSelection == "M":
+        results['amInfoStatus'] = "Complete"
+        results['doInfoStatus'] = "Private"
+        results['adminRightsAccess'] = "UMDfilms00001"
+    else:
+        print("Sorry, something went wrong with the rights selection!")
+        exit
+    return results
+        
 
 # Generates the specific XML tags based on dating information stored in the myDate dictionary
 # previously returned by the parseDate function.
@@ -216,7 +245,7 @@ def convertTime(inputTime):
 
 
 # Performs series of find and replace operations to generate UMAM file from the template.
-def createUMAM(data, template, pid):
+def createUMAM(data, template, pid, rights):
     
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     convertedRunTime = convertTime(data['DurationDerivatives'])
@@ -228,7 +257,7 @@ def createUMAM(data, template, pid):
     umamMap = {
                 '!!!PID!!!' : pid,
                 '!!!ContentModel!!!' : 'UMD_VIDEO',
-                '!!!Status!!!' : 'Complete',
+                '!!!Status!!!' : rights['amInfoStatus'],
                 '!!!FileName!!!' : data['FileName'],
                 '!!!DateDigitized!!!' : data['DateDigitized'],
                 '!!!DigitizedByDept!!!' : 'Digital Conversion and Media Reformatting',
@@ -236,7 +265,7 @@ def createUMAM(data, template, pid):
                 '!!!SharestreamURL!!!' : data['SharestreamURLs'],
                 '!!!DigitizedByPers!!!' : data['DigitizedByPers'],
                 '!!!DigitizationNotes!!!' : data['DigitizationNotes'],
-                '!!!AccessRights!!!' : 'UMDpublic',
+                '!!!AccessRights!!!' : rights['adminRightsAccess'],
                 '!!!MimeType!!!' : 'audio/mpeg',
                 '!!!Compression!!!' : 'lossy',
                 '!!!DurationDerivatives!!!' : str(convertedRunTime),
@@ -254,7 +283,7 @@ def createUMAM(data, template, pid):
 
 
 # Performs series of find and replace operations to generate UMDM file from the template.
-def createUMDM(data, template, summedRunTime, mets, pid):
+def createUMDM(data, template, summedRunTime, mets, pid, rights):
     
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     
@@ -326,18 +355,14 @@ def createUMDM(data, template, summedRunTime, mets, pid):
     umdmMap = {
                 '!!!PID!!!' : pid,
                 '!!!ContentModel!!!' : 'UMD_VIDEO',
-                '!!!Status!!!' : 'Complete',
+                '!!!Status!!!' : rights['doInfoStatus'],
                 '!!!Title!!!' : data['Title'],
                 '!!!AlternateTitle!!!' : data['AlternateTitle'],
                 '!!!Contributor!!!' : data['Contributor'],
                 '!!!Provider!!!' :  data['Provider/Publisher'],
                 '!!!ItemControlNumber!!!' : data['ItemControlNumber'],
                 '!!!Description/Summary!!!' : data['Description/Summary'],
-                '!!!AccessDescription!!!' : 'Collection may be protected under Title 17 ' +
-                                            'of the U.S. Copyright Law. To obtain permission ' +
-                                            'to publish or reproduce, please contact the ' +
-                                            'University of Maryland Libraries at ' +
-                                            'http://digital.lib.umd.edu/archivesum/contact.jsp.',
+                '!!!AccessDescription!!!' : data['Rights'],
                 '!!!CopyrightHolder!!!' : data['CopyrightHolder'],
                 '!!!MediaType/Form!!!' : data['Genre'],
                 '!!!Continent!!!' : data['Continent'],
@@ -440,6 +465,8 @@ def main():
         print('Exiting program.')
         quit()
     
+    rightsScheme = getRightsScheme()
+    
     # Load the UMAM template and print it to screen  
     umam, umamName = loadFile('UMAM')
     print("\n UMAM:\n" + umam)
@@ -476,7 +503,7 @@ def main():
                 
                 # If the mets variable is NOT empty, finish the UMDM for the previous group
                 if mets != "":
-                    myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'])
+                    myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'], rightsScheme)
                     fileStem = tempData['PID'].replace(':', '_').strip()    # convert ':' to '_' in PID for use in filename
                     writeFile(fileStem, myFile, '.xml')                     # Write the file
                     
@@ -508,7 +535,7 @@ def main():
                 print('Writing UMAM...', end=' ')
                 
                 # Create UMAM, convert PID for use as filename, write the file
-                myFile = createUMAM(x, umam, x['PID'])
+                myFile = createUMAM(x, umam, x['PID'], rightsScheme)
                 convertedDerivativeRunTime = convertTime(x['DurationDerivatives'])
                 fileStem = x['PID'].replace(':', '_').strip()
                 print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
@@ -524,7 +551,7 @@ def main():
                 mets = updateMets(objectParts, mets, x['FileName'], x['PID'])
                 
         # After iteration complete, finish the last UMDM    
-        myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'])
+        myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'], rightsScheme)
         fileStem = tempData['PID'].replace(':', '_').strip()    # convert ':' to '_' in PID for use in filename
         writeFile(fileStem, myFile, '.xml')                     # Write the file
         
@@ -564,7 +591,7 @@ def main():
             mets = createMets()
             
             # Create UMAM, convert PID for use as filename, write the file
-            myFile, convertedDerivativeRunTime = createUMAM(x, umam, x['umamPID'])
+            myFile, convertedDerivativeRunTime = createUMAM(x, umam, x['umamPID'], rightsScheme)
             fileStem = x['umamPID'].replace(':', '_').strip()
             writeFile(fileStem, myFile, '.xml')
             
