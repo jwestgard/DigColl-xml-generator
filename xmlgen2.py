@@ -364,7 +364,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Description/Summary!!!' : data['Description/Summary'],
                 '!!!AccessDescription!!!' : data['Rights'],
                 '!!!CopyrightHolder!!!' : data['CopyrightHolder'],
-                '!!!MediaType/Form!!!' : data['Genre'],
+                '!!!MediaType/Form!!!' : data['MediaType/Form'],
                 '!!!Continent!!!' : data['Continent'],
                 '!!!Country!!!' : data['Country'],
                 '!!!Region/State!!!' : data['Region/State'],
