@@ -303,7 +303,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     dateTagString = generateDateTag(data['DateCreated'], data['DateAttribute'], data['Century'])
     
     # Generate browse terms from subject field
-    subjectTagString = generateBrowseTerms(data['Subjects'])
+    subjectTagString = generateBrowseTerms(data['RepositoryBrowse'])
     
     # Generate MediaType XML Tags
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
@@ -380,13 +380,12 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Region/State!!!' : 			data['Region/State'],
                 '!!!Settlement/City!!!' : 		data['Settlement/City'],
                 '!!!InsertDateHere!!!' : 		dateTagString,
-                '!!!Culture!!!' : 				'American',
-                '!!!Language!!!' : 				'en',
+                '!!!Language!!!' : 				data['Language'],
                 '!!!Repository!!!' : 			data['Repository'],
                 '!!!Dimensions!!!' : 			data['Dimensions'],
                 '!!!DurationMasters!!!' : 		str(round(summedRunTime, 2)),
                 '!!!TypeOfMaterial!!!' : 		data['TypeOfMaterial'],
-                '!!!Subjects!!!' : 				subjectTagString,
+                '!!!RepositoryBrowse!!!' : 		subjectTagString,
                 '!!!Collection!!!' : 			data['Collection'],
                 '!!!PhysicalLocation!!!' : 		data['PhysicalLocation'],
                 '!!!AccessionNumber!!!' : 		data['AccessionNumber'],
