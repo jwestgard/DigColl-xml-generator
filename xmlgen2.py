@@ -306,7 +306,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     subjectTagString = generateBrowseTerms(data['Subjects'])
     
     # Generate MediaType XML Tags
-    mediaTypeString = generateMediaTypeTag
+    mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
     
     # Insert the RELS-METS section compiled from the UMAM files
     outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
