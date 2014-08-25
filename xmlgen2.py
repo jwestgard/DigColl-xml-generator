@@ -138,7 +138,12 @@ def getRightsScheme():
         print("Sorry, something went wrong with the rights selection!")
         exit
     return results
-        
+
+
+# Generates the mediaType XML tag, wrapping it around the form XML tag      
+def generateMediaTypeTag(mediaType, formType, form):
+    return '<mediaType type="{0}"><form type="{1}">{2}</form></mediaType>'.format(mediaType, formType, form)
+
 
 # Generates the specific XML tags based on dating information stored in the myDate dictionary
 # previously returned by the parseDate function.
@@ -300,6 +305,9 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     # Generate browse terms from subject field
     subjectTagString = generateBrowseTerms(data['Subjects'])
     
+    # Generate MediaType XML Tags
+    mediaTypeString = generateMediaTypeTag
+    
     # Insert the RELS-METS section compiled from the UMAM files
     outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
     outputfile = stripAnchors(outputfile)                               # Strip out anchor points
@@ -328,8 +336,6 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                                          		'close' : '</rights>'},
             '!!!CopyrightHolder!!!' : {			'open' : '<rights type="copyrightowner">',
                                        			'close' : '</rights>'},
-            '!!!MediaType/Form!!!' : {			'open' : '<mediaType type="sound"><form type="analog">',
-                                      			'close' : '</form></mediaType>'},
             '!!!Continent!!!' : {				'open' : '<geogName type="continent">',
                                  				'close' : '</geogName>'},
             '!!!Country!!!' : {					'open' : '<geogName type="country">',
@@ -368,7 +374,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Description/Summary!!!' : 	data['Description/Summary'],
                 '!!!AccessDescription!!!' : 	data['Rights'],
                 '!!!CopyrightHolder!!!' : 		data['CopyrightHolder'],
-                '!!!MediaType/Form!!!' : 		data['MediaType/Form'],
+                '!!!MediaType/Form!!!' : 		mediaTypeString,
                 '!!!Continent!!!' : 			data['Continent'],
                 '!!!Country!!!' : 				data['Country'],
                 '!!!Region/State!!!' : 			data['Region/State'],
