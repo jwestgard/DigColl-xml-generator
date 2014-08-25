@@ -119,21 +119,21 @@ def getRightsScheme():
     while schemeSelection not in ["P", "R", "C", "M"]:
         schemeSelection = input("You must enter P, R, C, or M!")
     if schemeSelection == "P":
-        results['amInfoStatus'] = "Complete"
-        results['doInfoStatus'] = "Complete"
-        results['adminRightsAccess'] = "UMDPublic"
+        results['amInfoStatus'] =           "Complete"
+        results['doInfoStatus'] =           "Complete"
+        results['adminRightsAccess'] =      "UMDPublic"
     elif schemeSelection == "R":
-        results['amInfoStatus'] = "Complete"
-        results['doInfoStatus'] = "Private"
-        results['adminRightsAccess'] = "UMDfilms00001"
+        results['amInfoStatus'] =           "Complete"
+        results['doInfoStatus'] =           "Private"
+        results['adminRightsAccess'] =      "UMDfilms00001"
     elif schemeSelection == "C":
-        results['amInfoStatus'] = "Complete"
-        results['doInfoStatus'] = "Complete"
-        results['adminRightsAccess'] = "UMDfilms00001"
+        results['amInfoStatus'] =           "Complete"
+        results['doInfoStatus'] =           "Complete"
+        results['adminRightsAccess'] =      "UMDfilms00001"
     elif schemeSelection == "M":
-        results['amInfoStatus'] = "Complete"
-        results['doInfoStatus'] = "Private"
-        results['adminRightsAccess'] = "UMDfilms00001"
+        results['amInfoStatus'] =           "Complete"
+        results['doInfoStatus'] =           "Private"
+        results['adminRightsAccess'] =      "UMDfilms00001"
     else:
         print("Sorry, something went wrong with the rights selection!")
         exit
@@ -255,23 +255,23 @@ def createUMAM(data, template, pid, rights):
     
     # create mapping of the metadata onto the UMAM XML template file
     umamMap = {
-                '!!!PID!!!' : pid,
-                '!!!ContentModel!!!' : 'UMD_VIDEO',
-                '!!!Status!!!' : rights['amInfoStatus'],
-                '!!!FileName!!!' : data['FileName'],
-                '!!!DateDigitized!!!' : data['DateDigitized'],
-                '!!!DigitizedByDept!!!' : 'Digital Conversion and Media Reformatting',
-                '!!!ExtRefDescription!!!' : 'Sharestream',
-                '!!!SharestreamURL!!!' : data['SharestreamURLs'],
-                '!!!DigitizedByPers!!!' : data['DigitizedByPers'],
-                '!!!DigitizationNotes!!!' : data['DigitizationNotes'],
-                '!!!AccessRights!!!' : rights['adminRightsAccess'],
-                '!!!MimeType!!!' : 'audio/mpeg',
-                '!!!Compression!!!' : 'lossy',
-                '!!!DurationDerivatives!!!' : str(convertedRunTime),
-                '!!!Mono/Stereo!!!' : data['Mono/Stereo'],
-                '!!!TrackFormat!!!' : data['TrackFormat'],
-                '!!!TimeStamp!!!' : timeStamp
+                '!!!PID!!!' : 					pid,
+                '!!!ContentModel!!!' : 			'UMD_VIDEO',
+                '!!!Status!!!' : 				rights['amInfoStatus'],
+                '!!!FileName!!!' : 				data['FileName'],
+                '!!!DateDigitized!!!' : 		data['DateDigitized'],
+                '!!!DigitizedByDept!!!' : 		'Digital Conversion and Media Reformatting',
+                '!!!ExtRefDescription!!!' : 	'Sharestream',
+                '!!!SharestreamURL!!!' : 		data['SharestreamURLs'],
+                '!!!DigitizedByPers!!!' : 		data['DigitizedByPers'],
+                '!!!DigitizationNotes!!!' : 	data['DigitizationNotes'],
+                '!!!AccessRights!!!' : 			rights['adminRightsAccess'],
+                '!!!MimeType!!!' : 				'audio/mpeg',
+                '!!!Compression!!!' : 			'lossy',
+                '!!!DurationDerivatives!!!' : 	str(convertedRunTime),
+                '!!!Mono/Stereo!!!' : 			data['Mono/Stereo'],
+                '!!!TrackFormat!!!' : 			data['TrackFormat'],
+                '!!!TimeStamp!!!' : 			timeStamp
     }
     
     # Carry out a find and replace for each line of the data mapping
@@ -306,82 +306,86 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     
     # XML tags with which to wrap the CSV data
     XMLtags = {
-            '!!!ContentModel!!!' : {'open' : '<type>',
-                                    'close' : '</type>'},
-            '!!!Status!!!' : {'open' : '<status>',
-                              'close' : '</status>'},
-            '!!!Title!!!' : {'open' : '<title type="main">',
-                       'close' : '</title>' },
-            '!!!AlternateTitle!!!' : {'open' : '<title type="alternate">',
-                                      'close' : '</title>'},
-            '!!!Contributor!!!' : {'open' : '<agent type="contributor"><persName>',
-                                   'close' : '</persName></agent>'},
-            '!!!Provider!!!' : {'open' : '<agent type="provider"><corpName>',
-                                'close' : '</corpName></agent>'},
-            '!!!ItemControlNumber!!!' : {'open' : '<identifier>',
-                                         'close' : '</identifier>'},
-            '!!!Description/Summary!!!' : {'open' : '<description type="summary">',
-                                           'close' : '</description>'},
-            '!!!AccessDescription!!!' : {'open' : '<rights type="access">',
-                                         'close' : '</rights>'},
-            '!!!CopyrightHolder!!!' : {'open' : '<rights type="copyrightowner">',
-                                       'close' : '</rights>'},
-            '!!!MediaType/Form!!!' : {'open' : '<mediaType type="sound"><form type="analog">',
-                                      'close' : '</form></mediaType>'},
-            '!!!Continent!!!' : {'open' : '<geogName type="continent">',
-                                 'close' : '</geogName>'},
-            '!!!Country!!!' : {'open' : '<geogName type="country">','close' : '</geogName>'},
-            '!!!Region/State!!!' : {'open' : '<geogName type="region">',
-                                    'close' : '</geogName>'},
-            '!!!Settlement/City!!!' : {'open' : '<geogName type="settlement">',
-                                       'close' : '</geogName>'},
-            '!!!Repository!!!' : {'open' : '<repository><corpName>',
-                                  'close' : '</corpName></repository>'},
-            '!!!Dimensions!!!' : {'open' : '<size units="in">',
-                                  'close' : '</size>'},
-            '!!!DurationMasters!!!' : {'open' : '<extent units="minutes">',
-                                       'close' : '</extent>'},
-            '!!!TypeOfMaterial!!!' : {'open' : '<format>',
-                                      'close' : '</format>'},
-            '!!!Collection!!!' : {'open' : '<title type="main">',
-                                  'close' : '</title>'},
-            '!!!PhysicalLocation!!!' : {'open' : '<bibScope type="box">',
-                                        'close' : '</bibScope>'},
-            '!!!AccessionNumber!!!' : {'open' : '<bibScope type="accession">',
-                                       'close' : '</bibScope>'},
+            '!!!ContentModel!!!' : 	{			'open' : '<type>',
+                                    			'close' : '</type>'	},
+            '!!!Status!!!' : {					'open' : '<status>',
+                              					'close' : '</status>' },
+            '!!!Title!!!' : {					'open' : '<title type="main">',
+                       							'close' : '</title>' },
+            '!!!AlternateTitle!!!' : {			'open' : '<title type="alternate">',
+                                      			'close' : '</title>'},
+            '!!!Contributor!!!' : {				'open' : '<agent type="contributor"><persName>',
+                                   				'close' : '</persName></agent>'},
+            '!!!Creator!!!' : {					'open' : '<agent type="creator"><persName>',
+                                    			'close' : '</persName></agent>'},
+            '!!!Provider!!!' : {				'open' : '<agent type="provider"><corpName>',
+                                				'close' : '</corpName></agent>'},
+            '!!!Identifier!!!' : {				'open' : '<identifier>',
+                                         		'close' : '</identifier>'},
+            '!!!Description/Summary!!!' : 	{	'open' : '<description type="summary">',
+                                           		'close' : '</description>'},
+            '!!!Rights!!!' : {					'open' : '<rights type="access">',
+                                         		'close' : '</rights>'},
+            '!!!CopyrightHolder!!!' : {			'open' : '<rights type="copyrightowner">',
+                                       			'close' : '</rights>'},
+            '!!!MediaType/Form!!!' : {			'open' : '<mediaType type="sound"><form type="analog">',
+                                      			'close' : '</form></mediaType>'},
+            '!!!Continent!!!' : {				'open' : '<geogName type="continent">',
+                                 				'close' : '</geogName>'},
+            '!!!Country!!!' : {					'open' : '<geogName type="country">',
+            									'close' : '</geogName>'},
+            '!!!Region/State!!!' : {			'open' : '<geogName type="region">',
+                                    			'close' : '</geogName>'},
+            '!!!Settlement/City!!!' : {			'open' : '<geogName type="settlement">',
+                                       			'close' : '</geogName>'},
+            '!!!Repository!!!' : {				'open' : '<repository><corpName>',
+                                  				'close' : '</corpName></repository>'},
+            '!!!Dimensions!!!' : {				'open' : '<size units="in">',
+                                  				'close' : '</size>'},
+            '!!!DurationMasters!!!' : {			'open' : '<extent units="minutes">',
+                                       			'close' : '</extent>'},
+            '!!!TypeOfMaterial!!!' : {			'open' : '<format>',
+                                      			'close' : '</format>'},
+            '!!!Collection!!!' : {				'open' : '<title type="main">',
+                                  				'close' : '</title>'},
+            '!!!PhysicalLocation!!!' : {		'open' : '<bibScope type="box">',
+                                        		'close' : '</bibScope>'},
+            '!!!AccessionNumber!!!' : {			'open' : '<bibScope type="accession">',
+                                       			'close' : '</bibScope>'},
             }
     
     # Create mapping of the metadata onto the UMDM XML template file
     umdmMap = {
-                '!!!PID!!!' : pid,
-                '!!!ContentModel!!!' : 'UMD_VIDEO',
-                '!!!Status!!!' : rights['doInfoStatus'],
-                '!!!Title!!!' : data['Title'],
-                '!!!AlternateTitle!!!' : data['AlternateTitle'],
-                '!!!Contributor!!!' : data['Contributor'],
-                '!!!Provider!!!' :  data['Provider/Publisher'],
-                '!!!ItemControlNumber!!!' : data['ItemControlNumber'],
-                '!!!Description/Summary!!!' : data['Description/Summary'],
-                '!!!AccessDescription!!!' : data['Rights'],
-                '!!!CopyrightHolder!!!' : data['CopyrightHolder'],
-                '!!!MediaType/Form!!!' : data['MediaType/Form'],
-                '!!!Continent!!!' : data['Continent'],
-                '!!!Country!!!' : data['Country'],
-                '!!!Region/State!!!' : data['Region/State'],
-                '!!!Settlement/City!!!' : data['Settlement/City'],
-                '!!!InsertDateHere!!!' : dateTagString,
-                '!!!Culture!!!' : 'American',
-                '!!!Language!!!' : 'en',
-                '!!!Repository!!!' : data['Repository'],
-                '!!!Dimensions!!!' : data['Dimensions'],
-                '!!!DurationMasters!!!' : str(round(summedRunTime, 2)),
-                '!!!TypeOfMaterial!!!' : data['TypeOfMaterial'],
-                '!!!Subjects!!!' : subjectTagString,
-                '!!!Collection!!!' : data['Collection'],
-                '!!!PhysicalLocation!!!' : data['PhysicalLocation'],
-                '!!!AccessionNumber!!!' : data['AccessionNumber'],
-                '!!!CollectionPID!!!' : 'umd:3392',
-                '!!!TimeStamp!!!' : timeStamp
+                '!!!PID!!!' :           		pid,
+                '!!!ContentModel!!!' : 			'UMD_VIDEO',
+                '!!!Status!!!' : 				rights['doInfoStatus'],
+                '!!!Title!!!' : 				data['Title'],
+                '!!!AlternateTitle!!!' : 		data['AlternateTitle'],
+                '!!!Contributor!!!' : 			data['Contributor'],
+                '!!!Creator!!!' : 				data['Creator'],
+                '!!!Provider!!!' :  			data['Provider/Publisher'],
+                '!!!Identifier!!!' :  			data['Identifier'],
+                '!!!Description/Summary!!!' : 	data['Description/Summary'],
+                '!!!AccessDescription!!!' : 	data['Rights'],
+                '!!!CopyrightHolder!!!' : 		data['CopyrightHolder'],
+                '!!!MediaType/Form!!!' : 		data['MediaType/Form'],
+                '!!!Continent!!!' : 			data['Continent'],
+                '!!!Country!!!' : 				data['Country'],
+                '!!!Region/State!!!' : 			data['Region/State'],
+                '!!!Settlement/City!!!' : 		data['Settlement/City'],
+                '!!!InsertDateHere!!!' : 		dateTagString,
+                '!!!Culture!!!' : 				'American',
+                '!!!Language!!!' : 				'en',
+                '!!!Repository!!!' : 			data['Repository'],
+                '!!!Dimensions!!!' : 			data['Dimensions'],
+                '!!!DurationMasters!!!' : 		str(round(summedRunTime, 2)),
+                '!!!TypeOfMaterial!!!' : 		data['TypeOfMaterial'],
+                '!!!Subjects!!!' : 				subjectTagString,
+                '!!!Collection!!!' : 			data['Collection'],
+                '!!!PhysicalLocation!!!' : 		data['PhysicalLocation'],
+                '!!!AccessionNumber!!!' : 		data['AccessionNumber'],
+                '!!!CollectionPID!!!' : 		'umd:3392',
+                '!!!TimeStamp!!!' : 			timeStamp
     }
     
     # Carry out a find and replace for each line of the data mapping
@@ -492,10 +496,10 @@ def main():
             
             # Attach summary info to summary list, depending on XML type
             if x['XMLType'] == 'UMDM':
-                link = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['ItemControlNumber'],
+                link = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['Identifier'],
                                                                                              x['XMLType'], x['PID'])
             elif x['XMLType'] == 'UMAM':
-                link = '"{0}","{1}","{2}"'.format(x['ItemControlNumber'], x['XMLType'], x['PID'])
+                link = '"{0}","{1}","{2}"'.format(x['Identifier'], x['XMLType'], x['PID'])
             summaryList.append(link)
             
             # Check the XML type for each line, and build the FOXML files accordingly
@@ -576,9 +580,9 @@ def main():
             pidCounter += 1
             
             # Attach summary info to summary list, once for each file
-            link1 = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['ItemControlNumber'],
+            link1 = '"{0}","{1}","{2}","http://digital.lib.umd.edu/video?pid={2}"'.format(x['Identifier'],
                                                                                           'UMDM', x['umdmPID'])
-            link2 = '"{0}","{1}","{2}"'.format(x['ItemControlNumber'],
+            link2 = '"{0}","{1}","{2}"'.format(x['Identifier'],
                                                'UMAM', x['umamPID'])
             summaryList.append(link1)
             summaryList.append(link2)
