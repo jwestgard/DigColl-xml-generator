@@ -213,6 +213,15 @@ def generateBrowseTerms(inputSubjects):
     return '\n'.join(result)
 
 
+# generate block os XML relating to archival location
+def generateArchivalLocation(collection, **kwargs):
+    result = '<title type="main">{0}</title>'.format(collection)
+    for key, value in kwargs.items():
+        if value != "":
+            result.append('<bibScope type="{0}">{1}</bibscope>'.format(key, value))
+    return '\n'.join(result)
+
+
 # Prompts the user to enter the name of the UMAM or UMDM template or PID file and
 # read that file, returning the contents.
 def loadFile(fileType):
@@ -308,6 +317,15 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     # Generate MediaType XML Tags
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
     
+    # Generate Archival Location Information Tags
+    archivalLocation = generateArchivalLocation(collection=data['collection'],
+                                                series=data['series'],
+                                                subseries=data['subseries'],
+                                                box=data['box'],
+                                                item=data['item'],
+                                                accession=data['accession'] )
+
+    
     # Insert the RELS-METS section compiled from the UMAM files
     outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
     outputfile = stripAnchors(outputfile)                               # Strip out anchor points
@@ -352,12 +370,8 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                                        			'close' : '</extent>'},
             '!!!TypeOfMaterial!!!' : {			'open' : '<format>',
                                       			'close' : '</format>'},
-            '!!!Collection!!!' : {				'open' : '<title type="main">',
-                                  				'close' : '</title>'},
-            '!!!PhysicalLocation!!!' : {		'open' : '<bibScope type="box">',
-                                        		'close' : '</bibScope>'},
-            '!!!AccessionNumber!!!' : {			'open' : '<bibScope type="accession">',
-                                       			'close' : '</bibScope>'},
+            '!!!ArchivalLocation!!!' : {		'open' : '<bibRef>',
+                                  				'close' : '</bibRef>'}
             }
     
     # Create mapping of the metadata onto the UMDM XML template file
@@ -384,11 +398,9 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Repository!!!' : 			data['Repository'],
                 '!!!Dimensions!!!' : 			data['Dimensions'],
                 '!!!DurationMasters!!!' : 		str(round(summedRunTime, 2)),
-                '!!!TypeOfMaterial!!!' : 		data['TypeOfMaterial'],
+                '!!!Format!!!' : 		        data['Format'],
                 '!!!RepositoryBrowse!!!' : 		subjectTagString,
-                '!!!Collection!!!' : 			data['Collection'],
-                '!!!PhysicalLocation!!!' : 		data['PhysicalLocation'],
-                '!!!AccessionNumber!!!' : 		data['AccessionNumber'],
+                '!!!ArchivalLocation!!!' :      archivalLocation,
                 '!!!CollectionPID!!!' : 		'umd:3392',
                 '!!!TimeStamp!!!' : 			timeStamp
     }
