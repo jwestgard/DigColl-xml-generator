@@ -38,10 +38,11 @@
           !!!Title!!!
           !!!AlternateTitle!!!
           !!!Contributor!!!
+	  !!!Creator!!!
 	  !!!Provider!!!
-          !!!ItemControlNumber!!!
+          !!!Identifier!!!
 	  !!!Description/Summary!!!
-	  !!!AccessDescription!!!
+	  !!!Rights!!!
 	  !!!CopyrightHolder!!!
           !!!MediaType/Form!!!
           <covPlace>
@@ -53,20 +54,24 @@
           <covTime>
 	    !!!InsertDateHere!!!
           </covTime>
-          <culture>American</culture>
-          <language>en</language>
+          !!!Language!!!
           !!!Repository!!!
           <physDesc>
             !!!Dimensions!!!
             !!!DurationMasters!!!
             !!!TypeOfMaterial!!!
           </physDesc>
-	  !!!Subjects!!!
+	    !!!Repository Browse!!!
+	    !!!Subjects!!!
           <relationships>
             <relation label="archivalcollection" type="isPartOf">
               <bibRef>
                 !!!Collection!!!
-                !!!PhysicalLocation!!!
+                !!!Series!!!
+		!!!Subseries!!!
+		!!!Box!!!
+		!!!Item!!!
+		<!-- It does not seem that subseries, box, or item are in UMDM, but not sure yet what field(s) these should go in -->
                 !!!AccessionNumber!!!
               </bibRef>
             </relation>
