@@ -244,22 +244,37 @@ def writeFile(fileStem, content, extension):
     f.write(content)
     f.close()
 
+# Select time format for runtime conversions (either minutes as decimal or ISO)
+def timeFormatSelection():
+    choice = input('Enter the output time format: [I] for ISO/HHMMSS, or [M] for minutes. ')
+    while choice not in ['I', 'i', 'M', 'm']:
+        choice = input('You must enter I or M!')
+    if choice == "M" or "m":
+        convertTime = timeToMins
+    elif choice == "I" or "i":
+        convertTime = timeToDelta
 
 # When passed a string in the format 'HH:MM:SS', returns the decimal value in minutes,
 # rounded to two decimal places.
 def convertTime(inputTime):
-    if inputTime == "":                 # if the input string is empty, return the same string
-        return inputTime
-    hrsMinSec = inputTime.split(':')    # otherwise, split the string at the colon
-    minutes = int(hrsMinSec[0]) * 60    # multiply the first value by 60
-    minutes += int(hrsMinSec[1])        # add the second value
-    minutes += int(hrsMinSec[2]) / 60   # add the third value divided by 60
-    print('Time Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2))) # print result
-    return round(minutes, 2)            # return the resulting decimal rounded to two places
+    if timeFormat == "mins":
+        hrsMinSec = inputTime.split(':')    # otherwise, split the string at the colon
+        minutes = int(hrsMinSec[0]) * 60    # multiply the first value by 60
+        minutes += int(hrsMinSec[1])        # add the second value
+        minutes += int(hrsMinSec[2]) / 60   # add the third value divided by 60
+        print('Time Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2))) # print result
+        return round(minutes, 2)            # return the resulting decimal rounded to two places
+    elif timeFormat == "iso":
+        hh, mm, ss = map(int, inputTime.split(":"))
+        result = datetime.timedelta(hours=hh, minutes=mm, seconds=ss)
+        print('Runtime for object: ' + str(result))
+        return result
+    else:
+        print("Something went wrong with the time format selection!")
 
 
 # Performs series of find and replace operations to generate UMAM file from the template.
-def createUMAM(data, template, pid, rights):
+def createUMAM(data, template, pid, rights, timeFormat):
     
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     convertedRunTime = convertTime(data['DurationDerivatives'])
