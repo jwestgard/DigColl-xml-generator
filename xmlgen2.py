@@ -213,11 +213,27 @@ def generateBrowseTerms(inputSubjects):
     return '\n'.join(result)
 
 
+# generate subject terms from the three subject columns of the data
+def generateTopicalSubjects(**kwargs):
+    result = []
+    for key, value in kwargs.items():
+        if value != '':
+            for i in value.split(;):
+                if key == "pers":
+                    element = ('<persName>{0}</persName>'.format(i.strip())
+                elif key == "corp":
+                    element = ('<corpName>{0}</corpName>'.format(i.strip())
+                else:
+                    element = i.strip()
+                result.append('<subject type="topical">{0}</subject>'.format(element))
+    return '\n'.join(result)
+
+
 # generate block os XML relating to archival location
 def generateArchivalLocation(collection, **kwargs):
     result = ['<title type="main">{0}</title>'.format(collection)]
     for key, value in kwargs.items():
-        if value != "":
+        if value != '':
             result.append('<bibScope type="{0}">{1}</bibscope>'.format(key, value))
     return '\n'.join(result)
 
@@ -315,8 +331,12 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
         data['Dimensions'] = data['Dimensions'][0:-1]
     # Generate dating tags  
     dateTagString = generateDateTag(data['DateCreated'], data['DateAttribute'], data['Century'])
-    # Generate browse terms from subject field
-    subjectTagString = generateBrowseTerms(data['RepositoryBrowse'])
+    # Generate browse terms
+    browseTermsString = generateBrowseTerms(data['RepositoryBrowse'])
+    # Generate topical subjects
+    topicalSubjects = generateTopicalSubjects(  pers=data['PersonalSubject'],
+                                                corp=data['CorpSubject'],
+                                                top=data['TopicalSubject']   )
     # Generate MediaType XML Tags
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
     # Generate Archival Location Information Tags
@@ -368,7 +388,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                                   				'close' : '</size>'},
             '!!!DurationMasters!!!' : {			'open' : '<extent units="minutes">',
                                        			'close' : '</extent>'},
-            '!!!TypeOfMaterial!!!' : {			'open' : '<format>',
+            '!!!Format!!!' : {			        'open' : '<format>',
                                       			'close' : '</format>'},
             '!!!ArchivalLocation!!!' : {		'open' : '<bibRef>',
                                   				'close' : '</bibRef>'}
@@ -399,12 +419,13 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Dimensions!!!' : 			data['Dimensions'],
                 '!!!DurationMasters!!!' : 		str(round(summedRunTime, 2)),
                 '!!!Format!!!' : 		        data['Format'],
-                '!!!RepositoryBrowse!!!' : 		subjectTagString,
+                '!!!RepositoryBrowse!!!' : 		browseTermsString,
+                '!!!TopicalSubjects!!!' :       topicalSubjects
                 '!!!ArchivalLocation!!!' :      archivalLocation,
                 '!!!CollectionPID!!!' : 		'umd:3392',
                 '!!!TimeStamp!!!' : 			timeStamp
     }
-    
+
     # Carry out a find and replace for each line of the data mapping
     # and convert ampersands to XML entities in the process
     for k, v in umdmMap.items():
