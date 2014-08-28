@@ -218,11 +218,11 @@ def generateTopicalSubjects(**kwargs):
     result = []
     for key, value in kwargs.items():
         if value != '':
-            for i in value.split(;):
+            for i in value.split(';'):
                 if key == "pers":
-                    element = ('<persName>{0}</persName>'.format(i.strip())
+                    element = '<persName>{0}</persName>'.format(i.strip())
                 elif key == "corp":
-                    element = ('<corpName>{0}</corpName>'.format(i.strip())
+                    element = '<corpName>{0}</corpName>'.format(i.strip())
                 else:
                     element = i.strip()
                 result.append('<subject type="topical">{0}</subject>'.format(element))
@@ -264,8 +264,8 @@ def writeFile(fileStem, content, extension):
 # Select time format for runtime conversions (either minutes as decimal or ISO)
 def timeFormatSelection():
     choice = input('Enter the output time format ([H] for HHMMSS, or [M] for minutes): ')
-    while choice not in ['I', 'i', 'M', 'm']:
-        choice = input('You must enter either I or M!')
+    while choice not in ['H', 'h', 'M', 'm']:
+        choice = input('You must enter either H or M!')
     if choice == "M" or "m":
         # When passed a string in the format 'HH:MM:SS', returns the decimal value in minutes,
         # rounded to two decimal places.
@@ -276,7 +276,7 @@ def timeFormatSelection():
             minutes += int(hrsMinSec[2]) / 60   # add the third value divided by 60
             print('Time Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2))) # print result
             return round(minutes, 2)            # return the resulting decimal rounded to two places
-    elif choice == "I" or "i":
+    elif choice == "H" or "h":
         # Convert the input time to a timedelta and return it
         def convertTime(inputTime):
             hh, mm, ss = map(int, inputTime.split(":"))
@@ -285,11 +285,11 @@ def timeFormatSelection():
             return result
     else:
         print("Something went wrong with the time format selection!")
-        break
+    return convertTime
 
 
 # Performs series of find and replace operations to generate UMAM file from the template.
-def createUMAM(data, template, pid, rights, timeFormat):
+def createUMAM(data, template, pid, rights):
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     convertedRunTime = convertTime(data['DurationDerivatives'])
     # initialize the output starting with the specified template file
@@ -340,7 +340,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     # Generate MediaType XML Tags
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
     # Generate Archival Location Information Tags
-    archivalLocation = generateArchivalLocation(collection=data['collection'],
+    archivalLocation = generateArchivalLocation(collection=data['ArchivalCollection'],
                                                 series=data['series'],
                                                 subseries=data['subseries'],
                                                 box=data['box'],
@@ -415,12 +415,11 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Settlement/City!!!' : 		data['Settlement/City'],
                 '!!!InsertDateHere!!!' : 		dateTagString,
                 '!!!Language!!!' : 				data['Language'],
-                '!!!Repository!!!' : 			data['Repository'],
                 '!!!Dimensions!!!' : 			data['Dimensions'],
                 '!!!DurationMasters!!!' : 		str(round(summedRunTime, 2)),
                 '!!!Format!!!' : 		        data['Format'],
                 '!!!RepositoryBrowse!!!' : 		browseTermsString,
-                '!!!TopicalSubjects!!!' :       topicalSubjects
+                '!!!TopicalSubjects!!!' :       topicalSubjects,
                 '!!!ArchivalLocation!!!' :      archivalLocation,
                 '!!!CollectionPID!!!' : 		'umd:3392',
                 '!!!TimeStamp!!!' : 			timeStamp
@@ -481,6 +480,7 @@ def main():
     umdmList = []	# list for compiling list of UMDM pids
     outputFiles = []    # list for compiling list of all pids written
     summaryList = []    # list for compiling list of PIDs and Object IDs
+    global convertTime
     
     # Create a timeStamp for these operations
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -508,6 +508,9 @@ def main():
         quit()
     
     rightsScheme = getRightsScheme()
+    
+    convertTime = timeFormatSelection()
+    print(convertTime)
     
     # Load the UMAM template and print it to screen  
     umam, umamName = loadFile('UMAM')
@@ -633,7 +636,7 @@ def main():
             mets = createMets()
             
             # Create UMAM, convert PID for use as filename, write the file
-            myFile, convertedDerivativeRunTime = createUMAM(x, umam, x['umamPID'], rightsScheme)
+            myFile = createUMAM(x, umam, x['umamPID'], rightsScheme)
             fileStem = x['umamPID'].replace(':', '_').strip()
             writeFile(fileStem, myFile, '.xml')
             
