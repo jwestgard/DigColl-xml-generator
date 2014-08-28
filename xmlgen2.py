@@ -244,44 +244,40 @@ def writeFile(fileStem, content, extension):
     f.write(content)
     f.close()
 
+
 # Select time format for runtime conversions (either minutes as decimal or ISO)
 def timeFormatSelection():
-    choice = input('Enter the output time format: [I] for ISO/HHMMSS, or [M] for minutes. ')
+    choice = input('Enter the output time format ([H] for HHMMSS, or [M] for minutes): ')
     while choice not in ['I', 'i', 'M', 'm']:
-        choice = input('You must enter I or M!')
+        choice = input('You must enter either I or M!')
     if choice == "M" or "m":
-        convertTime = timeToMins
+        # When passed a string in the format 'HH:MM:SS', returns the decimal value in minutes,
+        # rounded to two decimal places.
+        def convertTime(inputTime):
+            hrsMinSec = inputTime.split(':')    # otherwise, split the string at the colon
+            minutes = int(hrsMinSec[0]) * 60    # multiply the first value by 60
+            minutes += int(hrsMinSec[1])        # add the second value
+            minutes += int(hrsMinSec[2]) / 60   # add the third value divided by 60
+            print('Time Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2))) # print result
+            return round(minutes, 2)            # return the resulting decimal rounded to two places
     elif choice == "I" or "i":
-        convertTime = timeToDelta
-
-# When passed a string in the format 'HH:MM:SS', returns the decimal value in minutes,
-# rounded to two decimal places.
-def convertTime(inputTime):
-    if timeFormat == "mins":
-        hrsMinSec = inputTime.split(':')    # otherwise, split the string at the colon
-        minutes = int(hrsMinSec[0]) * 60    # multiply the first value by 60
-        minutes += int(hrsMinSec[1])        # add the second value
-        minutes += int(hrsMinSec[2]) / 60   # add the third value divided by 60
-        print('Time Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2))) # print result
-        return round(minutes, 2)            # return the resulting decimal rounded to two places
-    elif timeFormat == "iso":
-        hh, mm, ss = map(int, inputTime.split(":"))
-        result = datetime.timedelta(hours=hh, minutes=mm, seconds=ss)
-        print('Runtime for object: ' + str(result))
-        return result
+        # Convert the input time to a timedelta and return it
+        def convertTime(inputTime):
+            hh, mm, ss = map(int, inputTime.split(":"))
+            result = datetime.timedelta(hours=hh, minutes=mm, seconds=ss)
+            print('Runtime as timedelta: ' + str(result))
+            return result
     else:
         print("Something went wrong with the time format selection!")
+        break
 
 
 # Performs series of find and replace operations to generate UMAM file from the template.
 def createUMAM(data, template, pid, rights, timeFormat):
-    
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     convertedRunTime = convertTime(data['DurationDerivatives'])
-    
     # initialize the output starting with the specified template file
     outputfile = template
-    
     # create mapping of the metadata onto the UMAM XML template file
     umamMap = {
                 '!!!PID!!!' : 					pid,
@@ -302,36 +298,27 @@ def createUMAM(data, template, pid, rights, timeFormat):
                 '!!!TrackFormat!!!' : 			data['TrackFormat'],
                 '!!!TimeStamp!!!' : 			timeStamp
     }
-    
     # Carry out a find and replace for each line of the data mapping
     # and convert ampersands in data into XML entities in the process
     for k, v in umamMap.items():
         outputfile = outputfile.replace(k, v.replace('&', '&amp;'))
-    
     return outputfile
 
 
 # Performs series of find and replace operations to generate UMDM file from the template.
 def createUMDM(data, template, summedRunTime, mets, pid, rights):
-    
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    
     # Initialize the output starting with the specified template file
     outputfile = template
-    
     # Strip out trailing quotation marks from Dimensions field
     if data['Dimensions'].endswith('"'):
         data['Dimensions'] = data['Dimensions'][0:-1]
-    
     # Generate dating tags  
     dateTagString = generateDateTag(data['DateCreated'], data['DateAttribute'], data['Century'])
-    
     # Generate browse terms from subject field
     subjectTagString = generateBrowseTerms(data['RepositoryBrowse'])
-    
     # Generate MediaType XML Tags
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
-    
     # Generate Archival Location Information Tags
     archivalLocation = generateArchivalLocation(collection=data['collection'],
                                                 series=data['series'],
@@ -340,11 +327,9 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                                                 item=data['item'],
                                                 accession=data['accession'] )
 
-    
     # Insert the RELS-METS section compiled from the UMAM files
     outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
     outputfile = stripAnchors(outputfile)                               # Strip out anchor points
-    
     # XML tags with which to wrap the CSV data
     XMLtags = {
             '!!!ContentModel!!!' : 	{			'open' : '<type>',
@@ -388,7 +373,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
             '!!!ArchivalLocation!!!' : {		'open' : '<bibRef>',
                                   				'close' : '</bibRef>'}
             }
-    
+
     # Create mapping of the metadata onto the UMDM XML template file
     umdmMap = {
                 '!!!PID!!!' :           		pid,
