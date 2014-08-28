@@ -38,11 +38,12 @@
           !!!Title!!!
           !!!AlternateTitle!!!
           !!!Contributor!!!
-	  !!!Provider!!!
-          !!!ItemControlNumber!!!
-	  !!!Description/Summary!!!
-	  !!!AccessDescription!!!
-	  !!!CopyrightHolder!!!
+	        !!!Creator!!!
+	        !!!Provider!!!
+          !!!Identifier!!!
+	        !!!Description/Summary!!!
+	        !!!Rights!!!
+	        !!!CopyrightHolder!!!
           !!!MediaType/Form!!!
           <covPlace>
             !!!Continent!!!
@@ -53,21 +54,29 @@
           <covTime>
 	    !!!InsertDateHere!!!
           </covTime>
-          <culture>American</culture>
-          <language>en</language>
+          !!!Language!!!
           !!!Repository!!!
           <physDesc>
             !!!Dimensions!!!
             !!!DurationMasters!!!
-            !!!TypeOfMaterial!!!
+            !!!Format!!!
           </physDesc>
-	  !!!Subjects!!!
+	    !!!Repository Browse!!!
+	         <subject scheme="LCSH" type="topical">!!!TopicalSubject!!!</subject>
+          <subject scheme="LCSH" type="topical">!!!GeographicSubject!!!</subject>
+          <!-- not sure we can go a geographic subject type, since we may not have the geogName type. Plus, these will be coming from 
+            MARC files, so should be LCSH, and I think they can fit under topical. Or, we just don't inlcude them -->
+          <subject scheme="LCNAF" type="topical">!!!PersonalSubject!!!</subject>
+                 <!-- not sure how you wanted these broken down, or if you wanted the script to take care of it -->
           <relationships>
             <relation label="archivalcollection" type="isPartOf">
               <bibRef>
                 !!!Collection!!!
-                !!!PhysicalLocation!!!
-                !!!AccessionNumber!!!
+                !!!Series!!!
+	             	!!!Subseries!!!
+            		!!!Box!!!
+            		!!!Item!!!
+                !!!Accession!!!
               </bibRef>
             </relation>
           </relationships>
