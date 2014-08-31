@@ -391,7 +391,11 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
             '!!!Format!!!' : {			        'open' : '<format>',
                                       			'close' : '</format>'},
             '!!!ArchivalLocation!!!' : {		'open' : '<bibRef>',
-                                  				'close' : '</bibRef>'}
+                                  				'close' : '</bibRef>'},
+            '!!!Language!!!' : {                'open' : '<language>',
+                                                'close' : '</language>'},
+            '!!!Rights!!!' : {                  'open' : '<rights>',
+                                                'close' : '</rights'}
             }
 
     # Create mapping of the metadata onto the UMDM XML template file
@@ -406,7 +410,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Provider!!!' :  			data['Provider/Publisher'],
                 '!!!Identifier!!!' :  			data['Identifier'],
                 '!!!Description/Summary!!!' : 	data['Description/Summary'],
-                '!!!AccessDescription!!!' : 	data['Rights'],
+                '!!!Rights!!!' : 	            data['Rights'],
                 '!!!CopyrightHolder!!!' : 		data['CopyrightHolder'],
                 '!!!MediaType/Form!!!' : 		mediaTypeString,
                 '!!!Continent!!!' : 			data['Continent'],
@@ -416,7 +420,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!InsertDateHere!!!' : 		dateTagString,
                 '!!!Language!!!' : 				data['Language'],
                 '!!!Dimensions!!!' : 			data['Dimensions'],
-                '!!!DurationMasters!!!' : 		str(round(summedRunTime, 2)),
+                '!!!DurationMasters!!!' : 		str(summedRunTime),
                 '!!!Format!!!' : 		        data['Format'],
                 '!!!RepositoryBrowse!!!' : 		browseTermsString,
                 '!!!TopicalSubjects!!!' :       topicalSubjects,
