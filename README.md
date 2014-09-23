@@ -9,3 +9,6 @@ The program assumes that the XML templates and data files will be in the same wo
 
 ============
 __UPDATE 2013-09-12:__ The whole script has been revised as xmlgen2.py.  The revised version attempts to accommodate audio or video objects coming from any collection, and therefore the program no longer assumes that modifiable metadata elements are hardcoded in the XML templates. In addition, a succinct mapping of all metadata elements has been implemented as two python dictionaries, for easier updating in the future.
+
+============
+__UPDATE 2014-09-23:__ Another major revision has been undertaken, including normalizing the metadata column headings expected by the script with standards and practices throughout the libraries, allowing for the expression of object duration in units other than minutes, and more comprehensive handling of subjects and browse terms.  This version is xmlgen3.py.
