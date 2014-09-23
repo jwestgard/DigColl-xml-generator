@@ -1,3 +1,5 @@
+#!usr/bin/env python3
+
 ############################################################################
 #                                                                          #
 #                              XMLGEN.PY:                                  #
@@ -263,29 +265,30 @@ def writeFile(fileStem, content, extension):
 
 # Select time format for runtime conversions (either minutes as decimal or ISO)
 def timeFormatSelection():
-    choice = input('Enter the output time format ([H] for HHMMSS, or [M] for minutes): ')
-    while choice not in ['H', 'h', 'M', 'm']:
+    choice = input('Enter the output time format ([I] for ISO, or [M] for minutes): ')
+    while choice not in ['I', 'i', 'M', 'm']:
         choice = input('You must enter either H or M!')
-    if choice == "M" or "m":
+    if choice == "M" or choice == "m":
         # When passed a string in the format 'HH:MM:SS', returns the decimal value in minutes,
         # rounded to two decimal places.
+        nullTimeCounter = 0
         def convertTime(inputTime):
             hrsMinSec = inputTime.split(':')    # otherwise, split the string at the colon
             minutes = int(hrsMinSec[0]) * 60    # multiply the first value by 60
             minutes += int(hrsMinSec[1])        # add the second value
             minutes += int(hrsMinSec[2]) / 60   # add the third value divided by 60
-            print('Time Conversion: ' + str(hrsMinSec) + ' = ' + str(round(minutes, 2))) # print result
-            return round(minutes, 2)            # return the resulting decimal rounded to two places
-    elif choice == "H" or "h":
+            return round(minutes, 2)  # return the resulting decimal rounded to two places
+    elif choice == "I" or choice == "i":
         # Convert the input time to a timedelta and return it
+        nullTimeCounter = datetime.timedelta(0)
         def convertTime(inputTime):
             hh, mm, ss = map(int, inputTime.split(":"))
             result = datetime.timedelta(hours=hh, minutes=mm, seconds=ss)
-            print('Runtime as timedelta: ' + str(result))
             return result
     else:
         print("Something went wrong with the time format selection!")
-    return convertTime
+        exit
+    return nullTimeCounter, convertTime
 
 
 # Performs series of find and replace operations to generate UMAM file from the template.
@@ -478,7 +481,6 @@ def main():
     mets = ""		# empty string for compiling METS record
     objectGroups = 0    # counter for UMDM plus UMAM(s) as a group
     objectParts = 0     # counter for the number of UMAM parts for each UMDM
-    summedRunTime = 0   # variable to hold sum of constituent UMAM runtimes for UMDM
     pidCounter = 0      # counter for coordinating PID list with data lines from CSV
     filesWritten = 0    # counter for file outputs
     umdmList = []	# list for compiling list of UMDM pids
@@ -513,8 +515,8 @@ def main():
     
     rightsScheme = getRightsScheme()
     
-    convertTime = timeFormatSelection()
-    print(convertTime)
+    nullTimeCounter, convertTime = timeFormatSelection()
+    summedRunTime = nullTimeCounter   # variable to hold sum of constituent UMAM runtimes for UMDM
     
     # Load the UMAM template and print it to screen  
     umam, umamName = loadFile('UMAM')
@@ -580,14 +582,10 @@ def main():
             # If the line is a UMAM line
             elif x['XMLType'] == 'UMAM':
                 
-                # Print summary info to the screen
-                print('Writing UMAM...', end=' ')
-                
                 # Create UMAM, convert PID for use as filename, write the file
                 myFile = createUMAM(x, umam, x['PID'], rightsScheme)
                 convertedDerivativeRunTime = convertTime(x['DurationDerivatives'])
                 fileStem = x['PID'].replace(':', '_').strip()
-                print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
                 writeFile(fileStem, myFile, '.xml')
                 
                 # Increment counters
@@ -595,6 +593,11 @@ def main():
                 summedRunTime += convertedDerivativeRunTime
                 objectParts += 1
                 filesWritten += 1
+                
+                # Print summary info to the screen
+                print('Writing UMAM...', end=' ')
+                print("Converted runtime = {0}".format(convertedDerivativeRunTime))
+                print('Part {0}: UMAM = {1}'.format(objectParts, fileStem))
                 
                 # Update the running METS record for use in finishing the UMDM
                 mets = updateMets(objectParts, mets, x['FileName'], x['PID'])
@@ -670,8 +673,8 @@ def main():
             filesWritten += 1
           
             # Reset counters
-            objectParts = 0     # reset parts counter
-            summedRunTime = 0   # reset runtime sum counter
+            objectParts = 0     				# reset parts counter
+            summedRunTime = nullTimeCounter   	# reset runtime sum counter
         
     # Abort if the value of dataFileArrangement is something else
     else:
