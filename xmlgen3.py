@@ -5,13 +5,13 @@
 #                              XMLGEN.PY:                                  #
 #                 A script to generate FOXML files for                     #
 #               Digital Collections Audio & Video at UMD                   #    
-#                      Version 2 -- September 2013                         #  
+#                      Version 3 -- September 2014                         #  
 #                                                                          #
 ############################################################################
 #                                                                          #       
 # Recommended command to run this program:                                 #
 #                                                                          #       
-#     python3 xmlgen2.py 2>&1 | tee xmlgen.log                             #
+#     python3 xmlgen3.py 2>&1 | tee xmlgen.log                             #
 #                                                                          #       
 # (Using this command prints all input and output to screen and also saves #
 # it as a log file).                                                       #
@@ -154,6 +154,7 @@ def generateDateTag(inputDate, inputAttribute, centuryData):
     centuryList = []
     myDate = parseDate(inputDate, inputAttribute)
     if myDate['Type'] == 'range':
+        print(myDate['Value'])
         elements = myDate['Value'].split('-')   # split the date into its parts
         if len(elements) == 2:                  # if there are two parts, use those as begin/end years
             beginDate = elements[0]
@@ -344,11 +345,11 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
     # Generate Archival Location Information Tags
     archivalLocation = generateArchivalLocation(collection=data['ArchivalCollection'],
-                                                series=data['series'],
-                                                subseries=data['subseries'],
-                                                box=data['box'],
-                                                item=data['item'],
-                                                accession=data['accession'] )
+                                                series=data['Series'],
+                                                subseries=data['Subseries'],
+                                                box=data['Box'],
+                                                item=data['Item'],
+                                                accession=data['Accession'] )
 
     # Insert the RELS-METS section compiled from the UMAM files
     outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
