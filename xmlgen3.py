@@ -518,6 +518,8 @@ def main():
     
     nullTimeCounter, convertTime = timeFormatSelection()
     summedRunTime = nullTimeCounter   # variable to hold sum of constituent UMAM runtimes for UMDM
+    print(summedRunTime)
+    
     
     # Load the UMAM template and print it to screen  
     umam, umamName = loadFile('UMAM')
@@ -570,8 +572,8 @@ def main():
                     filesWritten += 1
                     
                     # Reset counters
-                    objectParts = 0     # reset parts counter
-                    summedRunTime = 0   # reset runtime sum counter for masters
+                    objectParts = 0     				# reset parts counter
+                    summedRunTime = nullTimeCounter   	# reset runtime sum counter for masters
                 
                 # Begin a new UMDM group by incrementing the group counter, printing a notice to screen,
                 # storing the line of UMDM data for use after UMAMs are complete, and initiating a new METS
@@ -676,7 +678,7 @@ def main():
             # Reset counters
             objectParts = 0     				# reset parts counter
             summedRunTime = nullTimeCounter   	# reset runtime sum counter
-        
+            
     # Abort if the value of dataFileArrangement is something else
     else:
         print('Bad dataFileArrangement value!')
