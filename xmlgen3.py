@@ -518,8 +518,6 @@ def main():
     
     nullTimeCounter, convertTime = timeFormatSelection()
     summedRunTime = nullTimeCounter   # variable to hold sum of constituent UMAM runtimes for UMDM
-    print(summedRunTime)
-    
     
     # Load the UMAM template and print it to screen  
     umam, umamName = loadFile('UMAM')
