@@ -1,0 +1,591 @@
+
+Enter your name: 
+Hello josh, welcome to the XML generator!
+It is now 2014-12-08T23:27:18.756188Z
+
+This program is designed to take data from a CSV file,
+and use that data to generate FOXML files for the
+University of Maryland's digital collections repository.
+
+Enter the name of the data file: 
+Does your datafile contain single or multiple rows for each object?
+Please enter S or M: 
+The datafile you specified has 89 rows.
+Since you have multi-rowed objects, you need one PID for each row.
+Assuming there is a header row in your datafile, you need 88 PIDs.
+Load 88 PIDs from a file or request them from the server?
+Enter F (file) or S (server): Enter the name of the PID file: 
+Successfully loaded the following 1501 PIDs: 
+['umd:779269', 'umd:779270', 'umd:779271', 'umd:779272', 'umd:779273', 'umd:779274', 'umd:779275', 'umd:779276', 'umd:779277', 'umd:779278', 'umd:779279', 'umd:779280', 'umd:779281', 'umd:779282', 'umd:779283', 'umd:779284', 'umd:779285', 'umd:779286', 'umd:779287', 'umd:779288', 'umd:779289', 'umd:779290', 'umd:779291', 'umd:779292', 'umd:779293', 'umd:779294', 'umd:779295', 'umd:779296', 'umd:779297', 'umd:779298', 'umd:779299', 'umd:779300', 'umd:779301', 'umd:779302', 'umd:779303', 'umd:779304', 'umd:779305', 'umd:779306', 'umd:779307', 'umd:779308', 'umd:779309', 'umd:779310', 'umd:779311', 'umd:779312', 'umd:779313', 'umd:779314', 'umd:779315', 'umd:779316', 'umd:779317', 'umd:779318', 'umd:779319', 'umd:779320', 'umd:779321', 'umd:779322', 'umd:779323', 'umd:779324', 'umd:779325', 'umd:779326', 'umd:779327', 'umd:779328', 'umd:779329', 'umd:779330', 'umd:779331', 'umd:779332', 'umd:779333', 'umd:779334', 'umd:779335', 'umd:779336', 'umd:779337', 'umd:779338', 'umd:779339', 'umd:779340', 'umd:779341', 'umd:779342', 'umd:779343', 'umd:779344', 'umd:779345', 'umd:779346', 'umd:779347', 'umd:779348', 'umd:779349', 'umd:779350', 'umd:779351', 'umd:779352', 'umd:779353', 'umd:779354', 'umd:779355', 'umd:779356', 'umd:779357', 'umd:779358', 'umd:779359', 'umd:779360', 'umd:779361', 'umd:779362', 'umd:779363', 'umd:779364', 'umd:779365', 'umd:779366', 'umd:779367', 'umd:779368', 'umd:779369', 'umd:779370', 'umd:779371', 'umd:779372', 'umd:779373', 'umd:779374', 'umd:779375', 'umd:779376', 'umd:779377', 'umd:779378', 'umd:779379', 'umd:779380', 'umd:779381', 'umd:779382', 'umd:779383', 'umd:779384', 'umd:779385', 'umd:779386', 'umd:779387', 'umd:779388', 'umd:779389', 'umd:779390', 'umd:779391', 'umd:779392', 'umd:779393', 'umd:779394', 'umd:779395', 'umd:779396', 'umd:779397', 'umd:779398', 'umd:779399', 'umd:779400', 'umd:779401', 'umd:779402', 'umd:779403', 'umd:779404', 'umd:779405', 'umd:779406', 'umd:779407', 'umd:779408', 'umd:779409', 'umd:779410', 'umd:779411', 'umd:779412', 'umd:779413', 'umd:779414', 'umd:779415', 'umd:779416', 'umd:779417', 'umd:779418', 'umd:779419', 'umd:779420', 'umd:779421', 'umd:779422', 'umd:779423', 'umd:779424', 'umd:779425', 'umd:779426', 'umd:779427', 'umd:779428', 'umd:779429', 'umd:779430', 'umd:779431', 'umd:779432', 'umd:779433', 'umd:779434', 'umd:779435', 'umd:779436', 'umd:779437', 'umd:779438', 'umd:779439', 'umd:779440', 'umd:779441', 'umd:779442', 'umd:779443', 'umd:779444', 'umd:779445', 'umd:779446', 'umd:779447', 'umd:779448', 'umd:779449', 'umd:779450', 'umd:779451', 'umd:779452', 'umd:779453', 'umd:779454', 'umd:779455', 'umd:779456', 'umd:779457', 'umd:779458', 'umd:779459', 'umd:779460', 'umd:779461', 'umd:779462', 'umd:779463', 'umd:779464', 'umd:779465', 'umd:779466', 'umd:779467', 'umd:779468', 'umd:779469', 'umd:779470', 'umd:779471', 'umd:779472', 'umd:779473', 'umd:779474', 'umd:779475', 'umd:779476', 'umd:779477', 'umd:779478', 'umd:779479', 'umd:779480', 'umd:779481', 'umd:779482', 'umd:779483', 'umd:779484', 'umd:779485', 'umd:779486', 'umd:779487', 'umd:779488', 'umd:779489', 'umd:779490', 'umd:779491', 'umd:779492', 'umd:779493', 'umd:779494', 'umd:779495', 'umd:779496', 'umd:779497', 'umd:779498', 'umd:779499', 'umd:779500', 'umd:779501', 'umd:779502', 'umd:779503', 'umd:779504', 'umd:779505', 'umd:779506', 'umd:779507', 'umd:779508', 'umd:779509', 'umd:779510', 'umd:779511', 'umd:779512', 'umd:779513', 'umd:779514', 'umd:779515', 'umd:779516', 'umd:779517', 'umd:779518', 'umd:779519', 'umd:779520', 'umd:779521', 'umd:779522', 'umd:779523', 'umd:779524', 'umd:779525', 'umd:779526', 'umd:779527', 'umd:779528', 'umd:779529', 'umd:779530', 'umd:779531', 'umd:779532', 'umd:779533', 'umd:779534', 'umd:779535', 'umd:779536', 'umd:779537', 'umd:779538', 'umd:779539', 'umd:779540', 'umd:779541', 'umd:779542', 'umd:779543', 'umd:779544', 'umd:779545', 'umd:779546', 'umd:779547', 'umd:779548', 'umd:779549', 'umd:779550', 'umd:779551', 'umd:779552', 'umd:779553', 'umd:779554', 'umd:779555', 'umd:779556', 'umd:779557', 'umd:779558', 'umd:779559', 'umd:779560', 'umd:779561', 'umd:779562', 'umd:779563', 'umd:779564', 'umd:779565', 'umd:779566', 'umd:779567', 'umd:779568', 'umd:779569', 'umd:779570', 'umd:779571', 'umd:779572', 'umd:779573', 'umd:779574', 'umd:779575', 'umd:779576', 'umd:779577', 'umd:779578', 'umd:779579', 'umd:779580', 'umd:779581', 'umd:779582', 'umd:779583', 'umd:779584', 'umd:779585', 'umd:779586', 'umd:779587', 'umd:779588', 'umd:779589', 'umd:779590', 'umd:779591', 'umd:779592', 'umd:779593', 'umd:779594', 'umd:779595', 'umd:779596', 'umd:779597', 'umd:779598', 'umd:779599', 'umd:779600', 'umd:779601', 'umd:779602', 'umd:779603', 'umd:779604', 'umd:779605', 'umd:779606', 'umd:779607', 'umd:779608', 'umd:779609', 'umd:779610', 'umd:779611', 'umd:779612', 'umd:779613', 'umd:779614', 'umd:779615', 'umd:779616', 'umd:779617', 'umd:779618', 'umd:779619', 'umd:779620', 'umd:779621', 'umd:779622', 'umd:779623', 'umd:779624', 'umd:779625', 'umd:779626', 'umd:779627', 'umd:779628', 'umd:779629', 'umd:779630', 'umd:779631', 'umd:779632', 'umd:779633', 'umd:779634', 'umd:779635', 'umd:779636', 'umd:779637', 'umd:779638', 'umd:779639', 'umd:779640', 'umd:779641', 'umd:779642', 'umd:779643', 'umd:779644', 'umd:779645', 'umd:779646', 'umd:779647', 'umd:779648', 'umd:779649', 'umd:779650', 'umd:779651', 'umd:779652', 'umd:779653', 'umd:779654', 'umd:779655', 'umd:779656', 'umd:779657', 'umd:779658', 'umd:779659', 'umd:779660', 'umd:779661', 'umd:779662', 'umd:779663', 'umd:779664', 'umd:779665', 'umd:779666', 'umd:779667', 'umd:779668', 'umd:779669', 'umd:779670', 'umd:779671', 'umd:779672', 'umd:779673', 'umd:779674', 'umd:779675', 'umd:779676', 'umd:779677', 'umd:779678', 'umd:779679', 'umd:779680', 'umd:779681', 'umd:779682', 'umd:779683', 'umd:779684', 'umd:779685', 'umd:779686', 'umd:779687', 'umd:779688', 'umd:779689', 'umd:779690', 'umd:779691', 'umd:779692', 'umd:779693', 'umd:779694', 'umd:779695', 'umd:779696', 'umd:779697', 'umd:779698', 'umd:779699', 'umd:779700', 'umd:779701', 'umd:779702', 'umd:779703', 'umd:779704', 'umd:779705', 'umd:779706', 'umd:779707', 'umd:779708', 'umd:779709', 'umd:779710', 'umd:779711', 'umd:779712', 'umd:779713', 'umd:779714', 'umd:779715', 'umd:779716', 'umd:779717', 'umd:779718', 'umd:779719', 'umd:779720', 'umd:779721', 'umd:779722', 'umd:779723', 'umd:779724', 'umd:779725', 'umd:779726', 'umd:779727', 'umd:779728', 'umd:779729', 'umd:779730', 'umd:779731', 'umd:779732', 'umd:779733', 'umd:779734', 'umd:779735', 'umd:779736', 'umd:779737', 'umd:779738', 'umd:779739', 'umd:779740', 'umd:779741', 'umd:779742', 'umd:779743', 'umd:779744', 'umd:779745', 'umd:779746', 'umd:779747', 'umd:779748', 'umd:779749', 'umd:779750', 'umd:779751', 'umd:779752', 'umd:779753', 'umd:779754', 'umd:779755', 'umd:779756', 'umd:779757', 'umd:779758', 'umd:779759', 'umd:779760', 'umd:779761', 'umd:779762', 'umd:779763', 'umd:779764', 'umd:779765', 'umd:779766', 'umd:779767', 'umd:779768', 'umd:779769', 'umd:779770', 'umd:779771', 'umd:779772', 'umd:779773', 'umd:779774', 'umd:779775', 'umd:779776', 'umd:779777', 'umd:779778', 'umd:779779', 'umd:779780', 'umd:779781', 'umd:779782', 'umd:779783', 'umd:779784', 'umd:779785', 'umd:779786', 'umd:779787', 'umd:779788', 'umd:779789', 'umd:779790', 'umd:779791', 'umd:779792', 'umd:779793', 'umd:779794', 'umd:779795', 'umd:779796', 'umd:779797', 'umd:779798', 'umd:779799', 'umd:779800', 'umd:779801', 'umd:779802', 'umd:779803', 'umd:779804', 'umd:779805', 'umd:779806', 'umd:779807', 'umd:779808', 'umd:779809', 'umd:779810', 'umd:779811', 'umd:779812', 'umd:779813', 'umd:779814', 'umd:779815', 'umd:779816', 'umd:779817', 'umd:779818', 'umd:779819', 'umd:779820', 'umd:779821', 'umd:779822', 'umd:779823', 'umd:779824', 'umd:779825', 'umd:779826', 'umd:779827', 'umd:779828', 'umd:779829', 'umd:779830', 'umd:779831', 'umd:779832', 'umd:779833', 'umd:779834', 'umd:779835', 'umd:779836', 'umd:779837', 'umd:779838', 'umd:779839', 'umd:779840', 'umd:779841', 'umd:779842', 'umd:779843', 'umd:779844', 'umd:779845', 'umd:779846', 'umd:779847', 'umd:779848', 'umd:779849', 'umd:779850', 'umd:779851', 'umd:779852', 'umd:779853', 'umd:779854', 'umd:779855', 'umd:779856', 'umd:779857', 'umd:779858', 'umd:779859', 'umd:779860', 'umd:779861', 'umd:779862', 'umd:779863', 'umd:779864', 'umd:779865', 'umd:779866', 'umd:779867', 'umd:779868', 'umd:779869', 'umd:779870', 'umd:779871', 'umd:779872', 'umd:779873', 'umd:779874', 'umd:779875', 'umd:779876', 'umd:779877', 'umd:779878', 'umd:779879', 'umd:779880', 'umd:779881', 'umd:779882', 'umd:779883', 'umd:779884', 'umd:779885', 'umd:779886', 'umd:779887', 'umd:779888', 'umd:779889', 'umd:779890', 'umd:779891', 'umd:779892', 'umd:779893', 'umd:779894', 'umd:779895', 'umd:779896', 'umd:779897', 'umd:779898', 'umd:779899', 'umd:779900', 'umd:779901', 'umd:779902', 'umd:779903', 'umd:779904', 'umd:779905', 'umd:779906', 'umd:779907', 'umd:779908', 'umd:779909', 'umd:779910', 'umd:779911', 'umd:779912', 'umd:779913', 'umd:779914', 'umd:779915', 'umd:779916', 'umd:779917', 'umd:779918', 'umd:779919', 'umd:779920', 'umd:779921', 'umd:779922', 'umd:779923', 'umd:779924', 'umd:779925', 'umd:779926', 'umd:779927', 'umd:779928', 'umd:779929', 'umd:779930', 'umd:779931', 'umd:779932', 'umd:779933', 'umd:779934', 'umd:779935', 'umd:779936', 'umd:779937', 'umd:779938', 'umd:779939', 'umd:779940', 'umd:779941', 'umd:779942', 'umd:779943', 'umd:779944', 'umd:779945', 'umd:779946', 'umd:779947', 'umd:779948', 'umd:779949', 'umd:779950', 'umd:779951', 'umd:779952', 'umd:779953', 'umd:779954', 'umd:779955', 'umd:779956', 'umd:779957', 'umd:779958', 'umd:779959', 'umd:779960', 'umd:779961', 'umd:779962', 'umd:779963', 'umd:779964', 'umd:779965', 'umd:779966', 'umd:779967', 'umd:779968', 'umd:779969', 'umd:779970', 'umd:779971', 'umd:779972', 'umd:779973', 'umd:779974', 'umd:779975', 'umd:779976', 'umd:779977', 'umd:779978', 'umd:779979', 'umd:779980', 'umd:779981', 'umd:779982', 'umd:779983', 'umd:779984', 'umd:779985', 'umd:779986', 'umd:779987', 'umd:779988', 'umd:779989', 'umd:779990', 'umd:779991', 'umd:779992', 'umd:779993', 'umd:779994', 'umd:779995', 'umd:779996', 'umd:779997', 'umd:779998', 'umd:779999', 'umd:780000', 'umd:780001', 'umd:780002', 'umd:780003', 'umd:780004', 'umd:780005', 'umd:780006', 'umd:780007', 'umd:780008', 'umd:780009', 'umd:780010', 'umd:780011', 'umd:780012', 'umd:780013', 'umd:780014', 'umd:780015', 'umd:780016', 'umd:780017', 'umd:780018', 'umd:780019', 'umd:780020', 'umd:780021', 'umd:780022', 'umd:780023', 'umd:780024', 'umd:780025', 'umd:780026', 'umd:780027', 'umd:780028', 'umd:780029', 'umd:780030', 'umd:780031', 'umd:780032', 'umd:780033', 'umd:780034', 'umd:780035', 'umd:780036', 'umd:780037', 'umd:780038', 'umd:780039', 'umd:780040', 'umd:780041', 'umd:780042', 'umd:780043', 'umd:780044', 'umd:780045', 'umd:780046', 'umd:780047', 'umd:780048', 'umd:780049', 'umd:780050', 'umd:780051', 'umd:780052', 'umd:780053', 'umd:780054', 'umd:780055', 'umd:780056', 'umd:780057', 'umd:780058', 'umd:780059', 'umd:780060', 'umd:780061', 'umd:780062', 'umd:780063', 'umd:780064', 'umd:780065', 'umd:780066', 'umd:780067', 'umd:780068', 'umd:780069', 'umd:780070', 'umd:780071', 'umd:780072', 'umd:780073', 'umd:780074', 'umd:780075', 'umd:780076', 'umd:780077', 'umd:780078', 'umd:780079', 'umd:780080', 'umd:780081', 'umd:780082', 'umd:780083', 'umd:780084', 'umd:780085', 'umd:780086', 'umd:780087', 'umd:780088', 'umd:780089', 'umd:780090', 'umd:780091', 'umd:780092', 'umd:780093', 'umd:780094', 'umd:780095', 'umd:780096', 'umd:780097', 'umd:780098', 'umd:780099', 'umd:780100', 'umd:780101', 'umd:780102', 'umd:780103', 'umd:780104', 'umd:780105', 'umd:780106', 'umd:780107', 'umd:780108', 'umd:780109', 'umd:780110', 'umd:780111', 'umd:780112', 'umd:780113', 'umd:780114', 'umd:780115', 'umd:780116', 'umd:780117', 'umd:780118', 'umd:780119', 'umd:780120', 'umd:780121', 'umd:780122', 'umd:780123', 'umd:780124', 'umd:780125', 'umd:780126', 'umd:780127', 'umd:780128', 'umd:780129', 'umd:780130', 'umd:780131', 'umd:780132', 'umd:780133', 'umd:780134', 'umd:780135', 'umd:780136', 'umd:780137', 'umd:780138', 'umd:780139', 'umd:780140', 'umd:780141', 'umd:780142', 'umd:780143', 'umd:780144', 'umd:780145', 'umd:780146', 'umd:780147', 'umd:780148', 'umd:780149', 'umd:780150', 'umd:780151', 'umd:780152', 'umd:780153', 'umd:780154', 'umd:780155', 'umd:780156', 'umd:780157', 'umd:780158', 'umd:780159', 'umd:780160', 'umd:780161', 'umd:780162', 'umd:780163', 'umd:780164', 'umd:780165', 'umd:780166', 'umd:780167', 'umd:780168', 'umd:780169', 'umd:780170', 'umd:780171', 'umd:780172', 'umd:780173', 'umd:780174', 'umd:780175', 'umd:780176', 'umd:780177', 'umd:780178', 'umd:780179', 'umd:780180', 'umd:780181', 'umd:780182', 'umd:780183', 'umd:780184', 'umd:780185', 'umd:780186', 'umd:780187', 'umd:780188', 'umd:780189', 'umd:780190', 'umd:780191', 'umd:780192', 'umd:780193', 'umd:780194', 'umd:780195', 'umd:780196', 'umd:780197', 'umd:780198', 'umd:780199', 'umd:780200', 'umd:780201', 'umd:780202', 'umd:780203', 'umd:780204', 'umd:780205', 'umd:780206', 'umd:780207', 'umd:780208', 'umd:780209', 'umd:780210', 'umd:780211', 'umd:780212', 'umd:780213', 'umd:780214', 'umd:780215', 'umd:780216', 'umd:780217', 'umd:780218', 'umd:780219', 'umd:780220', 'umd:780221', 'umd:780222', 'umd:780223', 'umd:780224', 'umd:780225', 'umd:780226', 'umd:780227', 'umd:780228', 'umd:780229', 'umd:780230', 'umd:780231', 'umd:780232', 'umd:780233', 'umd:780234', 'umd:780235', 'umd:780236', 'umd:780237', 'umd:780238', 'umd:780239', 'umd:780240', 'umd:780241', 'umd:780242', 'umd:780243', 'umd:780244', 'umd:780245', 'umd:780246', 'umd:780247', 'umd:780248', 'umd:780249', 'umd:780250', 'umd:780251', 'umd:780252', 'umd:780253', 'umd:780254', 'umd:780255', 'umd:780256', 'umd:780257', 'umd:780258', 'umd:780259', 'umd:780260', 'umd:780261', 'umd:780262', 'umd:780263', 'umd:780264', 'umd:780265', 'umd:780266', 'umd:780267', 'umd:780268', 'umd:780269', 'umd:780270', 'umd:780271', 'umd:780272', 'umd:780273', 'umd:780274', 'umd:780275', 'umd:780276', 'umd:780277', 'umd:780278', 'umd:780279', 'umd:780280', 'umd:780281', 'umd:780282', 'umd:780283', 'umd:780284', 'umd:780285', 'umd:780286', 'umd:780287', 'umd:780288', 'umd:780289', 'umd:780290', 'umd:780291', 'umd:780292', 'umd:780293', 'umd:780294', 'umd:780295', 'umd:780296', 'umd:780297', 'umd:780298', 'umd:780299', 'umd:780300', 'umd:780301', 'umd:780302', 'umd:780303', 'umd:780304', 'umd:780305', 'umd:780306', 'umd:780307', 'umd:780308', 'umd:780309', 'umd:780310', 'umd:780311', 'umd:780312', 'umd:780313', 'umd:780314', 'umd:780315', 'umd:780316', 'umd:780317', 'umd:780318', 'umd:780319', 'umd:780320', 'umd:780321', 'umd:780322', 'umd:780323', 'umd:780324', 'umd:780325', 'umd:780326', 'umd:780327', 'umd:780328', 'umd:780329', 'umd:780330', 'umd:780331', 'umd:780332', 'umd:780333', 'umd:780334', 'umd:780335', 'umd:780336', 'umd:780337', 'umd:780338', 'umd:780339', 'umd:780340', 'umd:780341', 'umd:780342', 'umd:780343', 'umd:780344', 'umd:780345', 'umd:780346', 'umd:780347', 'umd:780348', 'umd:780349', 'umd:780350', 'umd:780351', 'umd:780352', 'umd:780353', 'umd:780354', 'umd:780355', 'umd:780356', 'umd:780357', 'umd:780358', 'umd:780359', 'umd:780360', 'umd:780361', 'umd:780362', 'umd:780363', 'umd:780364', 'umd:780365', 'umd:780366', 'umd:780367', 'umd:780368', 'umd:780369', 'umd:780370', 'umd:780371', 'umd:780372', 'umd:780373', 'umd:780374', 'umd:780375', 'umd:780376', 'umd:780377', 'umd:780378', 'umd:780379', 'umd:780380', 'umd:780381', 'umd:780382', 'umd:780383', 'umd:780384', 'umd:780385', 'umd:780386', 'umd:780387', 'umd:780388', 'umd:780389', 'umd:780390', 'umd:780391', 'umd:780392', 'umd:780393', 'umd:780394', 'umd:780395', 'umd:780396', 'umd:780397', 'umd:780398', 'umd:780399', 'umd:780400', 'umd:780401', 'umd:780402', 'umd:780403', 'umd:780404', 'umd:780405', 'umd:780406', 'umd:780407', 'umd:780408', 'umd:780409', 'umd:780410', 'umd:780411', 'umd:780412', 'umd:780413', 'umd:780414', 'umd:780415', 'umd:780416', 'umd:780417', 'umd:780418', 'umd:780419', 'umd:780420', 'umd:780421', 'umd:780422', 'umd:780423', 'umd:780424', 'umd:780425', 'umd:780426', 'umd:780427', 'umd:780428', 'umd:780429', 'umd:780430', 'umd:780431', 'umd:780432', 'umd:780433', 'umd:780434', 'umd:780435', 'umd:780436', 'umd:780437', 'umd:780438', 'umd:780439', 'umd:780440', 'umd:780441', 'umd:780442', 'umd:780443', 'umd:780444', 'umd:780445', 'umd:780446', 'umd:780447', 'umd:780448', 'umd:780449', 'umd:780450', 'umd:780451', 'umd:780452', 'umd:780453', 'umd:780454', 'umd:780455', 'umd:780456', 'umd:780457', 'umd:780458', 'umd:780459', 'umd:780460', 'umd:780461', 'umd:780462', 'umd:780463', 'umd:780464', 'umd:780465', 'umd:780466', 'umd:780467', 'umd:780468', 'umd:780469', 'umd:780470', 'umd:780471', 'umd:780472', 'umd:780473', 'umd:780474', 'umd:780475', 'umd:780476', 'umd:780477', 'umd:780478', 'umd:780479', 'umd:780480', 'umd:780481', 'umd:780482', 'umd:780483', 'umd:780484', 'umd:780485', 'umd:780486', 'umd:780487', 'umd:780488', 'umd:780489', 'umd:780490', 'umd:780491', 'umd:780492', 'umd:780493', 'umd:780494', 'umd:780495', 'umd:780496', 'umd:780497', 'umd:780498', 'umd:780499', 'umd:780500', 'umd:780501', 'umd:780502', 'umd:780503', 'umd:780504', 'umd:780505', 'umd:780506', 'umd:780507', 'umd:780508', 'umd:780509', 'umd:780510', 'umd:780511', 'umd:780512', 'umd:780513', 'umd:780514', 'umd:780515', 'umd:780516', 'umd:780517', 'umd:780518', 'umd:780519', 'umd:780520', 'umd:780521', 'umd:780522', 'umd:780523', 'umd:780524', 'umd:780525', 'umd:780526', 'umd:780527', 'umd:780528', 'umd:780529', 'umd:780530', 'umd:780531', 'umd:780532', 'umd:780533', 'umd:780534', 'umd:780535', 'umd:780536', 'umd:780537', 'umd:780538', 'umd:780539', 'umd:780540', 'umd:780541', 'umd:780542', 'umd:780543', 'umd:780544', 'umd:780545', 'umd:780546', 'umd:780547', 'umd:780548', 'umd:780549', 'umd:780550', 'umd:780551', 'umd:780552', 'umd:780553', 'umd:780554', 'umd:780555', 'umd:780556', 'umd:780557', 'umd:780558', 'umd:780559', 'umd:780560', 'umd:780561', 'umd:780562', 'umd:780563', 'umd:780564', 'umd:780565', 'umd:780566', 'umd:780567', 'umd:780568', 'umd:780569', 'umd:780570', 'umd:780571', 'umd:780572', 'umd:780573', 'umd:780574', 'umd:780575', 'umd:780576', 'umd:780577', 'umd:780578', 'umd:780579', 'umd:780580', 'umd:780581', 'umd:780582', 'umd:780583', 'umd:780584', 'umd:780585', 'umd:780586', 'umd:780587', 'umd:780588', 'umd:780589', 'umd:780590', 'umd:780591', 'umd:780592', 'umd:780593', 'umd:780594', 'umd:780595', 'umd:780596', 'umd:780597', 'umd:780598', 'umd:780599', 'umd:780600', 'umd:780601', 'umd:780602', 'umd:780603', 'umd:780604', 'umd:780605', 'umd:780606', 'umd:780607', 'umd:780608', 'umd:780609', 'umd:780610', 'umd:780611', 'umd:780612', 'umd:780613', 'umd:780614', 'umd:780615', 'umd:780616', 'umd:780617', 'umd:780618', 'umd:780619', 'umd:780620', 'umd:780621', 'umd:780622', 'umd:780623', 'umd:780624', 'umd:780625', 'umd:780626', 'umd:780627', 'umd:780628', 'umd:780629', 'umd:780630', 'umd:780631', 'umd:780632', 'umd:780633', 'umd:780634', 'umd:780635', 'umd:780636', 'umd:780637', 'umd:780638', 'umd:780639', 'umd:780640', 'umd:780641', 'umd:780642', 'umd:780643', 'umd:780644', 'umd:780645', 'umd:780646', 'umd:780647', 'umd:780648', 'umd:780649', 'umd:780650', 'umd:780651', 'umd:780652', 'umd:780653', 'umd:780654', 'umd:780655', 'umd:780656', 'umd:780657', 'umd:780658', 'umd:780659', 'umd:780660', 'umd:780661', 'umd:780662', 'umd:780663', 'umd:780664', 'umd:780665', 'umd:780666', 'umd:780667', 'umd:780668', 'umd:780669', 'umd:780670', 'umd:780671', 'umd:780672', 'umd:780673', 'umd:780674', 'umd:780675', 'umd:780676', 'umd:780677', 'umd:780678', 'umd:780679', 'umd:780680', 'umd:780681', 'umd:780682', 'umd:780683', 'umd:780684', 'umd:780685', 'umd:780686', 'umd:780687', 'umd:780688', 'umd:780689', 'umd:780690', 'umd:780691', 'umd:780692', 'umd:780693', 'umd:780694', 'umd:780695', 'umd:780696', 'umd:780697', 'umd:780698', 'umd:780699', 'umd:780700', 'umd:780701', 'umd:780702', 'umd:780703', 'umd:780704', 'umd:780705', 'umd:780706', 'umd:780707', 'umd:780708', 'umd:780709', 'umd:780710', 'umd:780711', 'umd:780712', 'umd:780713', 'umd:780714', 'umd:780715', 'umd:780716', 'umd:780717', 'umd:780718', 'umd:780719', 'umd:780720', 'umd:780721', 'umd:780722', 'umd:780723', 'umd:780724', 'umd:780725', 'umd:780726', 'umd:780727', 'umd:780728', 'umd:780729', 'umd:780730', 'umd:780731', 'umd:780732', 'umd:780733', 'umd:780734', 'umd:780735', 'umd:780736', 'umd:780737', 'umd:780738', 'umd:780739', 'umd:780740', 'umd:780741', 'umd:780742', 'umd:780743', 'umd:780744', 'umd:780745', 'umd:780746', 'umd:780747', 'umd:780748', 'umd:780749', 'umd:780750', 'umd:780751', 'umd:780752', 'umd:780753', 'umd:780754', 'umd:780755', 'umd:780756', 'umd:780757', 'umd:780758', 'umd:780759', 'umd:780760', 'umd:780761', 'umd:780762', 'umd:780763', 'umd:780764', 'umd:780765', 'umd:780766', 'umd:780767', 'umd:780768', 'umd:780769']
+
+[P]ublic = Accessible from anywhere, discoverable via search.
+[R]estricted = Accessible on campus only, not discoverable.
+[C]ampus Only = Accessible on campus only, discoverable via search.
+[M]ediated = Accessible from anywhere, not discoverable.
+
+Enter the rights scheme to govern access to this batch [P, R, C, or M]: Enter the output time format ([I] for ISO, or [M] for minutes): 
+Enter the name of the UMAM file: 
+ UMAM:
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject PID="!!!PID!!!"
+  fedoraxsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-0.xsd"
+  xmlns:audit="info:fedora/fedora-system:def/audit#" xmlns:fedoraxsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:foxml="info:fedora/fedora-system:def/foxml#">
+  <foxml:objectProperties>
+    <foxml:property NAME="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" VALUE="FedoraObject"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="UMAM Object"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="!!!ContentModel!!!"/>
+  </foxml:objectProperties>
+  <foxml:datastream CONTROL_GROUP="E" ID="thumbnail" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="thumbnail.0" LABEL="thumbnail" MIMETYPE="image/jpeg">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:contentLocation REF="http://local.fedora.server/images/video_thumbnail.jpeg" TYPE="URL"/>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="DC" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="DC.0" LABEL="Dublin Core Metadata"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+          <dc:title>UMAM Object</dc:title>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="amInfo" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="amInfo.0" LABEL="Digital Object Information"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <amInfo xmlns="http://www.itd.umd.edu/fedora/amInfo">
+          <type>!!!ContentModel!!!</type>
+          <status>!!!Status!!!</status>
+        </amInfo>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="umam" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="umam.0"
+      LABEL="University of Maryland Administrative Metadata" MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <adminMeta>
+          <identifier>!!!FileName!!!</identifier>
+          <digiProv>
+            <date>!!!DateDigitized!!!</date>
+            <agent type="creator">
+              <corpName>!!!DigitizedByDept!!!</corpName>
+            </agent>
+            <description>!!!ExtRefDescription!!!
+              <extRef>!!!SharestreamURL!!!</extRef>
+            </description>
+          </digiProv>
+          <digiProv>
+            <date>!!!DateDigitized!!!</date>
+            <agent type="creator">
+              <persName>!!!DigitizedByPers!!!</persName>
+            </agent>
+            <description>!!!DigitizationNotes!!!</description>
+          </digiProv>
+          <adminRights>
+            <access>!!!AccessRights!!!</access>
+          </adminRights>
+          <technical>
+            <format>
+              <mimeType>!!!MimeType!!!</mimeType>
+              <compression>!!!Compression!!!</compression>
+            </format>
+            <audio>
+              <duration>!!!DurationDerivatives!!!</duration>
+              <channels>!!!TrackFormat!!!</channels>
+              <audioTrack>
+                <soundField>!!!Mono/Stereo!!!</soundField>
+              </audioTrack>
+            </audio>
+            <fileName>!!!FileName!!!</fileName>
+          </technical>
+        </adminMeta>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:video" ID="DISS4" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:video" CREATED="!!!TimeStamp!!!" ID="DISS4.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="umam" KEY="umam"/>
+        <foxml:datastreamBinding DATASTREAM_ID="thumbnail" KEY="image"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:umam" ID="DISS3" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umam" CREATED="!!!TimeStamp!!!" ID="DISS3.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="umam" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels" ID="DISS2" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="!!!TimeStamp!!!" ID="DISS2.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:amInfo" ID="DISS1" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:amInfo" CREATED="!!!TimeStamp!!!" ID="DISS1.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="amInfo" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+</foxml:digitalObject>
+
+******************************
+
+Enter the name of the UMDM file: 
+ UMDM:
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject PID="!!!PID!!!"
+  fedoraxsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-0.xsd"
+  xmlns:audit="info:fedora/fedora-system:def/audit#" xmlns:fedoraxsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:foxml="info:fedora/fedora-system:def/foxml#">
+  <foxml:objectProperties>
+    <foxml:property NAME="http://www.w3.org/1999/02/22-rdf-syntax-ns#type" VALUE="FedoraObject"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="UMDM Object"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#contentModel" VALUE="UMD_VIDEO"/>
+  </foxml:objectProperties>
+  <foxml:datastream CONTROL_GROUP="X" ID="AUDIT" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!"
+      FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit" ID="AUDIT.0" LABEL="Fedora Object Audit Trail" MIMETYPE="text/xml">
+      <foxml:xmlContent>
+        <audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+        </audit:auditTrail>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="doInfo" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="doInfo.1" LABEL="Digital Object Information"
+      MIMETYPE="text/xml" SIZE="129">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <doInfo xmlns="http://www.itd.umd.edu/fedora/doInfo">
+          !!!ContentModel!!!
+          !!!Status!!!
+        </doInfo>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="umdm" STATE="A" VERSIONABLE="false">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="umdm.4"
+      LABEL="University of Maryland Descriptive Metadata" MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <descMeta xml:lang="en">
+          !!!Title!!!
+          !!!AlternateTitle!!!
+          !!!Contributor!!!
+	        !!!Creator!!!
+	        !!!Provider!!!
+          !!!Identifier!!!
+	        !!!Description/Summary!!!
+	        !!!Rights!!!
+	        !!!CopyrightHolder!!!
+          !!!MediaType/Form!!!
+          <covPlace>
+            !!!Continent!!!
+            !!!Country!!!
+            !!!Region/State!!!
+            !!!Settlement/City!!!
+          </covPlace>
+          <covTime>
+	          !!!InsertDateHere!!!
+          </covTime>
+          !!!Language!!!
+          !!!Repository!!!
+          <physDesc>
+            !!!Dimensions!!!
+            !!!DurationMasters!!!
+            !!!Format!!!
+          </physDesc>
+	        !!!RepositoryBrowse!!!
+	        <subject scheme="LCSH" type="topical">!!!TopicalSubject!!!</subject>
+          <subject scheme="LCSH" type="topical">!!!GeographicSubject!!!</subject>
+          <subject scheme="LCNAF" type="topical">!!!PersonalSubject!!!</subject>
+          <relationships>
+            <relation label="archivalcollection" type="isPartOf">
+              !!!ArchivalLocation!!!
+            </relation>
+          </relationships>
+        </descMeta>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream CONTROL_GROUP="X" ID="DC" STATE="A" VERSIONABLE="true">
+    <foxml:datastreamVersion CREATED="!!!TimeStamp!!!" ID="DC1.0" LABEL="Dublin Core Metadata"
+      MIMETYPE="text/xml">
+      <foxml:contentDigest DIGEST="none" TYPE="DISABLED"/>
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+          <dc:title>UMDM Object</dc:title>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+!!!INSERT_METS_HERE!!!
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:umdm" ID="DISS7" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:umdm" CREATED="!!!TimeStamp!!!" ID="DISS7.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="umdm" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:thumbnail" ID="DISS5" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:thumbnail" CREATED="!!!TimeStamp!!!" ID="DISS5.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:image" ID="DISS6" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:image.umdm" CREATED="!!!TimeStamp!!!" ID="DISS6.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:handle" ID="DISS4" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:handle" CREATED="!!!TimeStamp!!!" ID="DISS4.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:doInfo" ID="DISS3" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:doInfo" CREATED="!!!TimeStamp!!!" ID="DISS3.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="doInfo" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels" ID="DISS2" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels" CREATED="!!!TimeStamp!!!" ID="DISS2.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="DC" KEY="NULLBIND"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+  <foxml:disseminator BDEF_CONTRACT_PID="umd-bdef:rels-mets" ID="DISS1" STATE="A" VERSIONABLE="true">
+    <foxml:disseminatorVersion BMECH_SERVICE_PID="umd-bmech:rels-mets" CREATED="!!!TimeStamp!!!" ID="DISS1.0">
+      <foxml:serviceInputMap>
+        <foxml:datastreamBinding DATASTREAM_ID="rels-mets" KEY="DATASTREAM"/>
+      </foxml:serviceInputMap>
+    </foxml:disseminatorVersion>
+  </foxml:disseminator>
+</foxml:digitalObject>
+
+******************************
+Data successfully read.
+
+FILE GROUP 1: 
+Writing UMAM... Converted runtime = 0:16:05
+Part 1: UMAM = umd_779270
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:16:05.
+UMDM = umd_779269
+
+FILE GROUP 2: 
+Writing UMAM... Converted runtime = 0:05:43
+Part 1: UMAM = umd_779272
+1976-1977
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:05:43.
+UMDM = umd_779271
+
+FILE GROUP 3: 
+Writing UMAM... Converted runtime = 0:43:45
+Part 1: UMAM = umd_779274
+Writing UMAM... Converted runtime = 0:40:57
+Part 2: UMAM = umd_779275
+Writing UMAM... Converted runtime = 0:32:17
+Part 3: UMAM = umd_779276
+1976-1977
+Creating UMDM for object with 3 parts... 
+Total runtime of all parts = 1:56:59.
+UMDM = umd_779273
+
+FILE GROUP 4: 
+Writing UMAM... Converted runtime = 0:34:53
+Part 1: UMAM = umd_779278
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:34:53.
+UMDM = umd_779277
+
+FILE GROUP 5: 
+Writing UMAM... Converted runtime = 0:25:03
+Part 1: UMAM = umd_779280
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:25:03.
+UMDM = umd_779279
+
+FILE GROUP 6: 
+Writing UMAM... Converted runtime = 0:17:51
+Part 1: UMAM = umd_779282
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:17:51.
+UMDM = umd_779281
+
+FILE GROUP 7: 
+Writing UMAM... Converted runtime = 0:30:27
+Part 1: UMAM = umd_779284
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:30:27.
+UMDM = umd_779283
+
+FILE GROUP 8: 
+Writing UMAM... Converted runtime = 0:13:37
+Part 1: UMAM = umd_779286
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:13:37.
+UMDM = umd_779285
+
+FILE GROUP 9: 
+Writing UMAM... Converted runtime = 0:12:53
+Part 1: UMAM = umd_779288
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:12:53.
+UMDM = umd_779287
+
+FILE GROUP 10: 
+Writing UMAM... Converted runtime = 0:17:53
+Part 1: UMAM = umd_779290
+Writing UMAM... Converted runtime = 0:14:31
+Part 2: UMAM = umd_779291
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 0:32:24.
+UMDM = umd_779289
+
+FILE GROUP 11: 
+Writing UMAM... Converted runtime = 0:36:40
+Part 1: UMAM = umd_779293
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:36:40.
+UMDM = umd_779292
+
+FILE GROUP 12: 
+Writing UMAM... Converted runtime = 0:55:22
+Part 1: UMAM = umd_779295
+Writing UMAM... Converted runtime = 0:55:25
+Part 2: UMAM = umd_779296
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 1:50:47.
+UMDM = umd_779294
+
+FILE GROUP 13: 
+Writing UMAM... Converted runtime = 0:09:53
+Part 1: UMAM = umd_779298
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:09:53.
+UMDM = umd_779297
+
+FILE GROUP 14: 
+Writing UMAM... Converted runtime = 0:44:05
+Part 1: UMAM = umd_779300
+Writing UMAM... Converted runtime = 0:34:30
+Part 2: UMAM = umd_779301
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 1:18:35.
+UMDM = umd_779299
+
+FILE GROUP 15: 
+Writing UMAM... Converted runtime = 0:19:42
+Part 1: UMAM = umd_779303
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:19:42.
+UMDM = umd_779302
+
+FILE GROUP 16: 
+Writing UMAM... Converted runtime = 0:34:47
+Part 1: UMAM = umd_779305
+Writing UMAM... Converted runtime = 0:32:42
+Part 2: UMAM = umd_779306
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 1:07:29.
+UMDM = umd_779304
+
+FILE GROUP 17: 
+Writing UMAM... Converted runtime = 0:27:24
+Part 1: UMAM = umd_779308
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:27:24.
+UMDM = umd_779307
+
+FILE GROUP 18: 
+Writing UMAM... Converted runtime = 0:28:03
+Part 1: UMAM = umd_779310
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:28:03.
+UMDM = umd_779309
+
+FILE GROUP 19: 
+Writing UMAM... Converted runtime = 0:23:12
+Part 1: UMAM = umd_779312
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:23:12.
+UMDM = umd_779311
+
+FILE GROUP 20: 
+Writing UMAM... Converted runtime = 0:34:47
+Part 1: UMAM = umd_779314
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:34:47.
+UMDM = umd_779313
+
+FILE GROUP 21: 
+Writing UMAM... Converted runtime = 0:41:45
+Part 1: UMAM = umd_779316
+Writing UMAM... Converted runtime = 0:47:51
+Part 2: UMAM = umd_779317
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 1:29:36.
+UMDM = umd_779315
+
+FILE GROUP 22: 
+Writing UMAM... Converted runtime = 0:40:50
+Part 1: UMAM = umd_779319
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:40:50.
+UMDM = umd_779318
+
+FILE GROUP 23: 
+Writing UMAM... Converted runtime = 0:56:25
+Part 1: UMAM = umd_779321
+Writing UMAM... Converted runtime = 0:36:35
+Part 2: UMAM = umd_779322
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 1:33:00.
+UMDM = umd_779320
+
+FILE GROUP 24: 
+Writing UMAM... Converted runtime = 0:43:34
+Part 1: UMAM = umd_779324
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:43:34.
+UMDM = umd_779323
+
+FILE GROUP 25: 
+Writing UMAM... Converted runtime = 0:23:46
+Part 1: UMAM = umd_779326
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:23:46.
+UMDM = umd_779325
+
+FILE GROUP 26: 
+Writing UMAM... Converted runtime = 0:29:20
+Part 1: UMAM = umd_779328
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:29:20.
+UMDM = umd_779327
+
+FILE GROUP 27: 
+Writing UMAM... Converted runtime = 0:43:21
+Part 1: UMAM = umd_779330
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:43:21.
+UMDM = umd_779329
+
+FILE GROUP 28: 
+Writing UMAM... Converted runtime = 0:31:14
+Part 1: UMAM = umd_779332
+Writing UMAM... Converted runtime = 0:31:27
+Part 2: UMAM = umd_779333
+Creating UMDM for object with 2 parts... 
+Total runtime of all parts = 1:02:41.
+UMDM = umd_779331
+
+FILE GROUP 29: 
+Writing UMAM... Converted runtime = 0:30:24
+Part 1: UMAM = umd_779335
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:30:24.
+UMDM = umd_779334
+
+FILE GROUP 30: 
+Writing UMAM... Converted runtime = 0:24:22
+Part 1: UMAM = umd_779337
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:24:22.
+UMDM = umd_779336
+
+FILE GROUP 31: 
+Writing UMAM... Converted runtime = 0:40:22
+Part 1: UMAM = umd_779339
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:40:22.
+UMDM = umd_779338
+
+FILE GROUP 32: 
+Writing UMAM... Converted runtime = 0:34:09
+Part 1: UMAM = umd_779341
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:34:09.
+UMDM = umd_779340
+
+FILE GROUP 33: 
+Writing UMAM... Converted runtime = 0:40:44
+Part 1: UMAM = umd_779343
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:40:44.
+UMDM = umd_779342
+
+FILE GROUP 34: 
+Writing UMAM... Converted runtime = 0:48:17
+Part 1: UMAM = umd_779345
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:48:17.
+UMDM = umd_779344
+
+FILE GROUP 35: 
+Writing UMAM... Converted runtime = 0:06:11
+Part 1: UMAM = umd_779347
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:06:11.
+UMDM = umd_779346
+
+FILE GROUP 36: 
+Writing UMAM... Converted runtime = 0:10:06
+Part 1: UMAM = umd_779349
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:10:06.
+UMDM = umd_779348
+
+FILE GROUP 37: 
+Writing UMAM... Converted runtime = 0:14:20
+Part 1: UMAM = umd_779351
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:14:20.
+UMDM = umd_779350
+
+FILE GROUP 38: 
+Writing UMAM... Converted runtime = 0:48:41
+Part 1: UMAM = umd_779353
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:48:41.
+UMDM = umd_779352
+
+FILE GROUP 39: 
+Writing UMAM... Converted runtime = 0:15:15
+Part 1: UMAM = umd_779355
+Creating UMDM for object with 1 parts... 
+Total runtime of all parts = 0:15:15.
+UMDM = umd_779354
+
+Writing pidlist file as pids.txt...
+Writing summary file as links.txt...
+Writing list of UMDM files as UMDMpids.txt...
+
+******************************
+
+90 files written: 87 FOXML files in 39 groups, plus the summary list of pids, list of UMDM pids, and the links file.
+Thanks for using the XML generator!
+
+

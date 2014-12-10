@@ -224,13 +224,23 @@ def generateTopicalSubjects(**kwargs):
             for i in value.split(';'):
                 if key == "pers":
                     element = '<persName>{0}</persName>'.format(i.strip())
+                    scheme = 'scheme="LCNAF"'
+                    type = 'type="topical"'
                 elif key == "corp":
                     element = '<corpName>{0}</corpName>'.format(i.strip())
-                else:
+                    scheme = 'scheme="LCNAF"'
+                    type = 'type="topical"'
+                elif key == "top":
                     element = i.strip()
-                result.append('<subject type="topical">{0}</subject>'.format(element))
+                    scheme = 'scheme="LCSH"'
+                    type = 'type="topical"'
+                elif key == "geog":
+                    element = i.strip()
+                    scheme = ''
+                    type = 'type="geographical"'
+            result.append('<subject {0} {1}>{2}</subject>'.format(i.strip()))
     return '\n'.join(result)
-
+ 
 
 # generate block os XML relating to archival location
 def generateArchivalLocation(collection, **kwargs):
@@ -340,7 +350,8 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     # Generate topical subjects
     topicalSubjects = generateTopicalSubjects(  pers=data['PersonalSubject'],
                                                 corp=data['CorpSubject'],
-                                                top=data['TopicalSubject']   )
+                                                top=data['TopicalSubject'],
+                                                geog=data['GeographicalSubject'])
     # Generate MediaType XML Tags
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
     # Generate Archival Location Information Tags
