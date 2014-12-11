@@ -4,22 +4,22 @@
 #                                                                          #
 #                              XMLGEN.PY:                                  #
 #                 A script to generate FOXML files for                     #
-#               Digital Collections Audio & Video at UMD                   #    
-#                      Version 3 -- September 2014                         #  
+#               Digital Collections Audio & Video at UMD                   #
+#                      Version 3 -- September 2014                         #
 #                                                                          #
 ############################################################################
-#                                                                          #       
+#                                                                          #
 # Recommended command to run this program:                                 #
-#                                                                          #       
+#                                                                          #
 #     python3 xmlgen3.py 2>&1 | tee xmlgen.log                             #
-#                                                                          #       
+#                                                                          #
 # (Using this command prints all input and output to screen and also saves #
 # it as a log file).                                                       #
-#                                                                          #       
+#                                                                          #
 # The program assumes that CSV and XML template files are located in the   #
 # same directory as the script itself. It also assumes there will be a     #
 # subdirectory called output containing another directory called foxml.    #
-#                                                                          #       
+#                                                                          #
 ############################################################################
 
 
@@ -187,7 +187,7 @@ def parseDate(inputDate, inputAttribute):
         myDate['Certainty'] = 'circa'
     else:
         myDate['Certainty'] = 'exact'
-    if 'range' in inputAttribute:               # range or point?  
+    if 'range' in inputAttribute:               # range or point?
         myDate['Type'] = 'range'
     else:
         myDate['Type'] = 'date'
@@ -220,25 +220,26 @@ def generateBrowseTerms(inputSubjects):
 def generateTopicalSubjects(**kwargs):
     result = []
     for key, value in kwargs.items():
-        if value != '':
-            for i in value.split(';'):
-                if key == "pers":
-                    element = '<persName>{0}</persName>'.format(i.strip())
-                    scheme = 'scheme="LCNAF"'
-                    type = 'type="topical"'
-                elif key == "corp":
-                    element = '<corpName>{0}</corpName>'.format(i.strip())
-                    scheme = 'scheme="LCNAF"'
-                    type = 'type="topical"'
-                elif key == "top":
-                    element = i.strip()
-                    scheme = 'scheme="LCSH"'
-                    type = 'type="topical"'
-                elif key == "geog":
-                    element = i.strip()
-                    scheme = ''
-                    type = 'type="geographical"'
-            result.append('<subject {0} {1}>{2}</subject>'.format(i.strip()))
+        if value[0] != '':
+            for subj in value[0].split(';'):
+                scheme = value[1].strip()
+                if key == 'pers':
+                    element = '<persName>{0}</persName>'.format(subj.strip())
+                    type = 'topical'
+                elif key == 'corp':
+                    element = '<corpName>{0}</corpName>'.format(subj.strip())
+                    type = 'topical'
+                elif key == 'top':
+                    element = subj.strip()
+                    type = 'topical'
+                elif key == 'geog':
+                    element = '<geogName>{0}</geogName>'.format(subj.strip())
+                    type = 'geographical'
+                if scheme != '':
+                    subj_elem = '<subject scheme="{0}" type="{1}">{2}</subject>'.format(scheme, type, element)
+                else:
+                    subj_elem = '<subject type="{0}">{1}</subject>'.format(type, element)
+            result.append(subj_elem)
     return '\n'.join(result)
  
 
@@ -310,23 +311,23 @@ def createUMAM(data, template, pid, rights):
     outputfile = template
     # create mapping of the metadata onto the UMAM XML template file
     umamMap = {
-                '!!!PID!!!' : 					pid,
-                '!!!ContentModel!!!' : 			'UMD_VIDEO',
-                '!!!Status!!!' : 				rights['amInfoStatus'],
-                '!!!FileName!!!' : 				data['FileName'],
-                '!!!DateDigitized!!!' : 		data['DateDigitized'],
-                '!!!DigitizedByDept!!!' : 		'Digital Conversion and Media Reformatting',
-                '!!!ExtRefDescription!!!' : 	'Sharestream',
-                '!!!SharestreamURL!!!' : 		data['SharestreamURLs'],
-                '!!!DigitizedByPers!!!' : 		data['DigitizedByPers'],
-                '!!!DigitizationNotes!!!' : 	data['DigitizationNotes'],
-                '!!!AccessRights!!!' : 			rights['adminRightsAccess'],
-                '!!!MimeType!!!' : 				'audio/mpeg',
-                '!!!Compression!!!' : 			'lossy',
-                '!!!DurationDerivatives!!!' : 	str(convertedRunTime),
-                '!!!Mono/Stereo!!!' : 			data['Mono/Stereo'],
-                '!!!TrackFormat!!!' : 			data['TrackFormat'],
-                '!!!TimeStamp!!!' : 			timeStamp
+                '!!!PID!!!' :                   pid,
+                '!!!ContentModel!!!' :          'UMD_VIDEO',
+                '!!!Status!!!' :                rights['amInfoStatus'],
+                '!!!FileName!!!' :              data['FileName'],
+                '!!!DateDigitized!!!' :         data['DateDigitized'],
+                '!!!DigitizedByDept!!!' :       'Digital Conversion and Media Reformatting',
+                '!!!ExtRefDescription!!!' :     'Sharestream',
+                '!!!SharestreamURL!!!' :        data['SharestreamURLs'],
+                '!!!DigitizedByPers!!!' :       data['DigitizedByPers'],
+                '!!!DigitizationNotes!!!' :     data['DigitizationNotes'],
+                '!!!AccessRights!!!' :          rights['adminRightsAccess'],
+                '!!!MimeType!!!' :              'audio/mpeg',
+                '!!!Compression!!!' :           'lossy',
+                '!!!DurationDerivatives!!!' :   str(convertedRunTime),
+                '!!!Mono/Stereo!!!' :           data['Mono/Stereo'],
+                '!!!TrackFormat!!!' :           data['TrackFormat'],
+                '!!!TimeStamp!!!' :             timeStamp
     }
     # Carry out a find and replace for each line of the data mapping
     # and convert ampersands in data into XML entities in the process
@@ -348,10 +349,11 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     # Generate browse terms
     browseTermsString = generateBrowseTerms(data['RepositoryBrowse'])
     # Generate topical subjects
-    topicalSubjects = generateTopicalSubjects(  pers=data['PersonalSubject'],
-                                                corp=data['CorpSubject'],
-                                                top=data['TopicalSubject'],
-                                                geog=data['GeographicalSubject'])
+    topicalSubjects = generateTopicalSubjects(  pers=(data['PersonalSubject'], data['PersonalScheme']),
+                                                corp=(data['CorpSubject'], data['CorpScheme']),
+                                                top=(data['TopicalSubject'], data['TopicalScheme']),
+                                                geog=(data['GeographicalSubject'], data['GeographicalScheme'])
+                                                )
     # Generate MediaType XML Tags
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
     # Generate Archival Location Information Tags
@@ -360,53 +362,53 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                                                 subseries=data['Subseries'],
                                                 box=data['Box'],
                                                 item=data['Item'],
-                                                accession=data['Accession'] )
-
+                                                accession=data['Accession'] 
+                                                )
     # Insert the RELS-METS section compiled from the UMAM files
     outputfile = outputfile.replace('!!!INSERT_METS_HERE!!!', mets)     # Insert the METS
     outputfile = stripAnchors(outputfile)                               # Strip out anchor points
     # XML tags with which to wrap the CSV data
     XMLtags = {
-            '!!!ContentModel!!!' : 	{			'open' : '<type>',
-                                    			'close' : '</type>'	},
-            '!!!Status!!!' : {					'open' : '<status>',
-                              					'close' : '</status>' },
-            '!!!Title!!!' : {					'open' : '<title type="main">',
-                       							'close' : '</title>' },
-            '!!!AlternateTitle!!!' : {			'open' : '<title type="alternate">',
-                                      			'close' : '</title>'},
-            '!!!Contributor!!!' : {				'open' : '<agent type="contributor"><persName>',
-                                   				'close' : '</persName></agent>'},
-            '!!!Creator!!!' : {					'open' : '<agent type="creator"><persName>',
-                                    			'close' : '</persName></agent>'},
-            '!!!Provider!!!' : {				'open' : '<agent type="provider"><corpName>',
-                                				'close' : '</corpName></agent>'},
-            '!!!Identifier!!!' : {				'open' : '<identifier>',
-                                         		'close' : '</identifier>'},
-            '!!!Description/Summary!!!' : 	{	'open' : '<description type="summary">',
-                                           		'close' : '</description>'},
-            '!!!Rights!!!' : {					'open' : '<rights type="access">',
-                                         		'close' : '</rights>'},
-            '!!!CopyrightHolder!!!' : {			'open' : '<rights type="copyrightowner">',
-                                       			'close' : '</rights>'},
-            '!!!Continent!!!' : {				'open' : '<geogName type="continent">',
-                                 				'close' : '</geogName>'},
-            '!!!Country!!!' : {					'open' : '<geogName type="country">',
-            									'close' : '</geogName>'},
-            '!!!Region/State!!!' : {			'open' : '<geogName type="region">',
-                                    			'close' : '</geogName>'},
-            '!!!Settlement/City!!!' : {			'open' : '<geogName type="settlement">',
-                                       			'close' : '</geogName>'},
-            '!!!Repository!!!' : {				'open' : '<repository><corpName>',
-                                  				'close' : '</corpName></repository>'},
-            '!!!Dimensions!!!' : {				'open' : '<size units="in">',
-                                  				'close' : '</size>'},
-            '!!!DurationMasters!!!' : {			'open' : '<extent units="minutes">',
-                                       			'close' : '</extent>'},
-            '!!!Format!!!' : {			        'open' : '<format>',
-                                      			'close' : '</format>'},
-            '!!!ArchivalLocation!!!' : {		'open' : '<bibRef>',
-                                  				'close' : '</bibRef>'},
+            '!!!ContentModel!!!' :     {        'open' : '<type>',
+                                                'close' : '</type>'    },
+            '!!!Status!!!' : {                  'open' : '<status>',
+                                                'close' : '</status>' },
+            '!!!Title!!!' : {                   'open' : '<title type="main">',
+                                                'close' : '</title>' },
+            '!!!AlternateTitle!!!' : {          'open' : '<title type="alternate">',
+                                                'close' : '</title>'},
+            '!!!Contributor!!!' : {             'open' : '<agent type="contributor"><persName>',
+                                                'close' : '</persName></agent>'},
+            '!!!Creator!!!' : {                 'open' : '<agent type="creator"><persName>',
+                                                'close' : '</persName></agent>'},
+            '!!!Provider!!!' : {                'open' : '<agent type="provider"><corpName>',
+                                                'close' : '</corpName></agent>'},
+            '!!!Identifier!!!' : {              'open' : '<identifier>',
+                                                'close' : '</identifier>'},
+            '!!!Description/Summary!!!' :     { 'open' : '<description type="summary">',
+                                                'close' : '</description>'},
+            '!!!Rights!!!' : {                  'open' : '<rights type="access">',
+                                                'close' : '</rights>'},
+            '!!!CopyrightHolder!!!' : {         'open' : '<rights type="copyrightowner">',
+                                                'close' : '</rights>'},
+            '!!!Continent!!!' : {               'open' : '<geogName type="continent">',
+                                                'close' : '</geogName>'},
+            '!!!Country!!!' : {                 'open' : '<geogName type="country">',
+                                                'close' : '</geogName>'},
+            '!!!Region/State!!!' : {            'open' : '<geogName type="region">',
+                                                'close' : '</geogName>'},
+            '!!!Settlement/City!!!' : {         'open' : '<geogName type="settlement">',
+                                                'close' : '</geogName>'},
+            '!!!Repository!!!' : {              'open' : '<repository><corpName>',
+                                                'close' : '</corpName></repository>'},
+            '!!!Dimensions!!!' : {              'open' : '<size units="in">',
+                                                'close' : '</size>'},
+            '!!!DurationMasters!!!' : {         'open' : '<extent units="minutes">',
+                                                'close' : '</extent>'},
+            '!!!Format!!!' : {                  'open' : '<format>',
+                                                'close' : '</format>'},
+            '!!!ArchivalLocation!!!' : {        'open' : '<bibRef>',
+                                                'close' : '</bibRef>'},
             '!!!Language!!!' : {                'open' : '<language>',
                                                 'close' : '</language>'},
             '!!!Rights!!!' : {                  'open' : '<rights>',
@@ -415,33 +417,35 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
 
     # Create mapping of the metadata onto the UMDM XML template file
     umdmMap = {
-                '!!!PID!!!' :           		pid,
-                '!!!ContentModel!!!' : 			'UMD_VIDEO',
-                '!!!Status!!!' : 				rights['doInfoStatus'],
-                '!!!Title!!!' : 				data['Title'],
-                '!!!AlternateTitle!!!' : 		data['AlternateTitle'],
-                '!!!Contributor!!!' : 			data['Contributor'],
-                '!!!Creator!!!' : 				data['Creator'],
-                '!!!Provider!!!' :  			data['Provider/Publisher'],
-                '!!!Identifier!!!' :  			data['Identifier'],
-                '!!!Description/Summary!!!' : 	data['Description/Summary'],
-                '!!!Rights!!!' : 	            data['Rights'],
-                '!!!CopyrightHolder!!!' : 		data['CopyrightHolder'],
-                '!!!MediaType/Form!!!' : 		mediaTypeString,
-                '!!!Continent!!!' : 			data['Continent'],
-                '!!!Country!!!' : 				data['Country'],
-                '!!!Region/State!!!' : 			data['Region/State'],
-                '!!!Settlement/City!!!' : 		data['Settlement/City'],
-                '!!!InsertDateHere!!!' : 		dateTagString,
-                '!!!Language!!!' : 				data['Language'],
-                '!!!Dimensions!!!' : 			data['Dimensions'],
-                '!!!DurationMasters!!!' : 		str(summedRunTime),
-                '!!!Format!!!' : 		        data['Format'],
-                '!!!RepositoryBrowse!!!' : 		browseTermsString,
+                '!!!PID!!!' :                   pid,
+                '!!!ContentModel!!!' :          'UMD_VIDEO',
+                '!!!Status!!!' :                rights['doInfoStatus'],
+                '!!!Title!!!' :                 data['Title'],
+                '!!!AlternateTitle!!!' :        data['AlternateTitle'],
+                '!!!Contributor!!!' :           data['Contributor'],
+                '!!!Creator!!!' :               data['Creator'],
+                '!!!Provider!!!' :              data['Provider/Publisher'],
+                '!!!Identifier!!!' :            data['Identifier'],
+                '!!!Description/Summary!!!' :   data['Description/Summary'],
+                '!!!Rights!!!' :                data['Rights'],
+                '!!!CopyrightHolder!!!' :       data['CopyrightHolder'],
+                '!!!MediaType/Form!!!' :        mediaTypeString,
+                '!!!Continent!!!' :             data['Continent'],
+                '!!!Country!!!' :               data['Country'],
+                '!!!Region/State!!!' :          data['Region/State'],
+                '!!!Settlement/City!!!' :       data['Settlement/City'],
+                '!!!InsertDateHere!!!' :        dateTagString,
+                '!!!Language!!!' :              data['Language'],
+                '!!!Dimensions!!!' :            data['Dimensions'],
+                '!!!DurationMasters!!!' :       str(summedRunTime),
+                '!!!Format!!!' :                data['Format'],
+                '!!!RepositoryBrowse!!!' :      browseTermsString,
+                '!!!Repository!!!' :            data['Department'],
                 '!!!TopicalSubjects!!!' :       topicalSubjects,
                 '!!!ArchivalLocation!!!' :      archivalLocation,
-                '!!!CollectionPID!!!' : 		'umd:3392',
-                '!!!TimeStamp!!!' : 			timeStamp
+                '!!!CollectionPID!!!' :         'umd:3392',
+                '!!!TimeStamp!!!' :             timeStamp,
+                '!!!TopicalSubjects!!!' :       topicalSubjects
     }
 
     # Carry out a find and replace for each line of the data mapping
@@ -490,12 +494,12 @@ def stripAnchors(target):
 def main():
     
     # Initialize needed variables and lists
-    mets = ""		# empty string for compiling METS record
+    mets = ""        # empty string for compiling METS record
     objectGroups = 0    # counter for UMDM plus UMAM(s) as a group
     objectParts = 0     # counter for the number of UMAM parts for each UMDM
     pidCounter = 0      # counter for coordinating PID list with data lines from CSV
     filesWritten = 0    # counter for file outputs
-    umdmList = []	# list for compiling list of UMDM pids
+    umdmList = []    # list for compiling list of UMDM pids
     outputFiles = []    # list for compiling list of all pids written
     summaryList = []    # list for compiling list of PIDs and Object IDs
     global convertTime
@@ -581,8 +585,8 @@ def main():
                     filesWritten += 1
                     
                     # Reset counters
-                    objectParts = 0     				# reset parts counter
-                    summedRunTime = nullTimeCounter   	# reset runtime sum counter for masters
+                    objectParts = 0                     # reset parts counter
+                    summedRunTime = nullTimeCounter       # reset runtime sum counter for masters
                 
                 # Begin a new UMDM group by incrementing the group counter, printing a notice to screen,
                 # storing the line of UMDM data for use after UMAMs are complete, and initiating a new METS
@@ -685,8 +689,8 @@ def main():
             filesWritten += 1
           
             # Reset counters
-            objectParts = 0     				# reset parts counter
-            summedRunTime = nullTimeCounter   	# reset runtime sum counter
+            objectParts = 0                     # reset parts counter
+            summedRunTime = nullTimeCounter       # reset runtime sum counter
             
     # Abort if the value of dataFileArrangement is something else
     else:

@@ -85,4 +85,3 @@
 "Traver 42","UMAM","umd:779353"
 "Traver 43","UMDM","umd:779354","http://digital.lib.umd.edu/video?pid=umd:779354"
 "Traver 43","UMAM","umd:779355"
-"Traver 43","UMAM","umd:779355"
