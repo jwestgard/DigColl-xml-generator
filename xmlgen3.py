@@ -248,7 +248,7 @@ def generateArchivalLocation(collection, **kwargs):
     result = ['<title type="main">{0}</title>'.format(collection)]
     for key, value in kwargs.items():
         if value != '':
-            result.append('<bibScope type="{0}">{1}</bibscope>'.format(key, value))
+            result.append('<bibScope type="{0}">{1}</bibScope>'.format(key, value))
     return '\n'.join(result)
 
 
