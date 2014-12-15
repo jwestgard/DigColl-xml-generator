@@ -1,6 +1,6 @@
 .DS_Store
-.csv
-.log
+*.csv
+*.log
 output/foxml/
 output/links.txt
 output/pids.txt
