@@ -123,7 +123,7 @@ def getRightsScheme():
     if schemeSelection == "P":
         results['amInfoStatus'] =           "Complete"
         results['doInfoStatus'] =           "Complete"
-        results['adminRightsAccess'] =      "UMDPublic"
+        results['adminRightsAccess'] =      "UMDpublic"
     elif schemeSelection == "R":
         results['amInfoStatus'] =           "Complete"
         results['doInfoStatus'] =           "Private"
