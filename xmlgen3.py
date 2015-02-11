@@ -316,7 +316,7 @@ def createUMAM(data, template, pid, rights):
                 '!!!Status!!!' :                rights['amInfoStatus'],
                 '!!!FileName!!!' :              data['FileName'],
                 '!!!DateDigitized!!!' :         data['DateDigitized'],
-                '!!!DigitizedByDept!!!' :       'Digital Conversion and Media Reformatting',
+                '!!!DigitizedByDept!!!' :       data['DigitizedByDept'],
                 '!!!ExtRefDescription!!!' :     'Sharestream',
                 '!!!SharestreamURL!!!' :        data['SharestreamURLs'],
                 '!!!DigitizedByPers!!!' :       data['DigitizedByPers'],
@@ -412,7 +412,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
             '!!!Language!!!' : {                'open' : '<language>',
                                                 'close' : '</language>'},
             '!!!Rights!!!' : {                  'open' : '<rights>',
-                                                'close' : '</rights'}
+                                                'close' : '</rights>'}
             }
 
     # Create mapping of the metadata onto the UMDM XML template file
