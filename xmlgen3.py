@@ -147,6 +147,34 @@ def generateMediaTypeTag(mediaType, formType, form):
     return '<mediaType type="{0}"><form type="{1}">{2}</form></mediaType>'.format(mediaType, formType, form)
 
 
+# Manage the generation of agent elements from the Creator, Provider, and Contributor columns
+def generateAgents():
+    result = []
+    pairs = [   ("contributor", data['Contributor'], data['ContributorType']),
+                ("creator", data['Creator'], data['CreatorType']),
+                ("provider", data['Provider/Publisher'], data['Provider/PublisherType']) ]
+    for agentType in pairs
+    
+
+<persName>
+<corpName>
+    
+    for x in pairs:
+        result.append(createAgentElement(x[0], x[1]))
+    
+
+# Generate each agent element from the data column pairs
+def createAgentElement(dataColumn, dataTypeColumn)
+    names = dataColumn.split(";")
+    nameTypes = nameTypeColumn.split(";")
+    if len(names) != len(nameTypes):
+        print("Error -- non-matching lengths of agent data")
+    else:
+        agentData = zip(names, nameTypes)
+    for agent, type in agentData:
+        return '<agent type="{0}">{1}</agent>'.format(type, agent)
+
+
 # Generates the specific XML tags based on dating information stored in the myDate dictionary
 # previously returned by the parseDate function.
 def generateDateTag(inputDate, inputAttribute, centuryData):
@@ -344,6 +372,8 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     # Strip out trailing quotation marks from Dimensions field
     if data['Dimensions'].endswith('"'):
         data['Dimensions'] = data['Dimensions'][0:-1]
+    # Generate Agents (Creator, Contributor, Provider)
+    agentElementsString = generateAgents()
     # Generate dating tags  
     dateTagString = generateDateTag(data['DateCreated'], data['DateAttribute'], data['Century'])
     # Generate browse terms
@@ -377,12 +407,12 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                                                 'close' : '</title>' },
             '!!!AlternateTitle!!!' : {          'open' : '<title type="alternate">',
                                                 'close' : '</title>'},
-            '!!!Contributor!!!' : {             'open' : '<agent type="contributor"><persName>',
-                                                'close' : '</persName></agent>'},
-            '!!!Creator!!!' : {                 'open' : '<agent type="creator"><persName>',
-                                                'close' : '</persName></agent>'},
-            '!!!Provider!!!' : {                'open' : '<agent type="provider"><corpName>',
-                                                'close' : '</corpName></agent>'},
+            '!!!Contributor!!!' : {             'open' : '<agent type="contributor">',
+                                                'close' : '</agent>'},
+            '!!!Creator!!!' : {                 'open' : '<agent type="creator">',
+                                                'close' : '</agent>'},
+            '!!!Provider!!!' : {                'open' : '<agent type="provider">',
+                                                'close' : '</agent>'},
             '!!!Identifier!!!' : {              'open' : '<identifier>',
                                                 'close' : '</identifier>'},
             '!!!Description/Summary!!!' :     { 'open' : '<description type="summary">',
@@ -422,9 +452,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Status!!!' :                rights['doInfoStatus'],
                 '!!!Title!!!' :                 data['Title'],
                 '!!!AlternateTitle!!!' :        data['AlternateTitle'],
-                '!!!Contributor!!!' :           data['Contributor'],
-                '!!!Creator!!!' :               data['Creator'],
-                '!!!Provider!!!' :              data['Provider/Publisher'],
+                '!!!Agents!!!' :                agentElementsString,
                 '!!!Identifier!!!' :            data['Identifier'],
                 '!!!Description/Summary!!!' :   data['Description/Summary'],
                 '!!!Rights!!!' :                data['Rights'],
