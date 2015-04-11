@@ -147,32 +147,29 @@ def generateMediaTypeTag(mediaType, formType, form):
     return '<mediaType type="{0}"><form type="{1}">{2}</form></mediaType>'.format(mediaType, formType, form)
 
 
-# Manage the generation of agent elements from the Creator, Provider, and Contributor columns
-def generateAgents():
+# Build a block of the various agents elements as a string
+def generateAgentsString(**kwargs):
     result = []
-    pairs = [   ("contributor", data['Contributor'], data['ContributorType']),
-                ("creator", data['Creator'], data['CreatorType']),
-                ("provider", data['Provider/Publisher'], data['Provider/PublisherType']) ]
-    for agentType in pairs
-    
+    for type, agents in kwargs.items():
+        for agent in agents:
+            result.append('<agent type="{0}">{1}</agent>'.format(type, agent)
+    return "\n".join(result)
 
-<persName>
-<corpName>
-    
-    for x in pairs:
-        result.append(createAgentElement(x[0], x[1]))
-    
 
-# Generate each agent element from the data column pairs
-def createAgentElement(dataColumn, dataTypeColumn)
-    names = dataColumn.split(";")
-    nameTypes = nameTypeColumn.split(";")
-    if len(names) != len(nameTypes):
-        print("Error -- non-matching lengths of agent data")
+# Generate list of agents from the data and type columns
+def generateAgentElements(agentColumn, agentTypeColumn):
+    agents = agentColumn.split(";")
+    agentTypes = agentTypeColumn.split(";")
+    if len(agents) != len(angentTypes):
+        print('Error! Bad agent data in: "{0}" and "{1}"'.format(agentcolumn, agentTypeColumn)
     else:
-        agentData = zip(names, nameTypes)
-    for agent, type in agentData:
-        return '<agent type="{0}">{1}</agent>'.format(type, agent)
+        result = []
+        agentData = zip(agents, agentTypes)
+        for a, t in agentData:
+            if t = "corpName":
+                result.append("<corpName>{0}</corpName>".format(a))
+            elif t = "persName":
+                result.append("<persName>{0}</persName>".format(a))
 
 
 # Generates the specific XML tags based on dating information stored in the myDate dictionary
@@ -373,7 +370,10 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
     if data['Dimensions'].endswith('"'):
         data['Dimensions'] = data['Dimensions'][0:-1]
     # Generate Agents (Creator, Contributor, Provider)
-    agentElementsString = generateAgents()
+    agentsString = generateAgentsString(    creator=(data['Creator'], data['CreatorType']),
+                                            contributor=(data['Contributor'], data['ContributorType']),
+                                            provider=(data['Provider/Publisher'], data['Provider/PublisherType'])
+                                            )
     # Generate dating tags  
     dateTagString = generateDateTag(data['DateCreated'], data['DateAttribute'], data['Century'])
     # Generate browse terms
@@ -407,12 +407,6 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                                                 'close' : '</title>' },
             '!!!AlternateTitle!!!' : {          'open' : '<title type="alternate">',
                                                 'close' : '</title>'},
-            '!!!Contributor!!!' : {             'open' : '<agent type="contributor">',
-                                                'close' : '</agent>'},
-            '!!!Creator!!!' : {                 'open' : '<agent type="creator">',
-                                                'close' : '</agent>'},
-            '!!!Provider!!!' : {                'open' : '<agent type="provider">',
-                                                'close' : '</agent>'},
             '!!!Identifier!!!' : {              'open' : '<identifier>',
                                                 'close' : '</identifier>'},
             '!!!Description/Summary!!!' :     { 'open' : '<description type="summary">',
@@ -452,7 +446,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Status!!!' :                rights['doInfoStatus'],
                 '!!!Title!!!' :                 data['Title'],
                 '!!!AlternateTitle!!!' :        data['AlternateTitle'],
-                '!!!Agents!!!' :                agentElementsString,
+                '!!!Agents!!!' :                agentsString
                 '!!!Identifier!!!' :            data['Identifier'],
                 '!!!Description/Summary!!!' :   data['Description/Summary'],
                 '!!!Rights!!!' :                data['Rights'],
