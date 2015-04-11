@@ -150,9 +150,11 @@ def generateMediaTypeTag(mediaType, formType, form):
 # Build a block of the various agents elements as a string
 def generateAgentsString(**kwargs):
     result = []
-    for type, agents in kwargs.items():
-        for agent in agents:
-            result.append('<agent type="{0}">{1}</agent>'.format(type, agent)
+    for type, dataCols in kwargs.items():
+        if dataCols:
+            agentsList = generateAgentElements(dataCols[0], dataCols[1])
+            for agent in agentsList:
+                result.append('<agent type="{0}">{1}</agent>'.format(type, agent))
     return "\n".join(result)
 
 
@@ -160,16 +162,17 @@ def generateAgentsString(**kwargs):
 def generateAgentElements(agentColumn, agentTypeColumn):
     agents = agentColumn.split(";")
     agentTypes = agentTypeColumn.split(";")
-    if len(agents) != len(angentTypes):
-        print('Error! Bad agent data in: "{0}" and "{1}"'.format(agentcolumn, agentTypeColumn)
+    if len(agents) != len(agentTypes):
+        print('Error! Bad agent data in: "{0}" and "{1}"'.format(agentcolumn, agentTypeColumn))
     else:
         result = []
         agentData = zip(agents, agentTypes)
         for a, t in agentData:
-            if t = "corpName":
+            if t == "corpName":
                 result.append("<corpName>{0}</corpName>".format(a))
-            elif t = "persName":
+            elif t == "persName":
                 result.append("<persName>{0}</persName>".format(a))
+        return result
 
 
 # Generates the specific XML tags based on dating information stored in the myDate dictionary
