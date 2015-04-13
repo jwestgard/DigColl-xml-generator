@@ -449,7 +449,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Status!!!' :                rights['doInfoStatus'],
                 '!!!Title!!!' :                 data['Title'],
                 '!!!AlternateTitle!!!' :        data['AlternateTitle'],
-                '!!!Agents!!!' :                agentsString
+                '!!!Agents!!!' :                agentsString,
                 '!!!Identifier!!!' :            data['Identifier'],
                 '!!!Description/Summary!!!' :   data['Description/Summary'],
                 '!!!Rights!!!' :                data['Rights'],
