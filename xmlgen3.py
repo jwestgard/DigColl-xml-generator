@@ -25,6 +25,7 @@
 
 # Import needed modules
 import csv, datetime, re, requests
+from lxml import etree as etree
 
 
 # Initiates interaction with the program and records the time and user.
@@ -36,6 +37,17 @@ def greeting():
     print("\nThis program is designed to take data from a CSV file,")
     print("and use that data to generate FOXML files for the")
     print("University of Maryland's digital collections repository.")
+
+
+# Asks the user whether the batch is audio or video objects.
+def getMediaType():
+    mediaType = input('\nIs this a batch of [A]udio or [V]ideo? ')
+    while mediaType not in ('A','V'):
+        mediaType = input('Please enter A or V: ')
+    if mediaType == "A":
+        return "audio"
+    elif mediaType == "V":
+        return "video"
 
 
 # Analyzes the type of datafile and calculates the number of PIDs needed.
@@ -331,10 +343,59 @@ def timeFormatSelection():
     return nullTimeCounter, convertTime
 
 
+def generateTechnicalMetaString(data, mediaType):
+    # create root element and tree object
+    root = etree.Element('technical')
+    tech_meta = etree.ElementTree(root)
+    # technical/format/fileName
+    etree.SubElement(root, 'fileName').text = data['FileName']
+    # create format element and mimeType and compression subelements
+    format = etree.SubElement(root, 'format')
+    etree.SubElement(format, 'mimeType').text = data['MimeType']
+    etree.SubElement(format, 'compression').text = data['Compression']
+    # create media {audio,video} and duration subelement
+    media = etree.SubElement(root, mediaType)
+    etree.SubElement(media, 'duration').text = data['Duration']
+    if mediaType == 'audio':
+        etree.SubElement(media, 'channels').text = data['Channels']
+        # create sound container element specific to audio objects
+        sound = etree.SubElement(media, 'audioTrack')
+    elif mediaType == 'video':
+        # create sound container element specific to video objects
+        sound = etree.SubElement(media, 'videoSound')
+        # create top-level video elements
+        etree.SubElement(media, 'color').text = data['Color']
+        if 'DataRate' in data:
+            dataRate = etree.SubElement(media, 'dataRate')
+            d = data['DataRate'].split(" ")
+            dataRate.text = d[0]
+            dataRate.set('rate', d[1])
+        if 'FrameRate' in data:
+            frame = etree.SubElement(media, 'frame')
+            frame.text = data['FrameRate']
+            frame.set('rate', 'second')
+        # create video format element and subelements
+        videoFormat = etree.SubElement(media, 'videoFormat')
+        etree.SubElement(videoFormat, 'scanSignal').text = data['ScanSignal']
+        etree.SubElement(videoFormat, 'videoStandard').text = data['VideoStandard']
+        # create videoResolution and subelement only if all three are present
+        if all (k in data for k in ('AspectRatio','HorizontalPixels','VerticalPixels')):
+            videoRes = etree.SubElement(media, 'videoResolution')
+            etree.SubElement(videoRes, 'aspectRatio').text = data['AspectRatio']
+            etree.SubElement(videoRes, 'horizontalPixels').text = data['HorizontalPixels']
+            etree.SubElement(videoRes, 'verticalPixels').text = data['VerticalPixels']
+    # populate the sound container element
+    etree.SubElement(sound, 'soundField').text = data['SoundField']
+    etree.SubElement(sound, 'language').text = data['Language']
+    return etree.tostring(tech_meta, pretty_print=True)
+
+
 # Performs series of find and replace operations to generate UMAM file from the template.
-def createUMAM(data, template, pid, rights):
+def createUMAM(data, template, pid, rights, mediaType):
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     convertedRunTime = convertTime(data['DurationDerivatives'])
+    # create technical metadata section
+    techMeta = generateTechnicalMetaString(data, mediaType)
     # initialize the output starting with the specified template file
     outputfile = template
     # create mapping of the metadata onto the UMAM XML template file
@@ -355,7 +416,8 @@ def createUMAM(data, template, pid, rights):
                 '!!!DurationDerivatives!!!' :   str(convertedRunTime),
                 '!!!Mono/Stereo!!!' :           data['Mono/Stereo'],
                 '!!!TrackFormat!!!' :           data['TrackFormat'],
-                '!!!TimeStamp!!!' :             timeStamp
+                '!!!TimeStamp!!!' :             timeStamp,
+                '!!!TechMeta!!!' :              techMeta
     }
     # Carry out a find and replace for each line of the data mapping
     # and convert ampersands in data into XML entities in the process
@@ -559,6 +621,9 @@ def main():
     nullTimeCounter, convertTime = timeFormatSelection()
     summedRunTime = nullTimeCounter   # variable to hold sum of constituent UMAM runtimes for UMDM
     
+    # Get the mediaType from user input
+    mediaType = getMediaType()
+    
     # Load the UMAM template and print it to screen  
     umam, umamName = loadFile('UMAM')
     print("\n UMAM:\n" + umam)
@@ -624,7 +689,7 @@ def main():
             elif x['XMLType'] == 'UMAM':
                 
                 # Create UMAM, convert PID for use as filename, write the file
-                myFile = createUMAM(x, umam, x['PID'], rightsScheme)
+                myFile = createUMAM(x, umam, x['PID'], rightsScheme, mediaType)
                 convertedDerivativeRunTime = convertTime(x['DurationDerivatives'])
                 fileStem = x['PID'].replace(':', '_').strip()
                 writeFile(fileStem, myFile, '.xml')
@@ -684,7 +749,7 @@ def main():
             mets = createMets()
             
             # Create UMAM, convert PID for use as filename, write the file
-            myFile = createUMAM(x, umam, x['umamPID'], rightsScheme)
+            myFile = createUMAM(x, umam, x['umamPID'], rightsScheme, mediaType)
             fileStem = x['umamPID'].replace(':', '_').strip()
             writeFile(fileStem, myFile, '.xml')
             
