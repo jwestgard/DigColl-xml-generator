@@ -349,18 +349,20 @@ def generateTechnicalMetaString(data, mediaType):
     tech_meta = etree.ElementTree(root)
     # technical/format/fileName
     etree.SubElement(root, 'fileName').text = data['FileName']
-    # create format element and mimeType and compression subelements
+    # create format element to hold mimeType and compression subelements
     format = etree.SubElement(root, 'format')
-    etree.SubElement(format, 'mimeType').text = data['MimeType']
-    etree.SubElement(format, 'compression').text = data['Compression']
     # create media {audio,video} and duration subelement
     media = etree.SubElement(root, mediaType)
-    etree.SubElement(media, 'duration').text = data['Duration']
+    etree.SubElement(media, 'duration').text = str(convertTime(data['DurationDerivatives']))
     if mediaType == 'audio':
-        etree.SubElement(media, 'channels').text = data['Channels']
+        etree.SubElement(format, 'mimeType').text = "audio/mpeg"
+        etree.SubElement(format, 'compression').text = "lossy"
+        etree.SubElement(media, 'channels').text = data['TrackFormat']
         # create sound container element specific to audio objects
         sound = etree.SubElement(media, 'audioTrack')
     elif mediaType == 'video':
+        etree.SubElement(format, 'mimeType').text = "video/foo"
+        etree.SubElement(format, 'compression').text = "lossy"
         # create sound container element specific to video objects
         sound = etree.SubElement(media, 'videoSound')
         # create top-level video elements
@@ -385,7 +387,7 @@ def generateTechnicalMetaString(data, mediaType):
             etree.SubElement(videoRes, 'horizontalPixels').text = data['HorizontalPixels']
             etree.SubElement(videoRes, 'verticalPixels').text = data['VerticalPixels']
     # populate the sound container element
-    etree.SubElement(sound, 'soundField').text = data['SoundField']
+    etree.SubElement(sound, 'soundField').text = data['Mono/Stereo']
     etree.SubElement(sound, 'language').text = data['Language']
     return etree.tostring(tech_meta, pretty_print=True)
 
@@ -393,9 +395,10 @@ def generateTechnicalMetaString(data, mediaType):
 # Performs series of find and replace operations to generate UMAM file from the template.
 def createUMAM(data, template, pid, rights, mediaType):
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    convertedRunTime = convertTime(data['DurationDerivatives'])
     # create technical metadata section
-    techMeta = generateTechnicalMetaString(data, mediaType)
+    techMeta = generateTechnicalMetaString(data, mediaType).decode('utf-8')
+    print(techMeta)
+    
     # initialize the output starting with the specified template file
     outputfile = template
     # create mapping of the metadata onto the UMAM XML template file
@@ -411,11 +414,6 @@ def createUMAM(data, template, pid, rights, mediaType):
                 '!!!DigitizedByPers!!!' :       data['DigitizedByPers'],
                 '!!!DigitizationNotes!!!' :     data['DigitizationNotes'],
                 '!!!AccessRights!!!' :          rights['adminRightsAccess'],
-                '!!!MimeType!!!' :              'audio/mpeg',
-                '!!!Compression!!!' :           'lossy',
-                '!!!DurationDerivatives!!!' :   str(convertedRunTime),
-                '!!!Mono/Stereo!!!' :           data['Mono/Stereo'],
-                '!!!TrackFormat!!!' :           data['TrackFormat'],
                 '!!!TimeStamp!!!' :             timeStamp,
                 '!!!TechMeta!!!' :              techMeta
     }
