@@ -56,7 +56,7 @@ def getCollection():
         coll = input('Please enter D or F: ')
     if coll == "D":
         return "umd:3392"
-    elif mediaType == "F":
+    elif coll == "F":
         return "umd:1158"
 
 
@@ -441,7 +441,7 @@ def createUMAM(data, template, pid, rights, mediaType):
 
 
 # Performs series of find and replace operations to generate UMDM file from the template.
-def createUMDM(data, template, summedRunTime, mets, pid, rights):
+def createUMDM(data, template, summedRunTime, mets, pid, rights, timeUnits):
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     # Initialize the output starting with the specified template file
     outputfile = template
@@ -675,7 +675,7 @@ def main():
                 
                 # If the mets variable is NOT empty, finish the UMDM for the previous group
                 if mets != "":
-                    myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'], rightsScheme)
+                    myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'], rightsScheme, timeUnits)
                     fileStem = tempData['PID'].replace(':', '_').strip()    # convert ':' to '_' in PID for use in filename
                     writeFile(fileStem, myFile, '.xml')                     # Write the file
                     
@@ -724,7 +724,7 @@ def main():
                 mets = updateMets(objectParts, mets, x['FileName'], x['PID'])
                 
         # After iteration complete, finish the last UMDM    
-        myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'], rightsScheme)
+        myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'], rightsScheme, timeUnits)
         fileStem = tempData['PID'].replace(':', '_').strip()    # convert ':' to '_' in PID for use in filename
         writeFile(fileStem, myFile, '.xml')                     # Write the file
         
@@ -781,7 +781,7 @@ def main():
             print('Writing UMAM...', end=' ')
             
             # Create UMDM
-            createUMDM(x, umdm, summedRunTime, mets, x['umdmPID'])
+            createUMDM(x, umdm, summedRunTime, mets, x['umdmPID'], timeUnits)
             
             # Print summary info to the screen
             print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
