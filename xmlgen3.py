@@ -50,6 +50,16 @@ def getMediaType():
         return "video"
 
 
+def getCollection():
+    coll = input("\nChoose a collection -- [D]igital Collections or [F]ilms@UM: ")
+    while coll not in ('D','F'):
+        coll = input('Please enter D or F: ')
+    if coll == "D":
+        return "umd:3392"
+    elif mediaType == "F":
+        return "umd:1158"
+
+
 # Analyzes the type of datafile and calculates the number of PIDs needed.
 def analyzeDataFile(dataFile):
     dataFileSize = len(dataFile)
@@ -361,34 +371,38 @@ def generateTechnicalMetaString(data, mediaType):
         # create sound container element specific to audio objects
         sound = etree.SubElement(media, 'audioTrack')
     elif mediaType == 'video':
-        etree.SubElement(format, 'mimeType').text = "video/foo"
+        etree.SubElement(format, 'mimeType').text = "video/x-m4v"
         etree.SubElement(format, 'compression').text = "lossy"
         # create sound container element specific to video objects
         sound = etree.SubElement(media, 'videoSound')
         # create top-level video elements
-        etree.SubElement(media, 'color').text = data['Color']
-        if 'DataRate' in data:
+        if data['Color']:
+            etree.SubElement(media, 'color').text = data['Color']
+        if data['DataRate']:
             dataRate = etree.SubElement(media, 'dataRate')
             d = data['DataRate'].split(" ")
             dataRate.text = d[0]
             dataRate.set('rate', d[1])
-        if 'FrameRate' in data:
+        if data['FrameRate']:
             frame = etree.SubElement(media, 'frame')
             frame.text = data['FrameRate']
             frame.set('rate', 'second')
         # create video format element and subelements
-        videoFormat = etree.SubElement(media, 'videoFormat')
-        etree.SubElement(videoFormat, 'scanSignal').text = data['ScanSignal']
-        etree.SubElement(videoFormat, 'videoStandard').text = data['VideoStandard']
+        if data['ScanSignal'] or data['VideoStandard']:
+            videoFormat = etree.SubElement(media, 'videoFormat')
+            etree.SubElement(videoFormat, 'scanSignal').text = data['ScanSignal']
+            etree.SubElement(videoFormat, 'videoStandard').text = data['VideoStandard']
         # create videoResolution and subelement only if all three are present
-        if all (k in data for k in ('AspectRatio','HorizontalPixels','VerticalPixels')):
+        if all (data[k] for k in ('AspectRatio','HorizontalPixels','VerticalPixels')):
             videoRes = etree.SubElement(media, 'videoResolution')
             etree.SubElement(videoRes, 'aspectRatio').text = data['AspectRatio']
             etree.SubElement(videoRes, 'horizontalPixels').text = data['HorizontalPixels']
             etree.SubElement(videoRes, 'verticalPixels').text = data['VerticalPixels']
     # populate the sound container element
-    etree.SubElement(sound, 'soundField').text = data['Mono/Stereo']
-    etree.SubElement(sound, 'language').text = data['Language']
+    if data['Mono/Stereo']:
+        etree.SubElement(sound, 'soundField').text = data['Mono/Stereo']
+    if data['Language']:
+        etree.SubElement(sound, 'language').text = data['Language']
     return etree.tostring(tech_meta, pretty_print=True)
 
 
@@ -528,7 +542,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                 '!!!Repository!!!' :            data['Department'],
                 '!!!TopicalSubjects!!!' :       topicalSubjects,
                 '!!!ArchivalLocation!!!' :      archivalLocation,
-                '!!!CollectionPID!!!' :         'umd:3392',
+                '!!!CollectionPID!!!' :         collectionPID,
                 '!!!TimeStamp!!!' :             timeStamp,
                 '!!!TopicalSubjects!!!' :       topicalSubjects
     }
@@ -619,8 +633,9 @@ def main():
     nullTimeCounter, convertTime = timeFormatSelection()
     summedRunTime = nullTimeCounter   # variable to hold sum of constituent UMAM runtimes for UMDM
     
-    # Get the mediaType from user input
+    # Get the mediaType and collection from user input
     mediaType = getMediaType()
+    collectionPID = getCollection()
     
     # Load the UMAM template and print it to screen  
     umam, umamName = loadFile('UMAM')
