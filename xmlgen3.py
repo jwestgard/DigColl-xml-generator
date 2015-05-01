@@ -632,7 +632,7 @@ def main():
     
     rightsScheme = getRightsScheme()
     
-    nullTimeCounter, convertTime = timeFormatSelection()
+    nullTimeCounter, convertTime, timeUnits = timeFormatSelection()
     summedRunTime = nullTimeCounter   # variable to hold sum of constituent UMAM runtimes for UMDM
     
     # Get the mediaType and collection from user input
