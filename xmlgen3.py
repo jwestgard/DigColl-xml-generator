@@ -333,6 +333,7 @@ def timeFormatSelection():
     if choice == "M" or choice == "m":
         # When passed a string in the format 'HH:MM:SS', returns the decimal value in minutes,
         # rounded to two decimal places.
+        timeUnits = "minutes"
         nullTimeCounter = 0
         def convertTime(inputTime):
             hrsMinSec = inputTime.split(':')    # otherwise, split the string at the colon
@@ -342,6 +343,7 @@ def timeFormatSelection():
             return round(minutes, 2)  # return the resulting decimal rounded to two places
     elif choice == "I" or choice == "i":
         # Convert the input time to a timedelta and return it
+        timeUnits = "hh:mm:ss"
         nullTimeCounter = datetime.timedelta(0)
         def convertTime(inputTime):
             hh, mm, ss = map(int, inputTime.split(":"))
@@ -350,7 +352,7 @@ def timeFormatSelection():
     else:
         print("Something went wrong with the time format selection!")
         exit
-    return nullTimeCounter, convertTime
+    return nullTimeCounter, convertTime, timeUnits
 
 
 def generateTechnicalMetaString(data, mediaType):
@@ -504,7 +506,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights):
                                                 'close' : '</corpName></repository>'},
             '!!!Dimensions!!!' : {              'open' : '<size units="in">',
                                                 'close' : '</size>'},
-            '!!!DurationMasters!!!' : {         'open' : '<extent units="minutes">',
+            '!!!DurationMasters!!!' : {         'open' : '<extent units="{0}">'.format(timeUnits),
                                                 'close' : '</extent>'},
             '!!!Format!!!' : {                  'open' : '<format>',
                                                 'close' : '</format>'},
