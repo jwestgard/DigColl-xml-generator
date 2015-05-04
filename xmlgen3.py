@@ -409,19 +409,19 @@ def generateTechnicalMetaString(data, mediaType):
 
 
 # Performs series of find and replace operations to generate UMAM file from the template.
-def createUMAM(data, template, pid, rights, mediaType):
+def createUMAM(data, batch, pid):
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     # create technical metadata section
-    techMeta = generateTechnicalMetaString(data, mediaType).decode('utf-8')
+    techMeta = generateTechnicalMetaString(data, batch['mediaType']).decode('utf-8')
     print(techMeta)
     
     # initialize the output starting with the specified template file
-    outputfile = template
+    outputfile = batch['umam']
     # create mapping of the metadata onto the UMAM XML template file
     umamMap = {
                 '!!!PID!!!' :                   pid,
                 '!!!ContentModel!!!' :          'UMD_VIDEO',
-                '!!!Status!!!' :                rights['amInfoStatus'],
+                '!!!Status!!!' :                batch['rightsScheme']['amInfoStatus'],
                 '!!!FileName!!!' :              data['FileName'],
                 '!!!DateDigitized!!!' :         data['DateDigitized'],
                 '!!!DigitizedByDept!!!' :       data['DigitizedByDept'],
@@ -429,7 +429,7 @@ def createUMAM(data, template, pid, rights, mediaType):
                 '!!!SharestreamURL!!!' :        data['SharestreamURLs'],
                 '!!!DigitizedByPers!!!' :       data['DigitizedByPers'],
                 '!!!DigitizationNotes!!!' :     data['DigitizationNotes'],
-                '!!!AccessRights!!!' :          rights['adminRightsAccess'],
+                '!!!AccessRights!!!' :          batch['rightsScheme']['adminRightsAccess'],
                 '!!!TimeStamp!!!' :             timeStamp,
                 '!!!TechMeta!!!' :              techMeta
     }
@@ -441,10 +441,10 @@ def createUMAM(data, template, pid, rights, mediaType):
 
 
 # Performs series of find and replace operations to generate UMDM file from the template.
-def createUMDM(data, template, summedRunTime, mets, pid, rights, timeUnits):
+def createUMDM(data, batch, summedRunTime, mets):
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     # Initialize the output starting with the specified template file
-    outputfile = template
+    outputfile = batch['umdm']
     # Strip out trailing quotation marks from Dimensions field
     if data['Dimensions'].endswith('"'):
         data['Dimensions'] = data['Dimensions'][0:-1]
@@ -522,7 +522,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights, timeUnits):
     umdmMap = {
                 '!!!PID!!!' :                   pid,
                 '!!!ContentModel!!!' :          'UMD_VIDEO',
-                '!!!Status!!!' :                rights['doInfoStatus'],
+                '!!!Status!!!' :                batch['rightsScheme']['doInfoStatus'],
                 '!!!Title!!!' :                 data['Title'],
                 '!!!AlternateTitle!!!' :        data['AlternateTitle'],
                 '!!!Agents!!!' :                agentsString,
@@ -544,7 +544,7 @@ def createUMDM(data, template, summedRunTime, mets, pid, rights, timeUnits):
                 '!!!Repository!!!' :            data['Department'],
                 '!!!TopicalSubjects!!!' :       topicalSubjects,
                 '!!!ArchivalLocation!!!' :      archivalLocation,
-                '!!!CollectionPID!!!' :         collectionPID,
+                '!!!CollectionPID!!!' :         batch['collectionPID'],
                 '!!!TimeStamp!!!' :             timeStamp,
                 '!!!TopicalSubjects!!!' :       topicalSubjects
     }
@@ -594,15 +594,15 @@ def stripAnchors(target):
 
 def main():
     
-    # Initialize needed variables and lists
-    mets = ""        # empty string for compiling METS record
+    mets = ""           # empty string for compiling METS record
     objectGroups = 0    # counter for UMDM plus UMAM(s) as a group
     objectParts = 0     # counter for the number of UMAM parts for each UMDM
     pidCounter = 0      # counter for coordinating PID list with data lines from CSV
     filesWritten = 0    # counter for file outputs
-    umdmList = []    # list for compiling list of UMDM pids
+    umdmList = []       # list for compiling list of UMDM pids
     outputFiles = []    # list for compiling list of all pids written
     summaryList = []    # list for compiling list of PIDs and Object IDs
+    batch = {}          # dictionary for batch-related metadata
     global convertTime
     
     # Create a timeStamp for these operations
@@ -630,22 +630,22 @@ def main():
         print('Exiting program.')
         quit()
     
-    rightsScheme = getRightsScheme()
-    
-    nullTimeCounter, convertTime, timeUnits = timeFormatSelection()
-    summedRunTime = nullTimeCounter   # variable to hold sum of constituent UMAM runtimes for UMDM
-    
     # Get the mediaType and collection from user input
-    mediaType = getMediaType()
-    collectionPID = getCollection()
+    batch['rightsScheme'] = getRightsScheme()
+    batch['mediaType'] = getMediaType()
+    batch['collectionPID'] = getCollection()
+    batch['nullTimeCounter'], batch['convertTime'], batch['timeUnits'] = timeFormatSelection()
+    
+    # setup variable to hold sum of constituent UMAM runtimes for UMDM
+    summedRunTime = batch['nullTimeCounter']   
     
     # Load the UMAM template and print it to screen  
-    umam, umamName = loadFile('UMAM')
+    batch['umam'], batch['umamName'] = loadFile('UMAM')
     print("\n UMAM:\n" + umam)
     print('*' * 30)
     
     # Load the UMDM template and print it to screen
-    umdm, umdmName = loadFile('UMDM')
+    batch['umdm'], batch['umdmName'] = loadFile('UMDM')
     print("\n UMDM:\n" + umdm)
     print('*' * 30)
     
@@ -675,7 +675,7 @@ def main():
                 
                 # If the mets variable is NOT empty, finish the UMDM for the previous group
                 if mets != "":
-                    myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'], rightsScheme, timeUnits)
+                    myFile = createUMDM(tempData, batch, summedRunTime, mets)
                     fileStem = tempData['PID'].replace(':', '_').strip()    # convert ':' to '_' in PID for use in filename
                     writeFile(fileStem, myFile, '.xml')                     # Write the file
                     
@@ -690,8 +690,8 @@ def main():
                     filesWritten += 1
                     
                     # Reset counters
-                    objectParts = 0                     # reset parts counter
-                    summedRunTime = nullTimeCounter       # reset runtime sum counter for masters
+                    objectParts = 0                             # reset parts counter
+                    summedRunTime = batch['nullTimeCounter']    # reset runtime sum counter for masters
                 
                 # Begin a new UMDM group by incrementing the group counter, printing a notice to screen,
                 # storing the line of UMDM data for use after UMAMs are complete, and initiating a new METS
@@ -704,7 +704,7 @@ def main():
             elif x['XMLType'] == 'UMAM':
                 
                 # Create UMAM, convert PID for use as filename, write the file
-                myFile = createUMAM(x, umam, x['PID'], rightsScheme, mediaType)
+                myFile = createUMAM(x, batch, x['PID'])
                 convertedDerivativeRunTime = convertTime(x['DurationDerivatives'])
                 fileStem = x['PID'].replace(':', '_').strip()
                 writeFile(fileStem, myFile, '.xml')
@@ -724,7 +724,7 @@ def main():
                 mets = updateMets(objectParts, mets, x['FileName'], x['PID'])
                 
         # After iteration complete, finish the last UMDM    
-        myFile = createUMDM(tempData, umdm, summedRunTime, mets, tempData['PID'], rightsScheme, timeUnits)
+        myFile = createUMDM(tempData, batch, summedRunTime, mets)
         fileStem = tempData['PID'].replace(':', '_').strip()    # convert ':' to '_' in PID for use in filename
         writeFile(fileStem, myFile, '.xml')                     # Write the file
         
@@ -764,7 +764,7 @@ def main():
             mets = createMets()
             
             # Create UMAM, convert PID for use as filename, write the file
-            myFile = createUMAM(x, umam, x['umamPID'], rightsScheme, mediaType)
+            myFile = createUMAM(x, batch, x['umamPID'])
             fileStem = x['umamPID'].replace(':', '_').strip()
             writeFile(fileStem, myFile, '.xml')
             
@@ -781,7 +781,7 @@ def main():
             print('Writing UMAM...', end=' ')
             
             # Create UMDM
-            createUMDM(x, umdm, summedRunTime, mets, x['umdmPID'], timeUnits)
+            createUMDM(x, batch, summedRunTime, mets)
             
             # Print summary info to the screen
             print('Creating UMDM for object with {0} parts...'.format(objectParts), end=" ")
