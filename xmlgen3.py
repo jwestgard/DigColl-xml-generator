@@ -634,19 +634,19 @@ def main():
     batch['rightsScheme'] = getRightsScheme()
     batch['mediaType'] = getMediaType()
     batch['collectionPID'] = getCollection()
-    batch['nullTimeCounter'], batch['convertTime'], batch['timeUnits'] = timeFormatSelection()
+    batch['nullTimeCounter'], convertTime, batch['timeUnits'] = timeFormatSelection()
     
     # setup variable to hold sum of constituent UMAM runtimes for UMDM
     summedRunTime = batch['nullTimeCounter']   
     
     # Load the UMAM template and print it to screen  
     batch['umam'], batch['umamName'] = loadFile('UMAM')
-    print("\n UMAM:\n" + umam)
+    print("\n UMAM:\n" + batch['umam'])
     print('*' * 30)
     
     # Load the UMDM template and print it to screen
     batch['umdm'], batch['umdmName'] = loadFile('UMDM')
-    print("\n UMDM:\n" + umdm)
+    print("\n UMDM:\n" + batch['umdm'])
     print('*' * 30)
     
     # Load the lines of the data file into a csv.DictReader object
