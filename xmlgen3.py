@@ -24,7 +24,11 @@
 
 
 # Import needed modules
-import csv, datetime, re, requests
+import csv
+import datetime
+import os
+import re
+import requests
 from lxml import etree as etree
 
 
@@ -270,7 +274,7 @@ def generateBrowseTerms(inputSubjects):
 def generateTopicalSubjects(**kwargs):
     result = []
     for key, value in kwargs.items():
-        if value[0] != '':
+        if value[0]:
             for subj in value[0].split(';'):
                 scheme = value[1].strip()
                 if key == 'pers':
@@ -306,7 +310,7 @@ def generateArchivalLocation(collection, **kwargs):
 # read that file, returning the contents.
 def loadFile(fileType):
     if fileType in ['umam','umdm']:
-        sourceFile = "xml/{}.xml".format(fileType)
+        sourceFile = "templates/{}.xml".format(fileType)
         f = open(sourceFile, 'r').read()
     else:
         sourceFile = input("\nEnter the name of the {0} file: ".format(fileType))
@@ -325,7 +329,9 @@ def writeFile(fileStem, content, extension):
     else:
         filePath = 'output/' + fileStem + extension
     f = open(filePath, mode='w')
-    f.write(content)
+    # filter out blank lines and lines containing only spaces from XML
+    cleaned = os.linesep.join([line for line in content.splitlines() if line.strip()])
+    f.write(cleaned)
     f.close()
 
 
@@ -382,32 +388,33 @@ def generateTechnicalMetaString(data, mediaType, convertTime):
         # create sound container element specific to video objects
         sound = etree.SubElement(media, 'videoSound')
         # create top-level video elements
-        if data['Color']:
+        if 'Color' in data and data['Color']:
             etree.SubElement(media, 'color').text = data['Color']
-        if data['DataRate']:
+        if 'DataRate' in data and data['DataRate']:
             dataRate = etree.SubElement(media, 'dataRate')
             d = data['DataRate'].split(" ")
             dataRate.text = d[0]
             dataRate.set('rate', d[1])
-        if data['FrameRate']:
+        if 'FrameRate' in data and data['FrameRate']:
             frame = etree.SubElement(media, 'frame')
             frame.text = data['FrameRate']
             frame.set('rate', 'second')
         # create video format element and subelements
-        if data['ScanSignal'] or data['VideoStandard']:
-            videoFormat = etree.SubElement(media, 'videoFormat')
-            etree.SubElement(videoFormat, 'scanSignal').text = data['ScanSignal']
-            etree.SubElement(videoFormat, 'videoStandard').text = data['VideoStandard']
+        if 'ScanSignal' in data or 'VideoStandard' in data:
+            if data['ScanSignal'] or data['VideoStandard']:
+                videoFormat = etree.SubElement(media, 'videoFormat')
+                etree.SubElement(videoFormat, 'scanSignal').text = data['ScanSignal']
+                etree.SubElement(videoFormat, 'videoStandard').text = data['VideoStandard']
         # create videoResolution and subelement only if all three are present
-        if all (data[k] for k in ('AspectRatio','HorizontalPixels','VerticalPixels')):
+        if all (k in data for k in ('AspectRatio','HorizontalPixels','VerticalPixels')):
             videoRes = etree.SubElement(media, 'videoResolution')
             etree.SubElement(videoRes, 'aspectRatio').text = data['AspectRatio']
             etree.SubElement(videoRes, 'horizontalPixels').text = data['HorizontalPixels']
             etree.SubElement(videoRes, 'verticalPixels').text = data['VerticalPixels']
     # populate the sound container element
-    if data['Mono/Stereo']:
+    if 'Mono/Stereo' in data and data['Mono/Stereo']:
         etree.SubElement(sound, 'soundField').text = data['Mono/Stereo']
-    if data['Language']:
+    if 'Language' in data and data['Language']:
         etree.SubElement(sound, 'language').text = data['Language']
     return etree.tostring(tech_meta, pretty_print=True)
 
@@ -514,8 +521,6 @@ def createUMDM(data, batch, summedRunTime, mets):
                                             'close' : '</extent>'},
             '!!!Format!!!' : {              'open' : '<format>',
                                             'close' : '</format>'},
-            '!!!Color!!!' : {               'open' : '<color>',
-                                            'close' : '</color>'},
             '!!!ArchivalLocation!!!' : {    'open' : '<bibRef>',
                                             'close' : '</bibRef>'},
             '!!!Language!!!' : {            'open' : '<language>',
@@ -546,7 +551,6 @@ def createUMDM(data, batch, summedRunTime, mets):
                 '!!!Dimensions!!!' :            data['Dimensions'],
                 '!!!DurationMasters!!!' :       str(summedRunTime),
                 '!!!Format!!!' :                data['Format'],
-                '!!!Color!!!' :                 data['Color'],
                 '!!!RepositoryBrowse!!!' :      browseTermsString,
                 '!!!Repository!!!' :            data['Department'],
                 '!!!TopicalSubjects!!!' :       topicalSubjects,
@@ -573,16 +577,16 @@ def createUMDM(data, batch, summedRunTime, mets):
 
 # Initiates a new METS snippet for use in a UMDM file
 def createMets():
-    metsFile = open('mets.xml', 'r').read()
+    metsFile = open('templates/mets.xml', 'r').read()
     return(metsFile)
 
 
 # Updates a METS record with UMAM info
 def updateMets(partNumber, mets, fileName, pid):
     id = str(partNumber + 1)   # first item(s) are collection PIDs
-    metsSnipA = open('metsA.xml', 'r').read() + '!!!Anchor-A!!!'
-    metsSnipB = open('metsB.xml', 'r').read() + '!!!Anchor-B!!!'
-    metsSnipC = open('metsC.xml', 'r').read() + '!!!Anchor-C!!!'
+    metsSnipA = open('templates/metsA.xml', 'r').read() + '!!!Anchor-A!!!'
+    metsSnipB = open('templates/metsB.xml', 'r').read() + '!!!Anchor-B!!!'
+    metsSnipC = open('templates/metsC.xml', 'r').read() + '!!!Anchor-C!!!'
     mets = mets.replace('!!!Anchor-A!!!', metsSnipA)
     mets = mets.replace('!!!Anchor-B!!!', metsSnipB)
     mets = mets.replace('!!!Anchor-C!!!', metsSnipC)
@@ -640,23 +644,19 @@ def main():
     batch['rightsScheme'] = getRightsScheme()
     batch['mediaType'] = getMediaType()
     batch['collectionPID'] = getCollection()
-<<<<<<< Updated upstream
     batch['nullTimeCounter'], batch['convertTime'], batch['timeUnits'] = timeFormatSelection()
     convertTime = batch['convertTime']
-=======
-    batch['nullTimeCounter'], convertTime, batch['timeUnits'] = timeFormatSelection()
->>>>>>> Stashed changes
     
     # setup variable to hold sum of constituent UMAM runtimes for UMDM
     summedRunTime = batch['nullTimeCounter']   
     
     # Load the UMAM template and print it to screen  
-    batch['umam'], batch['umamName'] = loadFile('UMAM')
+    batch['umam'], batch['umamName'] = loadFile('umam')
     print("\n UMAM:\n" + batch['umam'])
     print('*' * 30)
     
     # Load the UMDM template and print it to screen
-    batch['umdm'], batch['umdmName'] = loadFile('UMDM')
+    batch['umdm'], batch['umdmName'] = loadFile('umdm')
     print("\n UMDM:\n" + batch['umdm'])
     print('*' * 30)
     
