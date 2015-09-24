@@ -270,7 +270,7 @@ def generateBrowseTerms(inputSubjects):
 def generateTopicalSubjects(**kwargs):
     result = []
     for key, value in kwargs.items():
-        if value[0] != '':
+        if value[0]:
             for subj in value[0].split(';'):
                 scheme = value[1].strip()
                 if key == 'pers':
@@ -378,32 +378,34 @@ def generateTechnicalMetaString(data, mediaType, convertTime):
         # create sound container element specific to video objects
         sound = etree.SubElement(media, 'videoSound')
         # create top-level video elements
-        if data['Color']:
+        if 'Color' in data and data['Color']:
             etree.SubElement(media, 'color').text = data['Color']
-        if data['DataRate']:
+        if 'DataRate' in data and data['DataRate']:
             dataRate = etree.SubElement(media, 'dataRate')
             d = data['DataRate'].split(" ")
             dataRate.text = d[0]
             dataRate.set('rate', d[1])
-        if data['FrameRate']:
+        if 'FrameRate' in data and data['FrameRate']:
             frame = etree.SubElement(media, 'frame')
             frame.text = data['FrameRate']
             frame.set('rate', 'second')
         # create video format element and subelements
-        if data['ScanSignal'] or data['VideoStandard']:
+        if 'ScanSignal' or 'VideoStandard' in data:
             videoFormat = etree.SubElement(media, 'videoFormat')
-            etree.SubElement(videoFormat, 'scanSignal').text = data['ScanSignal']
-            etree.SubElement(videoFormat, 'videoStandard').text = data['VideoStandard']
+            if 'ScanSignal' in data and data['ScanSignal']:
+                etree.SubElement(videoFormat, 'scanSignal').text = data['ScanSignal']
+            if 'VideoStandard' in data and data['VideoStandard']:
+                etree.SubElement(videoFormat, 'videoStandard').text = data['VideoStandard']
         # create videoResolution and subelement only if all three are present
-        if all (data[k] for k in ('AspectRatio','HorizontalPixels','VerticalPixels')):
+        if all (k for k in ('AspectRatio','HorizontalPixels','VerticalPixels')) in data:
             videoRes = etree.SubElement(media, 'videoResolution')
             etree.SubElement(videoRes, 'aspectRatio').text = data['AspectRatio']
             etree.SubElement(videoRes, 'horizontalPixels').text = data['HorizontalPixels']
             etree.SubElement(videoRes, 'verticalPixels').text = data['VerticalPixels']
     # populate the sound container element
-    if data['Mono/Stereo']:
+    if 'Mono/Stereo' in data and data['Mono/Stereo']:
         etree.SubElement(sound, 'soundField').text = data['Mono/Stereo']
-    if data['Language']:
+    if 'Language' in data and data['Language']:
         etree.SubElement(sound, 'language').text = data['Language']
     return etree.tostring(tech_meta, pretty_print=True)
 
@@ -506,7 +508,7 @@ def createUMDM(data, batch, summedRunTime, mets):
                                                 'close' : '</corpName></repository>'},
             '!!!Dimensions!!!' : {              'open' : '<size units="in">',
                                                 'close' : '</size>'},
-            '!!!DurationMasters!!!' : {         'open' : '<extent units="{0}">'.format(timeUnits),
+            '!!!DurationMasters!!!' : {         'open' : '<extent units="{0}">'.format(batch['timeUnits']),
                                                 'close' : '</extent>'},
             '!!!Format!!!' : {                  'open' : '<format>',
                                                 'close' : '</format>'},
@@ -520,7 +522,7 @@ def createUMDM(data, batch, summedRunTime, mets):
 
     # Create mapping of the metadata onto the UMDM XML template file
     umdmMap = {
-                '!!!PID!!!' :                   pid,
+                '!!!PID!!!' :                   data['PID'],
                 '!!!ContentModel!!!' :          'UMD_VIDEO',
                 '!!!Status!!!' :                batch['rightsScheme']['doInfoStatus'],
                 '!!!Title!!!' :                 data['Title'],
