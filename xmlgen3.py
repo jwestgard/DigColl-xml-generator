@@ -355,7 +355,7 @@ def timeFormatSelection():
     return nullTimeCounter, convertTime, timeUnits
 
 
-def generateTechnicalMetaString(data, mediaType):
+def generateTechnicalMetaString(data, mediaType, convertTime):
     # create root element and tree object
     root = etree.Element('technical')
     tech_meta = etree.ElementTree(root)
@@ -412,8 +412,8 @@ def generateTechnicalMetaString(data, mediaType):
 def createUMAM(data, batch, pid):
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     # create technical metadata section
-    techMeta = generateTechnicalMetaString(data, batch['mediaType']).decode('utf-8')
-    print(techMeta)
+    techMeta = generateTechnicalMetaString(data, batch['mediaType'], 
+        batch['convertTime']).decode('utf-8')
     
     # initialize the output starting with the specified template file
     outputfile = batch['umam']
@@ -603,7 +603,6 @@ def main():
     outputFiles = []    # list for compiling list of all pids written
     summaryList = []    # list for compiling list of PIDs and Object IDs
     batch = {}          # dictionary for batch-related metadata
-    global convertTime
     
     # Create a timeStamp for these operations
     timeStamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -634,7 +633,8 @@ def main():
     batch['rightsScheme'] = getRightsScheme()
     batch['mediaType'] = getMediaType()
     batch['collectionPID'] = getCollection()
-    batch['nullTimeCounter'], convertTime, batch['timeUnits'] = timeFormatSelection()
+    batch['nullTimeCounter'], batch['convertTime'], batch['timeUnits'] = timeFormatSelection()
+    convertTime = batch['convertTime']
     
     # setup variable to hold sum of constituent UMAM runtimes for UMDM
     summedRunTime = batch['nullTimeCounter']   
