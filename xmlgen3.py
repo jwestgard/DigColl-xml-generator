@@ -305,11 +305,15 @@ def generateArchivalLocation(collection, **kwargs):
 # Prompts the user to enter the name of the UMAM or UMDM template or PID file and
 # read that file, returning the contents.
 def loadFile(fileType):
-    sourceFile = input("\nEnter the name of the %s file: " % (fileType))
-    if fileType == 'data':
-        f = open(sourceFile, 'r').readlines()
-    else:
+    if fileType in ['umam','umdm']:
+        sourceFile = "xml/{}.xml".format(fileType)
         f = open(sourceFile, 'r').read()
+    else:
+        sourceFile = input("\nEnter the name of the {0} file: ".format(fileType))
+        if fileType == 'data':
+            f = open(sourceFile, 'r').readlines()
+        else:
+            f = open(sourceFile, 'r').read()
     return(f, sourceFile)
 
 
@@ -478,49 +482,51 @@ def createUMDM(data, batch, summedRunTime, mets):
     outputfile = stripAnchors(outputfile)                               # Strip out anchor points
     # XML tags with which to wrap the CSV data
     XMLtags = {
-            '!!!ContentModel!!!' :     {        'open' : '<type>',
-                                                'close' : '</type>'    },
-            '!!!Status!!!' : {                  'open' : '<status>',
-                                                'close' : '</status>' },
-            '!!!Title!!!' : {                   'open' : '<title type="main">',
-                                                'close' : '</title>' },
-            '!!!AlternateTitle!!!' : {          'open' : '<title type="alternate">',
-                                                'close' : '</title>'},
-            '!!!Identifier!!!' : {              'open' : '<identifier>',
-                                                'close' : '</identifier>'},
-            '!!!Description/Summary!!!' :     { 'open' : '<description type="summary">',
-                                                'close' : '</description>'},
-            '!!!Rights!!!' : {                  'open' : '<rights type="access">',
-                                                'close' : '</rights>'},
-            '!!!CopyrightHolder!!!' : {         'open' : '<rights type="copyrightowner">',
-                                                'close' : '</rights>'},
-            '!!!Continent!!!' : {               'open' : '<geogName type="continent">',
-                                                'close' : '</geogName>'},
-            '!!!Country!!!' : {                 'open' : '<geogName type="country">',
-                                                'close' : '</geogName>'},
-            '!!!Region/State!!!' : {            'open' : '<geogName type="region">',
-                                                'close' : '</geogName>'},
-            '!!!Settlement/City!!!' : {         'open' : '<geogName type="settlement">',
-                                                'close' : '</geogName>'},
-            '!!!Repository!!!' : {              'open' : '<repository><corpName>',
-                                                'close' : '</corpName></repository>'},
-            '!!!Dimensions!!!' : {              'open' : '<size units="in">',
-                                                'close' : '</size>'},
-            '!!!DurationMasters!!!' : {         'open' : '<extent units="{0}">'.format(timeUnits),
-                                                'close' : '</extent>'},
-            '!!!Format!!!' : {                  'open' : '<format>',
-                                                'close' : '</format>'},
-            '!!!ArchivalLocation!!!' : {        'open' : '<bibRef>',
-                                                'close' : '</bibRef>'},
-            '!!!Language!!!' : {                'open' : '<language>',
-                                                'close' : '</language>'},
-            '!!!Rights!!!' : {                  'open' : '<rights>',
-                                                'close' : '</rights>'}
+            '!!!ContentModel!!!' :     {    'open' : '<type>',
+                                            'close' : '</type>'    },
+            '!!!Status!!!' : {              'open' : '<status>',
+                                            'close' : '</status>' },
+            '!!!Title!!!' : {               'open' : '<title type="main">',
+                                            'close' : '</title>' },
+            '!!!AlternateTitle!!!' : {      'open' : '<title type="alternate">',
+                                            'close' : '</title>'},
+            '!!!Identifier!!!' : {          'open' : '<identifier>',
+                                            'close' : '</identifier>'},
+            '!!!Description/Summary!!!' : { 'open' : '<description type="summary">',
+                                            'close' : '</description>'},
+            '!!!Rights!!!' : {              'open' : '<rights type="access">',
+                                            'close' : '</rights>'},
+            '!!!CopyrightHolder!!!' : {     'open' : '<rights type="copyrightowner">',
+                                            'close' : '</rights>'},
+            '!!!Continent!!!' : {           'open' : '<geogName type="continent">',
+                                            'close' : '</geogName>'},
+            '!!!Country!!!' : {             'open' : '<geogName type="country">',
+                                            'close' : '</geogName>'},
+            '!!!Region/State!!!' : {        'open' : '<geogName type="region">',
+                                            'close' : '</geogName>'},
+            '!!!Settlement/City!!!' : {     'open' : '<geogName type="settlement">',
+                                            'close' : '</geogName>'},
+            '!!!Repository!!!' : {          'open' : '<repository><corpName>',
+                                            'close' : '</corpName></repository>'},
+            '!!!Dimensions!!!' : {          'open' : '<size units="in">',
+                                            'close' : '</size>'},
+            '!!!DurationMasters!!!' : {     'open' : '<extent units="{0}">'.format(batch['timeUnits']),
+                                            'close' : '</extent>'},
+            '!!!Format!!!' : {              'open' : '<format>',
+                                            'close' : '</format>'},
+            '!!!Color!!!' : {               'open' : '<color>',
+                                            'close' : '</color>'},
+            '!!!ArchivalLocation!!!' : {    'open' : '<bibRef>',
+                                            'close' : '</bibRef>'},
+            '!!!Language!!!' : {            'open' : '<language>',
+                                            'close' : '</language>'},
+            '!!!Rights!!!' : {              'open' : '<rights>',
+                                            'close' : '</rights>'}
             }
 
     # Create mapping of the metadata onto the UMDM XML template file
     umdmMap = {
-                '!!!PID!!!' :                   pid,
+                '!!!PID!!!' :                   data['PID'],
                 '!!!ContentModel!!!' :          'UMD_VIDEO',
                 '!!!Status!!!' :                batch['rightsScheme']['doInfoStatus'],
                 '!!!Title!!!' :                 data['Title'],
@@ -540,6 +546,7 @@ def createUMDM(data, batch, summedRunTime, mets):
                 '!!!Dimensions!!!' :            data['Dimensions'],
                 '!!!DurationMasters!!!' :       str(summedRunTime),
                 '!!!Format!!!' :                data['Format'],
+                '!!!Color!!!' :                 data['Color'],
                 '!!!RepositoryBrowse!!!' :      browseTermsString,
                 '!!!Repository!!!' :            data['Department'],
                 '!!!TopicalSubjects!!!' :       topicalSubjects,
@@ -633,8 +640,12 @@ def main():
     batch['rightsScheme'] = getRightsScheme()
     batch['mediaType'] = getMediaType()
     batch['collectionPID'] = getCollection()
+<<<<<<< Updated upstream
     batch['nullTimeCounter'], batch['convertTime'], batch['timeUnits'] = timeFormatSelection()
     convertTime = batch['convertTime']
+=======
+    batch['nullTimeCounter'], convertTime, batch['timeUnits'] = timeFormatSelection()
+>>>>>>> Stashed changes
     
     # setup variable to hold sum of constituent UMAM runtimes for UMDM
     summedRunTime = batch['nullTimeCounter']   
