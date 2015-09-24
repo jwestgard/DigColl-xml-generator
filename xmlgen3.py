@@ -24,7 +24,11 @@
 
 
 # Import needed modules
-import csv, datetime, re, requests
+import csv
+import datetime
+import os
+import re
+import requests
 from lxml import etree as etree
 
 
@@ -305,11 +309,15 @@ def generateArchivalLocation(collection, **kwargs):
 # Prompts the user to enter the name of the UMAM or UMDM template or PID file and
 # read that file, returning the contents.
 def loadFile(fileType):
-    sourceFile = input("\nEnter the name of the %s file: " % (fileType))
-    if fileType == 'data':
-        f = open(sourceFile, 'r').readlines()
-    else:
+    if fileType in ['umam','umdm']:
+        sourceFile = "templates/{}.xml".format(fileType)
         f = open(sourceFile, 'r').read()
+    else:
+        sourceFile = input("\nEnter the name of the {0} file: ".format(fileType))
+        if fileType == 'data':
+            f = open(sourceFile, 'r').readlines()
+        else:
+            f = open(sourceFile, 'r').read()
     return(f, sourceFile)
 
 
@@ -321,7 +329,9 @@ def writeFile(fileStem, content, extension):
     else:
         filePath = 'output/' + fileStem + extension
     f = open(filePath, mode='w')
-    f.write(content)
+    # filter out blank lines and lines containing only spaces from XML
+    cleaned = os.linesep.join([line for line in content.splitlines() if line.strip()])
+    f.write(cleaned)
     f.close()
 
 
@@ -390,14 +400,14 @@ def generateTechnicalMetaString(data, mediaType, convertTime):
             frame.text = data['FrameRate']
             frame.set('rate', 'second')
         # create video format element and subelements
-        if 'ScanSignal' or 'VideoStandard' in data:
+        if 'ScanSignal' in data or 'VideoStandard' in data:
             videoFormat = etree.SubElement(media, 'videoFormat')
-            if 'ScanSignal' in data and data['ScanSignal']:
+            if data['ScanSignal']:
                 etree.SubElement(videoFormat, 'scanSignal').text = data['ScanSignal']
-            if 'VideoStandard' in data and data['VideoStandard']:
+            if data['VideoStandard']:
                 etree.SubElement(videoFormat, 'videoStandard').text = data['VideoStandard']
         # create videoResolution and subelement only if all three are present
-        if all (k for k in ('AspectRatio','HorizontalPixels','VerticalPixels')) in data:
+        if all (k in data for k in ('AspectRatio','HorizontalPixels','VerticalPixels')):
             videoRes = etree.SubElement(media, 'videoResolution')
             etree.SubElement(videoRes, 'aspectRatio').text = data['AspectRatio']
             etree.SubElement(videoRes, 'horizontalPixels').text = data['HorizontalPixels']
@@ -480,6 +490,7 @@ def createUMDM(data, batch, summedRunTime, mets):
     outputfile = stripAnchors(outputfile)                               # Strip out anchor points
     # XML tags with which to wrap the CSV data
     XMLtags = {
+<<<<<<< HEAD
             '!!!ContentModel!!!' :     {        'open' : '<type>',
                                                 'close' : '</type>'    },
             '!!!Status!!!' : {                  'open' : '<status>',
@@ -518,6 +529,46 @@ def createUMDM(data, batch, summedRunTime, mets):
                                                 'close' : '</language>'},
             '!!!Rights!!!' : {                  'open' : '<rights>',
                                                 'close' : '</rights>'}
+=======
+            '!!!ContentModel!!!' :     {    'open' : '<type>',
+                                            'close' : '</type>'    },
+            '!!!Status!!!' : {              'open' : '<status>',
+                                            'close' : '</status>' },
+            '!!!Title!!!' : {               'open' : '<title type="main">',
+                                            'close' : '</title>' },
+            '!!!AlternateTitle!!!' : {      'open' : '<title type="alternate">',
+                                            'close' : '</title>'},
+            '!!!Identifier!!!' : {          'open' : '<identifier>',
+                                            'close' : '</identifier>'},
+            '!!!Description/Summary!!!' : { 'open' : '<description type="summary">',
+                                            'close' : '</description>'},
+            '!!!Rights!!!' : {              'open' : '<rights type="access">',
+                                            'close' : '</rights>'},
+            '!!!CopyrightHolder!!!' : {     'open' : '<rights type="copyrightowner">',
+                                            'close' : '</rights>'},
+            '!!!Continent!!!' : {           'open' : '<geogName type="continent">',
+                                            'close' : '</geogName>'},
+            '!!!Country!!!' : {             'open' : '<geogName type="country">',
+                                            'close' : '</geogName>'},
+            '!!!Region/State!!!' : {        'open' : '<geogName type="region">',
+                                            'close' : '</geogName>'},
+            '!!!Settlement/City!!!' : {     'open' : '<geogName type="settlement">',
+                                            'close' : '</geogName>'},
+            '!!!Repository!!!' : {          'open' : '<repository><corpName>',
+                                            'close' : '</corpName></repository>'},
+            '!!!Dimensions!!!' : {          'open' : '<size units="in">',
+                                            'close' : '</size>'},
+            '!!!DurationMasters!!!' : {     'open' : '<extent units="{0}">'.format(batch['timeUnits']),
+                                            'close' : '</extent>'},
+            '!!!Format!!!' : {              'open' : '<format>',
+                                            'close' : '</format>'},
+            '!!!ArchivalLocation!!!' : {    'open' : '<bibRef>',
+                                            'close' : '</bibRef>'},
+            '!!!Language!!!' : {            'open' : '<language>',
+                                            'close' : '</language>'},
+            '!!!Rights!!!' : {              'open' : '<rights>',
+                                            'close' : '</rights>'}
+>>>>>>> origin/master
             }
 
     # Create mapping of the metadata onto the UMDM XML template file
@@ -568,16 +619,16 @@ def createUMDM(data, batch, summedRunTime, mets):
 
 # Initiates a new METS snippet for use in a UMDM file
 def createMets():
-    metsFile = open('mets.xml', 'r').read()
+    metsFile = open('templates/mets.xml', 'r').read()
     return(metsFile)
 
 
 # Updates a METS record with UMAM info
 def updateMets(partNumber, mets, fileName, pid):
     id = str(partNumber + 1)   # first item(s) are collection PIDs
-    metsSnipA = open('metsA.xml', 'r').read() + '!!!Anchor-A!!!'
-    metsSnipB = open('metsB.xml', 'r').read() + '!!!Anchor-B!!!'
-    metsSnipC = open('metsC.xml', 'r').read() + '!!!Anchor-C!!!'
+    metsSnipA = open('templates/metsA.xml', 'r').read() + '!!!Anchor-A!!!'
+    metsSnipB = open('templates/metsB.xml', 'r').read() + '!!!Anchor-B!!!'
+    metsSnipC = open('templates/metsC.xml', 'r').read() + '!!!Anchor-C!!!'
     mets = mets.replace('!!!Anchor-A!!!', metsSnipA)
     mets = mets.replace('!!!Anchor-B!!!', metsSnipB)
     mets = mets.replace('!!!Anchor-C!!!', metsSnipC)
@@ -642,12 +693,12 @@ def main():
     summedRunTime = batch['nullTimeCounter']   
     
     # Load the UMAM template and print it to screen  
-    batch['umam'], batch['umamName'] = loadFile('UMAM')
+    batch['umam'], batch['umamName'] = loadFile('umam')
     print("\n UMAM:\n" + batch['umam'])
     print('*' * 30)
     
     # Load the UMDM template and print it to screen
-    batch['umdm'], batch['umdmName'] = loadFile('UMDM')
+    batch['umdm'], batch['umdmName'] = loadFile('umdm')
     print("\n UMDM:\n" + batch['umdm'])
     print('*' * 30)
     
