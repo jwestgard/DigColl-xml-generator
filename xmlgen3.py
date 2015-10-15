@@ -490,46 +490,6 @@ def createUMDM(data, batch, summedRunTime, mets):
     outputfile = stripAnchors(outputfile)                               # Strip out anchor points
     # XML tags with which to wrap the CSV data
     XMLtags = {
-<<<<<<< HEAD
-            '!!!ContentModel!!!' :     {        'open' : '<type>',
-                                                'close' : '</type>'    },
-            '!!!Status!!!' : {                  'open' : '<status>',
-                                                'close' : '</status>' },
-            '!!!Title!!!' : {                   'open' : '<title type="main">',
-                                                'close' : '</title>' },
-            '!!!AlternateTitle!!!' : {          'open' : '<title type="alternate">',
-                                                'close' : '</title>'},
-            '!!!Identifier!!!' : {              'open' : '<identifier>',
-                                                'close' : '</identifier>'},
-            '!!!Description/Summary!!!' :     { 'open' : '<description type="summary">',
-                                                'close' : '</description>'},
-            '!!!Rights!!!' : {                  'open' : '<rights type="access">',
-                                                'close' : '</rights>'},
-            '!!!CopyrightHolder!!!' : {         'open' : '<rights type="copyrightowner">',
-                                                'close' : '</rights>'},
-            '!!!Continent!!!' : {               'open' : '<geogName type="continent">',
-                                                'close' : '</geogName>'},
-            '!!!Country!!!' : {                 'open' : '<geogName type="country">',
-                                                'close' : '</geogName>'},
-            '!!!Region/State!!!' : {            'open' : '<geogName type="region">',
-                                                'close' : '</geogName>'},
-            '!!!Settlement/City!!!' : {         'open' : '<geogName type="settlement">',
-                                                'close' : '</geogName>'},
-            '!!!Repository!!!' : {              'open' : '<repository><corpName>',
-                                                'close' : '</corpName></repository>'},
-            '!!!Dimensions!!!' : {              'open' : '<size units="in">',
-                                                'close' : '</size>'},
-            '!!!DurationMasters!!!' : {         'open' : '<extent units="{0}">'.format(batch['timeUnits']),
-                                                'close' : '</extent>'},
-            '!!!Format!!!' : {                  'open' : '<format>',
-                                                'close' : '</format>'},
-            '!!!ArchivalLocation!!!' : {        'open' : '<bibRef>',
-                                                'close' : '</bibRef>'},
-            '!!!Language!!!' : {                'open' : '<language>',
-                                                'close' : '</language>'},
-            '!!!Rights!!!' : {                  'open' : '<rights>',
-                                                'close' : '</rights>'}
-=======
             '!!!ContentModel!!!' :     {    'open' : '<type>',
                                             'close' : '</type>'    },
             '!!!Status!!!' : {              'open' : '<status>',
@@ -568,7 +528,6 @@ def createUMDM(data, batch, summedRunTime, mets):
                                             'close' : '</language>'},
             '!!!Rights!!!' : {              'open' : '<rights>',
                                             'close' : '</rights>'}
->>>>>>> origin/master
             }
 
     # Create mapping of the metadata onto the UMDM XML template file
