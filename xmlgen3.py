@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+#!/usr/bin/env python3
 
 ############################################################################
 #                                                                          #
@@ -29,6 +29,7 @@ import datetime
 import os
 import re
 import requests
+import sys
 from lxml import etree as etree
 
 
@@ -54,6 +55,26 @@ def getMediaType():
         return "video"
 
 
+# Sets up the output directories and verifies they are empty
+def setup_output_dirs():
+    print("\nSetting up output directories...")
+    if not os.path.isdir('output'):
+        os.mkdir('output')
+    if not os.path.isdir('output/foxml'):
+        os.mkdir('output/foxml')
+    if not os.path.isdir('output/delObjects'):
+        os.mkdir('output/delObjects')
+    if (len([f for f in os.listdir('output') if not f.startswith('.')]) > 2 or 
+        len([f for f in os.listdir('output/foxml') if not f.startswith('.')]) > 0 or 
+        len([f for f in os.listdir('output/delObjects') if not f.startswith('.')]) > 0):
+        print("\toutput: ", os.listdir('output'))
+        print("\tfoxml: ", os.listdir('output/foxml'))
+        print("\tdelObjects: ", os.listdir('output/delObjects'))
+        sys.exit("Output directories not empty.")
+    return
+
+
+# Sets the governing collection
 def getCollection():
     coll = input("\nChoose a collection -- [D]igital Collections or [F]ilms@UM: ")
     while coll not in ('D','F'):
@@ -621,6 +642,9 @@ def main():
     
     # Initiate the program, recording the timestamp and name of user
     greeting()
+    
+    # Check for existence of output directories and create if necessary
+    setup_output_dirs()
     
     # Load CSV data
     dataFile, fileName = loadFile('data')
