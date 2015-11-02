@@ -26,6 +26,7 @@
 # Import needed modules
 import csv
 import datetime
+import isodate
 import os
 import re
 import requests
@@ -571,7 +572,8 @@ def createUMDM(data, batch, summedRunTime, mets):
                 '!!!InsertDateHere!!!' :        dateTagString,
                 '!!!Language!!!' :              data['Language'],
                 '!!!Dimensions!!!' :            data['Dimensions'],
-                '!!!DurationMasters!!!' :       str(summedRunTime),
+                '!!!DurationMasters!!!' :       isodate.strftime(summedRunTime,
+                                                    "%H:%M:%S"),
                 '!!!Format!!!' :                data['Format'],
                 '!!!RepositoryBrowse!!!' :      browseTermsString,
                 '!!!Repository!!!' :            data['Department'],
