@@ -147,11 +147,11 @@ def requestPids(numPids):
 # Takes the XML-based PID file provided by Fedora, and parses it to retrieve just the pids,
 # loading them into a Python list and returning it.
 def parsePids(pidFile):
-    pidList = []                                            # create list to hold PIDs
-    for line in pidFile.splitlines():                       # for each line in the response
-        pid = re.search('<pid>(.*?)</pid>', line)           # search for PID and if found
+    pidList = []                                        # create list to hold PIDs
+    for line in pidFile.splitlines():                   # for each line in the response
+        pid = re.search('<pid>(.*?)</pid>', line)       # search for PID and if found
         if pid:
-            pidList.append(pid.group(1))                    # append each PID to list
+            pidList.append(pid.group(1))                # append each PID to list
     resultLength = str(len(pidList))
     print('\nSuccessfully loaded the following {0} PIDs: '.format(resultLength))
     print(pidList)
@@ -165,7 +165,8 @@ def getRightsScheme():
     print("[R]estricted = Accessible on campus only, not discoverable.")
     print("[C]ampus Only = Accessible on campus only, discoverable via search.")
     print("[M]ediated = Accessible from anywhere, not discoverable.")
-    schemeSelection = input("\nEnter the rights scheme to govern access to this batch [P, R, C, or M]: ")
+    schemeSelection = input(
+        "\nEnter the rights scheme to govern access to this batch [P, R, C, or M]: ")
     while schemeSelection not in ["P", "R", "C", "M"]:
         schemeSelection = input("You must enter P, R, C, or M!")
     if schemeSelection == "P":
@@ -192,7 +193,8 @@ def getRightsScheme():
 
 # Generates the mediaType XML tag, wrapping it around the form XML tag      
 def generateMediaTypeTag(mediaType, formType, form):
-    return '<mediaType type="{0}"><form type="{1}">{2}</form></mediaType>'.format(mediaType, formType, form)
+    return '<mediaType type="{0}"><form type="{1}">{2}</form></mediaType>'.format(
+                mediaType, formType, form)
 
 
 # Build a block of the various agents elements as a string
@@ -397,7 +399,8 @@ def generateTechnicalMetaString(data, mediaType, convertTime):
     format = etree.SubElement(root, 'format')
     # create media {audio,video} and duration subelement
     media = etree.SubElement(root, mediaType)
-    etree.SubElement(media, 'duration').text = str(convertTime(data['DurationDerivatives']))
+    etree.SubElement(media, 'duration').text = isodate.strftime(
+        convertTime(data['DurationDerivatives']), "%H:%M:%S")
     if mediaType == 'audio':
         etree.SubElement(format, 'mimeType').text = "audio/mpeg"
         etree.SubElement(format, 'compression').text = "lossy"
@@ -540,7 +543,8 @@ def createUMDM(data, batch, summedRunTime, mets):
                                             'close' : '</corpName></repository>'},
             '!!!Dimensions!!!' : {          'open' : '<size units="in">',
                                             'close' : '</size>'},
-            '!!!DurationMasters!!!' : {     'open' : '<extent units="{0}">'.format(batch['timeUnits']),
+            '!!!DurationMasters!!!' : {     'open' : '<extent units="{0}">'.format(
+                                                        batch['timeUnits']),
                                             'close' : '</extent>'},
             '!!!Format!!!' : {              'open' : '<format>',
                                             'close' : '</format>'},
@@ -858,8 +862,8 @@ def main():
     
     # Print a divider and summarize output to the screen.
     print('\n' + ('*' * 30))               
-    print('\n{0} files written: {1} FOXML files in {2}'.format(filesWritten, filesWritten - 3,
-                                                               objectGroups), end=' ')
+    print('\n{0} files written: {1} FOXML files in {2}'.format(
+            filesWritten, filesWritten - 3, objectGroups), end=' ')
     print('groups, plus the summary list of pids, list of UMDM pids, and the links file.')
     print('Thanks for using the XML generator!\n\n')
         
