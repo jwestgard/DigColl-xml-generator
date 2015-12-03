@@ -77,11 +77,13 @@ def setup_output_dirs():
 
 # Sets the governing collection
 def getCollection():
-    coll = input("\nChoose a collection -- [D]igital Collections or [F]ilms@UM: ")
-    while coll not in ('D','F'):
-        coll = input('Please enter D or F: ')
+    coll = input("\nChoose a collection -- [D]igital Collections, [A]lbUM, or [F]ilms@UM: ")
+    while coll not in ('D','A','F'):
+        coll = input('Please enter D, A, or F: ')
     if coll == "D":
         return "umd:3392"
+    elif coll == 'A':
+        return "umd:3391"
     elif coll == "F":
         return "umd:1158"
 
@@ -281,7 +283,8 @@ def generateCenturyTags(inputCentury):
     result = []
     myList = sorted(inputCentury.split(';'))
     for i in myList:
-        result.append('<century certainty="exact" era="ad">{0}</century>'.format(i.strip()))
+        result.append('<century certainty="exact" era="ad">{0}</century>'.format(
+            i.strip()))
     return result
 
 
@@ -313,10 +316,23 @@ def generateTopicalSubjects(**kwargs):
                 elif key == 'geog':
                     element = '<geogName>{0}</geogName>'.format(subj.strip())
                     type = 'geographical'
-                if scheme != '':
-                    subj_elem = '<subject scheme="{0}" type="{1}">{2}</subject>'.format(scheme, type, element)
+                elif key == 'dec':
+                    element = '<decade certainty="exact">{0}</decade>'.format(
+                        subj.strip())
+                    type = 'temporal'
+                elif key == 'alb':
+                    element = subj.strip()
+                    label = 'AlbUM'
+                    type = 'browse'
+                if scheme == 'AlbUM':
+                    subj_elem = '<subject label="{0}" type="{1}">{2}</subject>'.format(
+                        label, type, element)
+                elif scheme != '':
+                    subj_elem = '<subject scheme="{0}" type="{1}">{2}</subject>'.format(
+                        scheme, type, element)
                 else:
-                    subj_elem = '<subject type="{0}">{1}</subject>'.format(type, element)
+                    subj_elem = '<subject type="{0}">{1}</subject>'.format(
+                        type, element)
             result.append(subj_elem)
     return '\n'.join(result)
  
@@ -326,7 +342,8 @@ def generateArchivalLocation(collection, **kwargs):
     result = ['<title type="main">{0}</title>'.format(collection)]
     for key, value in kwargs.items():
         if value != '':
-            result.append('<bibScope type="{0}">{1}</bibScope>'.format(key, value))
+            result.append('<bibScope type="{0}">{1}</bibScope>'.format(
+                key, value))
     return '\n'.join(result)
 
 
@@ -354,7 +371,8 @@ def writeFile(fileStem, content, extension):
         filePath = 'output/' + fileStem + extension
     f = open(filePath, mode='w')
     # filter out blank lines and lines containing only spaces from XML
-    cleaned = os.linesep.join([line for line in content.splitlines() if line.strip()])
+    cleaned = os.linesep.join(
+        [line for line in content.splitlines() if line.strip()])
     f.write(cleaned)
     f.close()
 
@@ -498,7 +516,9 @@ def createUMDM(data, batch, summedRunTime, mets):
     topicalSubjects = generateTopicalSubjects(  pers=(data['PersonalSubject'], data['PersonalScheme']),
                                                 corp=(data['CorpSubject'], data['CorpScheme']),
                                                 top=(data['TopicalSubject'], data['TopicalScheme']),
-                                                geog=(data['GeographicalSubject'], data['GeographicalScheme'])
+                                                geog=(data['GeographicalSubject'], data['GeographicalScheme']),
+                                                dec=(data['AlbumDecade'], ''),
+                                                alb=(data['AlbumBrowse'], 'AlbUM')
                                                 )
     # Generate MediaType XML Tags
     mediaTypeString = generateMediaTypeTag(data['MediaType'], data['FormType'], data['Form'])
