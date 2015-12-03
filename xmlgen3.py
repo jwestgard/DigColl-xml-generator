@@ -304,6 +304,7 @@ def generateTopicalSubjects(**kwargs):
         if value[0]:
             for subj in value[0].split(';'):
                 scheme = value[1].strip()
+                # set up the attributes and labels
                 if key == 'pers':
                     element = '<persName>{0}</persName>'.format(subj.strip())
                     type = 'topical'
@@ -324,16 +325,18 @@ def generateTopicalSubjects(**kwargs):
                     element = subj.strip()
                     label = 'AlbUM'
                     type = 'browse'
+                # populate the subject element string
                 if scheme == 'AlbUM':
                     subj_elem = '<subject label="{0}" type="{1}">{2}</subject>'.format(
                         label, type, element)
                 elif scheme != '':
                     subj_elem = '<subject scheme="{0}" type="{1}">{2}</subject>'.format(
                         scheme, type, element)
-                else:
+                elif scheme == '':
                     subj_elem = '<subject type="{0}">{1}</subject>'.format(
                         type, element)
-            result.append(subj_elem)
+                # append the element to the list of subject elements
+                result.append(subj_elem)
     return '\n'.join(result)
  
 
