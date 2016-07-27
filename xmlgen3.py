@@ -506,11 +506,18 @@ def createUMDM(data, batch, summedRunTime, mets):
     # Strip out trailing quotation marks from Dimensions field
     if data['Dimensions'].endswith('"'):
         data['Dimensions'] = data['Dimensions'][0:-1]
+
     # Generate Agents (Creator, Contributor, Provider)
-    agentsString = generateAgentsString(    creator=(data['Creator'], data['CreatorType']),
-                                            contributor=(data['Contributor'], data['ContributorType']),
-                                            provider=(data['Provider/Publisher'], data['Provider/PublisherType'])
-                                            )
+    agents = {}
+    if data['Creator'] and data['Creator'] is not None:
+        agents['creator'] = (data['Creator'], data['CreatorType'])
+    if data['Contributor'] and data['Contributor'] is not None:
+        agents['contributor'] = (data['Contributor'], data['ContributorType'])
+    if data['Provider/Publisher'] and data['Provider/Publisher'] is not None:
+        agents['provider'] = (data['Provider/Publisher'], 
+                              data['Provider/PublisherType'])
+    agentsString = generateAgentsString(**agents)
+
     # Generate dating tags  
     dateTagString = generateDateTag(data['DateCreated'], data['DateAttribute'], data['Century'])
     # Generate browse terms
