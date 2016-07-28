@@ -206,7 +206,8 @@ def generateAgentsString(**kwargs):
         if dataCols:
             agentsList = generateAgentElements(dataCols[0], dataCols[1])
             for agent in agentsList:
-                result.append('<agent type="{0}">{1}</agent>'.format(type, agent))
+                result.append('<agent type="{0}">{1}</agent>'.format(type, 
+                                                                     agent))
     return "\n".join(result)
 
 
@@ -215,7 +216,11 @@ def generateAgentElements(agentColumn, agentTypeColumn):
     agents = agentColumn.split(";")
     agentTypes = agentTypeColumn.split(";")
     if len(agents) != len(agentTypes):
-        print('Error! Bad agent data in: "{0}" and "{1}"'.format(agentcolumn, agentTypeColumn))
+        print(
+            'Error! Bad agent data in: "{0}" and "{1}"'.format(agentColumn, 
+                                                               agentTypeColumn
+                                                               )
+            )
     else:
         result = []
         agentData = zip(agents, agentTypes)
