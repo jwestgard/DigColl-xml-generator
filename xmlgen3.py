@@ -586,9 +586,7 @@ def createUMDM(data, batch, summedRunTime, mets):
             '!!!ArchivalLocation!!!' : {    'open' : '<bibRef>',
                                             'close' : '</bibRef>'},
             '!!!Language!!!' : {            'open' : '<language>',
-                                            'close' : '</language>'},
-            '!!!Rights!!!' : {              'open' : '<rights>',
-                                            'close' : '</rights>'}
+                                            'close' : '</language>'}
             }
 
     # Create mapping of the metadata onto the UMDM XML template file
