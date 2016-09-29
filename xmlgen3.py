@@ -244,6 +244,9 @@ def generateDateTag(inputDate, inputAttribute, centuryData):
         if len(elements) == 2:                  # if there are two parts, use those as begin/end years
             beginDate = elements[0]
             endDate = elements[1]
+        elif len(elements) == 4:
+            beginDate = elements[0]
+            endDate = elements[2]
         elif len(elements) == 6:    # if there are 6 parts, use index 0 and 4 as begin/end years
             beginDate = elements[0] # i.e. we assume YYYY-MM-DD-YYYY-MM-DD format for exact date ranges
             endDate = elements[4]
@@ -688,8 +691,12 @@ def main():
     # Load CSV data
     dataFile, fileName = loadFile('data')
     
+    # Load the lines of the data file into a csv.DictReader object
+    myData = [row for row in csv.DictReader(dataFile)]
+    print('Data successfully read.')
+    
     # Parse loaded data and request user input to calculate num of PIDS needed
-    pidsNeeded, dataFileArrangement = analyzeDataFile(dataFile)
+    pidsNeeded, dataFileArrangement = analyzeDataFile(myData)
     
     # Request PIDs from the server OR load PIDs from previously saved file.
     pidFile = getPids(pidsNeeded)
@@ -724,15 +731,17 @@ def main():
     print("\n UMDM:\n" + batch['umdm'])
     print('*' * 30)
     
-    # Load the lines of the data file into a csv.DictReader object
-    myData = csv.DictReader(dataFile)
-    print('Data successfully read.')
-    
+    # Add omitted data columns
+    for row in myData:
+        print("Adding missing columns...")
+        for column in ['AlbumDecade', 'AlbumBrowse']:
+            if not hasattr(row, column):
+                row[column] = ''
+                
     # Generate XML for data arranged with multiple lines (UMAM and UMDM) per object
     if dataFileArrangement == 'M':
         
         for x in myData:
-            
             # Attach a PID to the line of data.
             x['PID'] = pidList[pidCounter]
             pidCounter += 1
@@ -747,7 +756,7 @@ def main():
             
             # Check the XML type for each line, and build the FOXML files accordingly
             if x['XMLType'] == 'UMDM':
-                
+                print("processing UMDM")
                 # If the mets variable is NOT empty, finish the UMDM for the previous group
                 if mets != "":
                     myFile = createUMDM(tempData, batch, summedRunTime, mets)
@@ -818,6 +827,7 @@ def main():
         
         # Assign two PIDs to each line
         for x in myData:
+            
             x['umdmPID'] = pidList[pidCounter]
             pidCounter += 1
             x['umamPID'] = pidList[pidCounter]
