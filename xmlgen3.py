@@ -308,70 +308,63 @@ def generateBrowseTerms(inputSubjects):
 # generate subject terms from the three subject columns of the data
 def generateTopicalSubjects(**kwargs):
     result = []
-    for key, value in kwargs.items():
-        if value[0]:
-            value_list = value[0].split(';')
-            scheme_list = value[1].split(';')
+    for key, (val, sch) in kwargs.items():
+        if val:
+            value_list = val.split(';')
+            scheme_list = sch.split(';')
             
             if len(value_list) != len(scheme_list):
-                print('Error! Subject data mismatch: "{0}" and "{1}"'.format(
-                    value_list, scheme_list
-                    ))
-                continue
-                
+                if len(scheme_list) == 1:
+                    zipped = [(v, scheme_list[0]) for v in value_list]
+                else:
+                    print('Error! Subject data mismatch:', 
+                          '"{0}" and "{1}"'.format(value_list, scheme_list))
+                    continue
             else:
-                for subj in zip(value_list, scheme_list):
-                    # set up the attributes and labels
-                    scheme = subj[1].strip()
-                    if key == 'pers':
-                        element = '<persName>{0}</persName>'.format(
-                            subj[0].strip()
-                            )
-                        type = 'topical'
+                zipped = zip(value_list, scheme_list)
+            
+            for subj in zipped:
+                # set up the attributes and labels
+                scheme = subj[1].strip()
+                if key == 'pers':
+                    element = '<persName>{0}</persName>'.format(subj[0].strip())
+                    type = 'topical'
+                
+                elif key == 'corp':
+                    element = '<corpName>{0}</corpName>'.format(subj[0].strip())
+                    type = 'topical'
+                
+                elif key == 'top':
+                    element = subj[0].strip()
+                    type = 'topical'
+                
+                elif key == 'geog':
+                    element = '<geogName>{0}</geogName>'.format(subj[0].strip())
+                    type = 'geographical'
+                
+                elif key == 'dec':
+                    element = ('<decade certainty="exact">' +
+                              '{0}</decade>'.format(subj[0].strip()))
+                    type = 'temporal'
+                
+                elif key == 'alb':
+                    element = subj[0].strip()
+                    label = 'AlbUM'
+                    type = 'browse'
                     
-                    elif key == 'corp':
-                        element = '<corpName>{0}</corpName>'.format(
-                            subj[0].strip()
-                            )
-                        type = 'topical'
-                    
-                    elif key == 'top':
-                        element = subj[0].strip()
-                        type = 'topical'
-                    
-                    elif key == 'geog':
-                        element = '<geogName>{0}</geogName>'.format(
-                            subj[0].strip()
-                            )
-                        type = 'geographical'
-                    
-                    elif key == 'dec':
-                        element = '<decade certainty="exact">{0}</decade>'.format(
-                            subj[0].strip()
-                            )
-                        type = 'temporal'
-                    
-                    elif key == 'alb':
-                        element = subj[0].strip()
-                        label = 'AlbUM'
-                        type = 'browse'
+                # populate the subject element string
+                if scheme == 'AlbUM':
+                    subj_elem = ('<subject label="{0}" type='.format(label) +
+                                '"{0}">{1}</subject>'.format(type, element))
+                elif scheme != '':
+                    subj_elem = ('<subject scheme="{0}" type='.format(scheme) +
+                                '"{0}">{1}</subject>'.format(type, element))
+                elif scheme == '' or scheme is None:
+                    subj_elem = ('<subject type=' +
+                                '"{0}">{1}</subject>'.format(type, element))
                         
-                    # populate the subject element string
-                    if scheme == 'AlbUM':
-                        subj_elem = '<subject label="{0}" type="{1}">{2}</subject>'.format(
-                            label, type, element
-                            )
-                    elif scheme != '':
-                        subj_elem = '<subject scheme="{0}" type="{1}">{2}</subject>'.format(
-                            scheme, type, element
-                            )
-                    elif scheme == '' or scheme is None:
-                        subj_elem = '<subject type="{0}">{1}</subject>'.format(
-                            type, element
-                            )
-                            
-                    # append the element to the list of subject elements
-                    result.append(subj_elem)
+                # append the element to the list of subject elements
+                result.append(subj_elem)
                 
     return '\n'.join(result)
  
