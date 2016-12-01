@@ -94,15 +94,18 @@ def analyzeDataFile(dataFile):
     print('\nDoes your datafile contain single or multiple rows for each object?')
     dataFileArrangement = input('Please enter S or M: ')
     while dataFileArrangement not in ('S','M'):
-        dataFileArrangement = input('Please enter either S for sigle-rowed data, or M for multi-rowed data: ')
-    print('\nThe datafile you specified has {0} rows.'.format(dataFileSize))
+        dataFileArrangement = input('Please enter either S for sigle-rowed',
+                                    'data, or M for multi-rowed data: ')
+    print('\nThe datafile you specified has {0} rows.'.format(dataFileSize + 1))
     if dataFileArrangement == 'S':
-        print('Since you have single-rowed objects, you need two PIDs for each row.')
-        dataLength = (dataFileSize - 1) * 2
+        print('Since you have single-rowed objects,'
+              'you need two PIDs for each row (excluding header).')
+        dataLength = dataFileSize * 2
     elif dataFileArrangement == 'M':
         print('Since you have multi-rowed objects, you need one PID for each row.')
-        dataLength = dataFileSize - 1
-    print('Assuming there is a header row in your datafile, you need {0} PIDs.'.format(dataLength))
+        dataLength = dataFileSize
+    print('Based on parsing the data file as a CSV',
+          'with a header row, it appears you need {0} PIDs.'.format(dataLength))
     print('Load {0} PIDs from a file or request them from the server?'.format(dataLength))
     return dataLength, dataFileArrangement
 
