@@ -745,21 +745,10 @@ def main():
     if dataFileArrangement == 'M':
         
         for x in myData:
-<<<<<<< Updated upstream
-=======
-            
             for column in ['AlbumBrowse', 'AlbumDecade']:
                 if not hasattr(x, column):
                     x[column] = ''
             
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
-            for column in ['AlbumBrowse', 'AlbumDecade']:
-                if not hasattr(x, column):
-                    x[column] = ''
-            
->>>>>>> Stashed changes
             # Attach a PID to the line of data.
             x['PID'] = pidList[pidCounter]
             pidCounter += 1
