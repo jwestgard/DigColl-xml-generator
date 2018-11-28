@@ -319,7 +319,7 @@ def generateTopicalSubjects(**kwargs):
                 else:
                     print('Error! Subject data mismatch:', 
                           '"{0}" and "{1}"'.format(value_list, scheme_list))
-                    continue
+                    sys.exit(1)
             else:
                 zipped = zip(value_list, scheme_list)
             
