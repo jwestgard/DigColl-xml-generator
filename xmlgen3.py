@@ -733,22 +733,17 @@ def main():
     batch['umdm'], batch['umdmName'] = loadFile('umdm')
     print("\n UMDM:\n" + batch['umdm'])
     print('*' * 30)
-    
+
     # Add omitted data columns
+    print("Adding missing columns...")
     for row in myData:
-        print("Adding missing columns...")
-        for column in ['AlbumDecade', 'AlbumBrowse']:
-            if not hasattr(row, column):
-                row[column] = ''
-                
+        row.setdefault('AlbumDecade', None)
+        row.setdefault('AlbumBrowse', None)
+
     # Generate XML for data arranged with multiple lines (UMAM and UMDM) per object
     if dataFileArrangement == 'M':
         
         for x in myData:
-            for column in ['AlbumBrowse', 'AlbumDecade']:
-                if not hasattr(x, column):
-                    x[column] = ''
-            
             # Attach a PID to the line of data.
             x['PID'] = pidList[pidCounter]
             pidCounter += 1
